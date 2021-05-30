@@ -1,6 +1,5 @@
-| Name      | Dates Works | Description     |
-| --------- | ----------- | --------------- |
-| Bob Smith | 5/28/2021   | Worked on stuff |
-|           |             |                 |
-|           |             |                 |
+| Name                | Dates Works         | Description                          |
+| ------------------- | ------------------- | -----------------------------------  |
+| Scott Engelhardt    | 5/28/21 - 5/29/21   | Initial GUI Setup and functionality  |
+|                     |                     |                                      |    
 
