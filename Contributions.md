@@ -1,6 +1,6 @@
-|    Name     | Dates Works |     Description     |
-| ----------- | ----------- | ------------------- |
-| Bob Smith   | 5/28/2021   | Worked on stuff     |
-| Drew Garmon | 5/29/2021   | Made logo           |
-| Drew Garmon | 6/2/2021    | Researched MP3 libs |
+|    Name          | Dates Works       |     Description        |
+| ---------------  | ----------------  | ---------------------- |
+| Scott Engelhardt | 5/28/21 - 5/29/21 | Initial GUI Setup      |
+| Drew Garmon      | 5/29/21           | Made logo              |
+| Drew Garmon      | 6/2/21            | Researched MP3 libs    |
 
