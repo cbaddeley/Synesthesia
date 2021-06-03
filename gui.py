@@ -1,14 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette, QColor, QPixmap, QIcon
-from PyQt5.QtWidgets import (
-    QApplication,
-    QFormLayout,
-    QLabel,
-    QPushButton,
-    QWidget,
-    QLineEdit,
-    QFileDialog,
-    QRadioButton)
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 
 class Window(QWidget):
@@ -22,11 +14,22 @@ class Window(QWidget):
         self.resize(610, 580)
 
         # set the logo
-        logo_file = QPixmap('./images/synesthesia-white.png')
-        logo_file = logo_file.scaled(200, 125)
+        logo_file = QPixmap('./images/main_logo.svg')
+        logo_file = logo_file.scaled(400, 150)
         self.logo = QLabel(self)
         self.logo.setPixmap(logo_file)
-        self.logo.move(200, 15)
+        self.logo.move(110, 0)
+
+        # line seperators
+        sep = QPixmap('./images/line.png')
+        sep = sep.scaled(610, 1)
+        self.mid_line = QLabel(self)
+        self.mid_line.setPixmap(sep)
+        self.mid_line.move(-10, 190)
+        sep = sep.scaled(1, 400)  # rotate vertically
+        self.vert_line = QLabel(self)
+        self.vert_line.setPixmap(sep)
+        self.vert_line.move(180, 190)
 
         # select file label
         self.select_file = QLabel(self)
@@ -43,33 +46,101 @@ class Window(QWidget):
         self.get_file.move(520, 150)
         self.get_file.clicked.connect(self.pick_file)
 
-        # radio buttons for different algorithms
-        self.algo1 = QRadioButton('Algorithm 1', self)
-        self.algo2 = QRadioButton('Algorithm 2', self)
-        self.algo3 = QRadioButton('Algorithm 3', self)
-        self.algo4 = QRadioButton('Algorithm 4', self)
-        self.algo5 = QRadioButton('Algorithm 5', self)
+        # select algorithm label
+        self.select_algo = QLabel(self)
+        self.select_algo.move(10, 200)
+        self.select_algo.setText('Algorithm:')
 
-        self.algo1.move(65 + 90 * 0, 180)
-        self.algo2.move(65 + 90 * 1, 180)
-        self.algo3.move(65 + 90 * 2, 180)
-        self.algo4.move(65 + 90 * 3, 180)
-        self.algo5.move(65 + 90 * 4, 180)
+        # ComboBox for different algorithms
+        self.algo_combo = QComboBox(self)
+        self.algo_combo.move(75, 200)
+        self.algo_combo.resize(90, 20)
+        algos = [
+            '',  # blank so when displayed nothing is autoselected
+            'Algorithm 1',
+            'Algorithm 2',
+            'Algorithm 3',
+            'Algorithm 4',
+            'Algorithm 5',
+        ]
+        self.algo_combo.addItems(algos)
+        self.algo_combo.activated[str].connect(self.on_algo_change)
+
+        # label for algorithm label
+        self.algo_lbl = QLabel(self)
+        self.algo_lbl.move(30, 400)
+        self.algo_lbl.setWordWrap(True)
+        self.algo_lbl.setAlignment(Qt.AlignCenter)
 
         # button to process file
         self.proc_file = QPushButton('Process...', self)
-        self.proc_file.move(520, 180)
+        self.proc_file.setGeometry(150, 150, 100, 40)
+        self.proc_file.move(30, 500)
         self.proc_file.clicked.connect(self.process_file)
 
-        # white line across screen
-        sep = QPixmap('./images/line.png')
-        self.line = QLabel(self)
-        self.line.setPixmap(sep)
-        self.line.move(0, 220)
+        # Tempo Slider
+        self.tempo_lbl = QLabel(self)
+        self.tempo_lbl.setText('Tempo:')
+        self.tempo_lbl.move(10, 225)
+        self.tempo_sld = QSlider(Qt.Horizontal, self)
+        self.tempo_sld.setRange(0, 100)
+        self.tempo_sld.setFocusPolicy(Qt.NoFocus)
+        self.tempo_sld.setPageStep(1)
+        self.tempo_sld.move(75, 225)
+
+        # Frequency Slider
+        self.frq_lbl = QLabel(self)
+        self.frq_lbl.setText('Frequency:')
+        self.frq_lbl.move(10, 250)
+        self.frq_sld = QSlider(Qt.Horizontal, self)
+        self.frq_sld.setRange(0, 100)
+        self.frq_sld.setFocusPolicy(Qt.NoFocus)
+        self.frq_sld.setPageStep(1)
+        self.frq_sld.move(75, 250)
+
+        # Tone Slider
+        self.tone_lbl = QLabel(self)
+        self.tone_lbl.setText('Tone:')
+        self.tone_lbl.move(10, 275)
+        self.tone_sld = QSlider(Qt.Horizontal, self)
+        self.tone_sld.setRange(0, 100)
+        self.tone_sld.setFocusPolicy(Qt.NoFocus)
+        self.tone_sld.setPageStep(1)
+        self.tone_sld.move(75, 275)
+
+        # Pitch Slider
+        self.pitch_lbl = QLabel(self)
+        self.pitch_lbl.setText('Pitch:')
+        self.pitch_lbl.move(10, 300)
+        self.pitch_sld = QSlider(Qt.Horizontal, self)
+        self.pitch_sld.setRange(0, 100)
+        self.pitch_sld.setFocusPolicy(Qt.NoFocus)
+        self.pitch_sld.setPageStep(1)
+        self.pitch_sld.move(75, 300)
+
+        # Octave Sliders
+        self.octave_lbl = QLabel(self)
+        self.octave_lbl.setText('Octave:')
+        self.octave_lbl.move(10, 325)
+        self.octave_sld = QSlider(Qt.Horizontal, self)
+        self.octave_sld.setRange(0, 100)
+        self.octave_sld.setFocusPolicy(Qt.NoFocus)
+        self.octave_sld.setPageStep(1)
+        self.octave_sld.move(75, 325)
+
+        # Other Slider
+        self.bs_lbl = QLabel(self)
+        self.bs_lbl.setText('Bull Shit:')
+        self.bs_lbl.move(10, 350)
+        self.bs_sld = QSlider(Qt.Horizontal, self)
+        self.bs_sld.setRange(0, 100)
+        self.bs_sld.setFocusPolicy(Qt.NoFocus)
+        self.bs_sld.setPageStep(1)
+        self.bs_sld.move(75, 350)
 
         # place holder for processed image
         self.result = QLabel(self)
-        self.result.move(10, 250)
+        self.result.move(200, 280)
 
     def dark_mode(self):
         # https://gist.github.com/mstuttgart/37c0e6d8f67a0611674e08294f3daef7
@@ -97,9 +168,22 @@ class Window(QWidget):
         if file_name:
             self.file_path.setText(file_name)
 
+    def on_algo_change(self):
+        algo_desc = {
+            '' : '',
+            'Algorithm 1': 'Brief description for algorithm 1',
+            'Algorithm 2': 'Brief description for algorithm 2',
+            'Algorithm 3': 'Brief description for algorithm 3',
+            'Algorithm 4': 'Brief description for algorithm 4',
+            'Algorithm 5': 'Brief description for algorithm 5',
+        }
+        self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
+        self.algo_lbl.adjustSize()
+
+
     def process_file(self):
         proc_img = QPixmap('./images/proc_img.png')
-        proc_img = proc_img.scaled(590,300)
+        proc_img = proc_img.scaled(400, 200)
         self.result.setPixmap(proc_img)
         self.result.adjustSize()
 
