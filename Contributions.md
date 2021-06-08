@@ -4,3 +4,4 @@
 | Drew Garmon      | 5/29/21           | Made logo              |
 | Drew Garmon      | 6/2/21            | Researched MP3 libs    |
 | Scott Engelhardt | 6/2/21            | Updated GUI w/ slides  |
+| Scott Engelhardt | 6/7/21            | Update slides & layout |

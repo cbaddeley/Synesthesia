@@ -29,7 +29,7 @@ class Window(QWidget):
         sep = sep.scaled(1, 400)  # rotate vertically
         self.vert_line = QLabel(self)
         self.vert_line.setPixmap(sep)
-        self.vert_line.move(180, 190)
+        self.vert_line.move(200, 190)
 
         # select file label
         self.select_file = QLabel(self)
@@ -68,79 +68,115 @@ class Window(QWidget):
 
         # label for algorithm label
         self.algo_lbl = QLabel(self)
-        self.algo_lbl.move(30, 400)
+        self.algo_lbl.move(25, 375)
         self.algo_lbl.setWordWrap(True)
         self.algo_lbl.setAlignment(Qt.AlignCenter)
-
-        # button to process file
-        self.proc_file = QPushButton('Process...', self)
-        self.proc_file.setGeometry(150, 150, 100, 40)
-        self.proc_file.move(30, 500)
-        self.proc_file.clicked.connect(self.process_file)
 
         # Tempo Slider
         self.tempo_lbl = QLabel(self)
         self.tempo_lbl.setText('Tempo:')
         self.tempo_lbl.move(10, 225)
+        self.tempo_val = QLabel(self)
+        self.tempo_val.move(165, 225)
+        self.tempo_val.resize(35, 10)
+        self.tempo_val.setText('0%')
         self.tempo_sld = QSlider(Qt.Horizontal, self)
-        self.tempo_sld.setRange(0, 100)
+        self.tempo_sld.setRange(-100, 100)
         self.tempo_sld.setFocusPolicy(Qt.NoFocus)
         self.tempo_sld.setPageStep(1)
         self.tempo_sld.move(75, 225)
+        self.tempo_sld.valueChanged.connect(
+            lambda val: self.tempo_val.setText(str(val) + '%'))
 
         # Frequency Slider
         self.frq_lbl = QLabel(self)
         self.frq_lbl.setText('Frequency:')
         self.frq_lbl.move(10, 250)
+        self.frq_val = QLabel(self)
+        self.frq_val.move(165, 250)
+        self.frq_val.resize(35, 10)
+        self.frq_val.setText('0%')
         self.frq_sld = QSlider(Qt.Horizontal, self)
-        self.frq_sld.setRange(0, 100)
+        self.frq_sld.setRange(-100, 100)
         self.frq_sld.setFocusPolicy(Qt.NoFocus)
         self.frq_sld.setPageStep(1)
         self.frq_sld.move(75, 250)
+        self.frq_sld.valueChanged.connect(
+            lambda val: self.frq_val.setText(str(val) + '%'))
 
         # Tone Slider
         self.tone_lbl = QLabel(self)
         self.tone_lbl.setText('Tone:')
         self.tone_lbl.move(10, 275)
+        self.tone_val = QLabel(self)
+        self.tone_val.move(165, 275)
+        self.tone_val.resize(35, 10)
+        self.tone_val.setText('0%')
         self.tone_sld = QSlider(Qt.Horizontal, self)
-        self.tone_sld.setRange(0, 100)
+        self.tone_sld.setRange(-100, 100)
         self.tone_sld.setFocusPolicy(Qt.NoFocus)
         self.tone_sld.setPageStep(1)
         self.tone_sld.move(75, 275)
+        self.tone_sld.valueChanged.connect(
+            lambda val: self.tone_val.setText(str(val) + '%'))
 
         # Pitch Slider
         self.pitch_lbl = QLabel(self)
         self.pitch_lbl.setText('Pitch:')
         self.pitch_lbl.move(10, 300)
+        self.pitch_val = QLabel(self)
+        self.pitch_val.move(165, 300)
+        self.pitch_val.resize(35, 10)
+        self.pitch_val.setText('0%')
         self.pitch_sld = QSlider(Qt.Horizontal, self)
-        self.pitch_sld.setRange(0, 100)
+        self.pitch_sld.setRange(-100, 100)
         self.pitch_sld.setFocusPolicy(Qt.NoFocus)
         self.pitch_sld.setPageStep(1)
         self.pitch_sld.move(75, 300)
+        self.pitch_sld.valueChanged.connect(
+            lambda val: self.pitch_val.setText(str(val) + '%'))
 
         # Octave Sliders
         self.octave_lbl = QLabel(self)
         self.octave_lbl.setText('Octave:')
         self.octave_lbl.move(10, 325)
+        self.octave_val = QLabel(self)
+        self.octave_val.move(165, 325)
+        self.octave_val.resize(35, 10)
+        self.octave_val.setText('0%')
         self.octave_sld = QSlider(Qt.Horizontal, self)
-        self.octave_sld.setRange(0, 100)
+        self.octave_sld.setRange(-100, 100)
         self.octave_sld.setFocusPolicy(Qt.NoFocus)
         self.octave_sld.setPageStep(1)
         self.octave_sld.move(75, 325)
+        self.octave_sld.valueChanged.connect(
+            lambda val: self.octave_val.setText(str(val) + '%'))
 
         # Other Slider
         self.bs_lbl = QLabel(self)
         self.bs_lbl.setText('Bull Shit:')
         self.bs_lbl.move(10, 350)
+        self.bs_val = QLabel(self)
+        self.bs_val.move(165, 350)
+        self.bs_val.resize(35, 10)
+        self.bs_val.setText('0%')
         self.bs_sld = QSlider(Qt.Horizontal, self)
-        self.bs_sld.setRange(0, 100)
+        self.bs_sld.setRange(-100, 100)
         self.bs_sld.setFocusPolicy(Qt.NoFocus)
         self.bs_sld.setPageStep(1)
         self.bs_sld.move(75, 350)
+        self.bs_sld.valueChanged.connect(
+            lambda val: self.bs_val.setText(str(val) + '%'))
+
+        # button to process file
+        self.proc_file = QPushButton('Process...', self)
+        self.proc_file.setGeometry(150, 150, 100, 40)
+        self.proc_file.move(50, 500)
+        self.proc_file.clicked.connect(self.process_file)
 
         # place holder for processed image
         self.result = QLabel(self)
-        self.result.move(200, 280)
+        self.result.move(200, 200)
 
     def dark_mode(self):
         # https://gist.github.com/mstuttgart/37c0e6d8f67a0611674e08294f3daef7
@@ -170,20 +206,19 @@ class Window(QWidget):
 
     def on_algo_change(self):
         algo_desc = {
-            '' : '',
+            '': '',
             'Algorithm 1': 'Brief description for algorithm 1',
-            'Algorithm 2': 'Brief description for algorithm 2',
+            'Algorithm 2': "A longer desctription for how algorithm 2 works with some of it's functionalities",
             'Algorithm 3': 'Brief description for algorithm 3',
             'Algorithm 4': 'Brief description for algorithm 4',
             'Algorithm 5': 'Brief description for algorithm 5',
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
-        self.algo_lbl.adjustSize()
-
+        self.algo_lbl.resize(150,80)
 
     def process_file(self):
         proc_img = QPixmap('./images/proc_img.png')
-        proc_img = proc_img.scaled(400, 200)
+        proc_img = proc_img.scaled(400, 370)
         self.result.setPixmap(proc_img)
         self.result.adjustSize()
 
