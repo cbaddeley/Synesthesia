@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from wsl import *
 
 
 class Window(QWidget):
@@ -224,6 +225,7 @@ class Window(QWidget):
 
 
 if __name__ == '__main__':
+    set_display_to_host()
     # instantiate application and create a window
     app = QApplication([])
     app.setStyle('Fusion')

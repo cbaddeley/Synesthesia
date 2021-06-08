@@ -133,3 +133,6 @@ dmypy.json
 
 # debugging
 /.vscode
+
+# misc
+.idea
