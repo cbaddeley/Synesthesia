@@ -1,0 +1,63 @@
+{
+  "name": "mood happy",
+  "type": "multi-class classifier",
+  "link": "https://essentia.upf.edu/models/classifiers/mood_happy/mood_happy-musicnn-msd-1.pb",
+  "version": "1",
+  "description": "classification of music by mood (happy/non-happy)",
+  "author": "Pablo Alonso",
+  "email": "pablo.alonso@upf.edu",
+  "release_date": "2020-03-31",
+  "framework": "tensorflow",
+  "framework_version": "1.15.0",
+  "classes": [
+    "happy", "non_happy"],
+  "model_types": [
+    "frozen_model"],
+  "dataset": {
+    "name": "In-house MTG collection",
+    "citation": "@inproceedings{laurier2009music,\n  title={Music mood annotator design and integration},\n  author={Laurier, Cyril and Meyers, Owen and Serra, Joan and Blech, Martin and Herrera, Perfecto},\n  booktitle={2009 Seventh International Workshop on Content-Based Multimedia Indexing},\n  pages={156--161},\n  year={2009},\n  organization={IEEE}\n}",
+    "size": "302 full tracks + excerpts, 139/163 per class",
+    "metrics": {
+      "5-fold_cross_validation_normalized_accuracy": 0.81
+    }
+  },
+  "schema": {
+    "inputs": [
+      {
+        "name": "model/Placeholder",
+        "type": "float",
+        "shape": [187, 96]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "model/Sigmoid",
+        "type": "float",
+        "shape": [1, 2],
+        "op": "Sigmoid"
+      },
+      {
+        "name": "model/dense_2/BiasAdd",
+        "type": "float",
+        "shape": [1, 2],
+        "op": "fully connected",
+        "description": "logits"
+      },
+      {
+        "name": "model/dense_1/BiasAdd",
+        "type": "float",
+        "shape": [1, 100],
+        "op": "fully connected",
+        "description": "penultimate layer"
+      },
+      {
+        "name": "model/dense/BiasAdd",
+        "type": "float",
+        "shape": [1, 200],
+        "op": "fully connected",
+        "description": "embeddings"
+      }
+    ]
+  },
+  "citation": "@article{alonso2020tensorflow,\ntitle={TensorFlow Audio Models in Essentia},\nauthor={Alonso-Jim{\\'e}nez, Pablo and Bogdanov, Dmitry and Pons, Jordi and Serra, Xavier},\njournal={ICASSP 2020},\nyear={2020}\n}"
+}

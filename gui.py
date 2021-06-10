@@ -2,6 +2,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from wsl import *
+from image_helper import *
+from PIL.ImageQt import ImageQt
+from essentia_helper import *
 
 
 class Window(QWidget):
@@ -218,8 +221,10 @@ class Window(QWidget):
         self.algo_lbl.resize(150,80)
 
     def process_file(self):
-        proc_img = QPixmap('./images/proc_img.png')
-        proc_img = proc_img.scaled(400, 370)
+        blank_image = create_image_array(512, 512)
+        img = create_image_from_array(blank_image)
+        qim = ImageQt(img)
+        proc_img = QPixmap.fromImage(qim)
         self.result.setPixmap(proc_img)
         self.result.adjustSize()
 
