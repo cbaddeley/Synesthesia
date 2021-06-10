@@ -9,3 +9,4 @@
 | Scott Engelhardt | 06/02/21     | Updated GUI w/ slides         |
 | Cory Baddeley    | 06/08/21     | WSL Setup                     |
 | Scott Engelhardt | 06/09/21     | Librosa setup and research    |
+| George Kolasa    | 06/10/21     | Essentia Tensorflow setup     |
