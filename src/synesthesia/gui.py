@@ -1,10 +1,10 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from synesthesia.wsl import *
-from synesthesia.image_helper import *
+from wsl import *
 from PIL.ImageQt import ImageQt
-from synesthesia.essentia_helper import *
+from art_generator import tests
+from essentia_helper import *
 
 
 class Window(QWidget):
@@ -221,8 +221,14 @@ class Window(QWidget):
         self.algo_lbl.resize(150,80)
 
     def process_file(self):
-        blank_image = create_image_array(512, 512)
-        img = create_image_from_array(blank_image)
+        # Test 1
+        img = tests.blank_image()
+        # Test 2
+        # img = tests.cairo_image()
+        # Test 3
+        # img = tests.layer()
+        # Test 4
+        # img = tests.circle()
         qim = ImageQt(img)
         proc_img = QPixmap.fromImage(qim)
         self.result.setPixmap(proc_img)

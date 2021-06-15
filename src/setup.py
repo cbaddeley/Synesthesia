@@ -19,7 +19,7 @@ setup(
     url="https://github.com/cbaddeley/Synesthesia",
     license="GPL 3",
     install_requires=['PyQt5', 'librosa', 'essentia',
-                      'pillow'],
+                      'pillow', 'pycairo'],
     keywords=['audio', 'visualizer', "image"],
 
     entry_points =
