@@ -1,10 +1,10 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from wsl import *
-from image_helper import *
+from synesthesia.wsl import *
+from synesthesia.image_helper import *
 from PIL.ImageQt import ImageQt
-from essentia_helper import *
+from synesthesia.essentia_helper import *
 
 
 class Window(QWidget):
@@ -228,8 +228,7 @@ class Window(QWidget):
         self.result.setPixmap(proc_img)
         self.result.adjustSize()
 
-
-if __name__ == '__main__':
+def main_func():
     set_display_to_host()
     # instantiate application and create a window
     app = QApplication([])
@@ -238,3 +237,9 @@ if __name__ == '__main__':
     app.setPalette(window.dark_mode())  # turn on dark mode
     window.show()
     app.exec()
+
+if __name__ == '__main__':
+    main_func()
+
+
+
