@@ -5,12 +5,12 @@ _Note: The Pip package may be behind what is currently up here on Github_
 
 **Enter in Linux console:**
 
-pip install sysnesthesia-uf
+pip install synesthesia-uf
 
 syne
 
 ## Dependencies ## 
-Included in the "install_requires" part of the setup.py file (should be installed when you run "pip install sysnesthesia-uf" ) 
+Included in the "install_requires" part of the setup.py file (should be installed when you run "pip install synesthesia-uf") 
 
 ## Ubuntu Installs (still trying to see if you can install these with pip at all) ##
     sudo apt-get install ffmpeg
