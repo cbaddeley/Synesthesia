@@ -1,7 +1,10 @@
-import math
-import cairo
-import numpy as np
 from PIL import Image
+import cairo
+import math
+import numpy as np
+from art_generator.canvas import Canvas
+from art_generator.circle import Circle
+from art_generator.context import Context
 
 
 def do_stuff():
@@ -36,4 +39,25 @@ def do_stuff():
 
     # surface.write_to_png("example.png")  # Output to PNG
     buf = surface.get_data()
-    return np.ndarray(shape=(WIDTH,HEIGHT,4), dtype=np.uint8, buffer=buf)
+    return np.ndarray(shape=(WIDTH, HEIGHT, 4), dtype=np.uint8, buffer=buf)
+
+
+def blank_image():
+    canvas = Canvas(256, 256)
+    return canvas.export()
+
+
+def cairo_image():
+    return Image.fromarray(do_stuff())
+
+
+def layer():
+    canvas = Canvas(256, 256)
+    canvas.layer(do_stuff())
+    return canvas.export()
+
+
+def circle():
+    context = Context(500, 500)
+    Circle(context, 200, 200, 100).draw()
+    return Image.fromarray(context.export())

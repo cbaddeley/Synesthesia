@@ -1,10 +1,10 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from synesthesia.wsl import *
+from wsl import *
 from PIL.ImageQt import ImageQt
-from image_creation import tests
-from synesthesia.essentia_helper import *
+from art_generator import tests
+from essentia_helper import *
 
 
 class Window(QWidget):
@@ -222,11 +222,13 @@ class Window(QWidget):
 
     def process_file(self):
         # Test 1
-        # img = tests.blank_image()
+        img = tests.blank_image()
         # Test 2
         # img = tests.cairo_image()
         # Test 3
-        img = tests.concat()
+        # img = tests.layer()
+        # Test 4
+        # img = tests.circle()
         qim = ImageQt(img)
         proc_img = QPixmap.fromImage(qim)
         self.result.setPixmap(proc_img)
