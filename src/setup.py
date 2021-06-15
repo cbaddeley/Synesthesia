@@ -3,7 +3,7 @@ import codecs
 import os
 
 
-VERSION = '0.0.3'
+VERSION = '0.0.11'
 DESCRIPTION = 'A Python audio image creation tool'
 LONG_DESCRIPTION = 'A Python audio image creation tool that takes audio and creates images from them.'
 
@@ -17,13 +17,14 @@ setup(
     packages=find_packages(),
     url="https://github.com/cbaddeley/Synesthesia",
     license="GPL 3",
-    install_requires=['PyQt5', 'librosa', 'essentia'],
+    install_requires=['PyQt5', 'librosa', 'essentia',
+                      'pillow'],
     keywords=['audio', 'visualizer', "image"],
 
     entry_points =
     {   "console_scripts":
         [
-            "syne = synesthesia:main"
+            "syne = synesthesia:main_func"
         ]
     }
 
