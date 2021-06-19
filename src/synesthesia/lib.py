@@ -1,34 +1,69 @@
 import librosa
 import turtle
 import numpy as np
-from synesthesia.wsl import *
+from wsl import *
 set_display_to_host()
 
-# y, sr = librosa.load('../mp3/around_the_sun.mp3', sr=22050)
-# C = librosa.cqt(y, sr)
-# chroma = librosa.feature.chroma_cqt(C=C, sr=sr)
-#
-#
-# turtle.screensize(canvwidth=400, canvheight=400)
-# t = turtle.Turtle()
-#
-# no_img_chroma = []
-# for i in chroma:
-#     for j in i:
-#         no_img_chroma.append([np.real(j), np.imag(j)])
-#
-# track = 0
-# for x in no_img_chroma:
-#     if x[0] != 0:
-#         if track == 0:
-#             t.rt(x[0]*50)
-#             track += 1
-#         elif track == 1:
-#             t.fd(x[0]*50)
-#             track += 1
-#         elif track == 2:
-#             t.lt(x[0]*50)
-#             track += 1
-#         elif track == 3:
-#             t.bk(x[0]*50)
-#             track = 0
+
+def draw_note(note, t):
+    octave = int(note[1])
+    note = note[0]
+
+    if note == 'A':  # draw a circle
+        t.circle(octave)
+    elif note == 'B':  # draw a square
+        for _ in range(4):
+            t.fd(octave)
+            t.rt(90)
+    elif note == 'C':  # draw a triangle
+        for _ in range(3):
+            t.fd(octave)
+            t.lt(120)
+    elif note == 'D':  # draw a octogon
+        for _ in range(8):
+            t.fd(octave)
+            t.lt(45)
+    elif note == 'E':  # draw a hexagon
+        for _ in range(6):
+            t.fd(octave)
+            t.lt(60)
+    elif note == 'F':  # draw a star
+        for _ in range(5):
+            t.rt(108)
+            t.fd(octave)
+            t.lt(36)
+            t.fd(octave)
+    # sharp notes, don't want the sharp char to cause issues
+    elif note[0] == 'A':  # rotate angle right by octave
+        t.rt(octave)
+    elif note[0] == 'B':  # rotate angle left by octave
+        t.lt(octave)
+    elif note[0] == 'C':  # do a 180
+        t.lt(180)
+    elif note[0] == 'D':  # pick up pen to octave places forward
+        t.up()
+        t.fd(octave)
+        t.down()
+    elif note[0] == 'E':  # pick up pen to octave places back
+        t.up()
+        t.lt(180)
+        t.fd(octave)
+        t.down()
+    elif note[0] == 'F':  # change the pen color to random color
+        colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+        t.pencolor(colors[octave % len(colors)])
+
+if __name__ == '__main__':
+    y, sr = librosa.load(librosa.ex('trumpet'), sr=22050)
+    S = np.abs(librosa.stft(y))
+    bars = librosa.hz_to_note(S)
+
+    turtle.screensize(canvwidth=400, canvheight=400)
+    t = turtle.Turtle()
+    t.speed(0)
+    t.hideturtle()
+
+    for bar in bars:
+        for note in bar:
+            if '-' in note:
+                draw_note(note.split('-'), t)
