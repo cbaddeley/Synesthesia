@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import *
 from wsl import *
 from PIL.ImageQt import ImageQt
 from art_generator import tests
-from essentia_helper import *
+# from essentia_helper import *
+from lib import notes_to_canvas
 
 
 class Window(QWidget):
@@ -12,20 +13,20 @@ class Window(QWidget):
         super().__init__()
         # set widow titles
         self.setWindowTitle(' ')
-        self.setWindowIcon(QIcon('./images/title_logo.png'))
+        self.setWindowIcon(QIcon('./src/synesthesia/images/title_logo.png'))
 
         # resize window
         self.resize(610, 580)
 
         # set the logo
-        logo_file = QPixmap('./images/main_logo.svg')
+        logo_file = QPixmap('./src/synesthesia/images/main_logo.svg')
         logo_file = logo_file.scaled(400, 150)
         self.logo = QLabel(self)
         self.logo.setPixmap(logo_file)
         self.logo.move(110, 0)
 
         # line seperators
-        sep = QPixmap('./images/line.png')
+        sep = QPixmap('./src/synesthesia/images/line.png')
         sep = sep.scaled(610, 1)
         self.mid_line = QLabel(self)
         self.mid_line.setPixmap(sep)
@@ -211,7 +212,7 @@ class Window(QWidget):
     def on_algo_change(self):
         algo_desc = {
             '': '',
-            'Algorithm 1': 'Brief description for algorithm 1',
+            'Algorithm 1': 'Draw a collection of shapes and colors based on the notes and octaves',
             'Algorithm 2': "A longer desctription for how algorithm 2 works with some of it's functionalities",
             'Algorithm 3': 'Brief description for algorithm 3',
             'Algorithm 4': 'Brief description for algorithm 4',
@@ -221,6 +222,9 @@ class Window(QWidget):
         self.algo_lbl.resize(150,80)
 
     def process_file(self):
+        if self.algo_combo.currentText() == 'Algorithm 1':
+            notes_to_canvas(self.file_path.text(), self.tempo_sld.value(), self.octave_sld.value())
+
         # Test 1
         img = tests.blank_image()
         # Test 2

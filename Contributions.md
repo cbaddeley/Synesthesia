@@ -10,3 +10,4 @@
 | Cory Baddeley    | 06/08/21     | WSL Setup                     |
 | Scott Engelhardt | 06/09/21     | Librosa setup and research    |
 | George Kolasa    | 06/10/21     | Essentia Tensorflow setup     |
+| Scott Engelhardt | 06/19/21     | Librosa and turtle interface  |

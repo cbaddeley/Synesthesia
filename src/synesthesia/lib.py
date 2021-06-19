@@ -5,8 +5,8 @@ from wsl import *
 set_display_to_host()
 
 
-def draw_note(note, t):
-    octave = int(note[1])
+def draw_note(note, t, octave_scale):
+    octave = int(int(note[1]) * (1 + (octave_scale / 100)))
     note = note[0]
 
     if note == 'A':  # draw a circle
@@ -53,17 +53,17 @@ def draw_note(note, t):
         colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
         t.pencolor(colors[octave % len(colors)])
 
-if __name__ == '__main__':
+def notes_to_canvas(song_path, speed_scale, octave_scale):
     y, sr = librosa.load(librosa.ex('trumpet'), sr=22050)
     S = np.abs(librosa.stft(y))
     bars = librosa.hz_to_note(S)
 
     turtle.screensize(canvwidth=400, canvheight=400)
     t = turtle.Turtle()
-    t.speed(0)
+    t.speed(6 * (1 + (speed_scale / 100)))
     t.hideturtle()
 
     for bar in bars:
         for note in bar:
             if '-' in note:
-                draw_note(note.split('-'), t)
+                draw_note(note.split('-'), t, octave_scale)
