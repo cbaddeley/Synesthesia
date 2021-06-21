@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from wsl import *
 from PIL.ImageQt import ImageQt
-from art_generator import tests
+from art_generator import tests, qt_canvas
 # from essentia_helper import *
 from lib import notes_to_canvas
 
@@ -16,7 +16,7 @@ class Window(QWidget):
         self.setWindowIcon(QIcon('./src/synesthesia/images/title_logo.png'))
 
         # resize window
-        self.resize(610, 580)
+        self.resize(620, 620)
 
         # set the logo
         logo_file = QPixmap('./src/synesthesia/images/main_logo.svg')
@@ -180,8 +180,8 @@ class Window(QWidget):
         self.proc_file.clicked.connect(self.process_file)
 
         # place holder for processed image
-        self.result = QLabel(self)
-        self.result.move(200, 200)
+        self.canvas = qt_canvas.QtCanvas(self)
+        self.canvas.move(200,200)
 
     def dark_mode(self):
         # https://gist.github.com/mstuttgart/37c0e6d8f67a0611674e08294f3daef7
@@ -235,8 +235,10 @@ class Window(QWidget):
         # img = tests.circle()
         qim = ImageQt(img)
         proc_img = QPixmap.fromImage(qim)
-        self.result.setPixmap(proc_img)
-        self.result.adjustSize()
+        # self.canvas.setPixmap(proc_img)
+        # self.canvas.adjustSize()
+        self.canvas.refresh()
+
 
 def main_func():
     set_display_to_host()
