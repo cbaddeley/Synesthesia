@@ -29,8 +29,7 @@ def main():
 
     # instantiate PyAudio (1)
     p = pyaudio.PyAudio()
-    loop = QEventLoop
-    loop.connect(p, pyqtSignal(done()), loop, pyqtSlot(quit()))
+   
 
     def lib_analysis(data):
         s = np.abs(librosa.stft(data))
@@ -59,7 +58,6 @@ def main():
 
     # start the stream (4)
     stream.start_stream()
-    loop.exec()
     # wait for stream to finish (5)
     while stream.is_active():
         time.sleep(1)
