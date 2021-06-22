@@ -7,7 +7,6 @@ from art_generator import tests, qt_canvas
 # from essentia_helper import *
 from lib import notes_to_canvas
 
-
 class Window(QWidget):
     def __init__(self):
         super().__init__()
@@ -26,15 +25,15 @@ class Window(QWidget):
         self.logo.move(110, 0)
 
         # line seperators
-        sep = QPixmap('./src/synesthesia/images/line.png')
+        sep = QPixmap('./images/line.png')
         sep = sep.scaled(610, 1)
         self.mid_line = QLabel(self)
         self.mid_line.setPixmap(sep)
         self.mid_line.move(-10, 190)
-        sep = sep.scaled(1, 400)  # rotate vertically
+        sep = sep.scaled(1, 450)  # rotate vertically
         self.vert_line = QLabel(self)
         self.vert_line.setPixmap(sep)
-        self.vert_line.move(200, 190)
+        self.vert_line.move(210, 190)
 
         # select file label
         self.select_file = QLabel(self)
@@ -43,12 +42,13 @@ class Window(QWidget):
 
         # input for folder path
         self.file_path = QLineEdit(self)
-        self.file_path.move(65, 150)
-        self.file_path.resize(450, 20)
+        self.file_path.move(75, 150)
+        self.file_path.resize(440, 20)
 
         # button for file picker
         self.get_file = QPushButton('Choose...', self)
         self.get_file.move(520, 150)
+        self.get_file.resize(80, 20)
         self.get_file.clicked.connect(self.pick_file)
 
         # select algorithm label
@@ -59,7 +59,7 @@ class Window(QWidget):
         # ComboBox for different algorithms
         self.algo_combo = QComboBox(self)
         self.algo_combo.move(75, 200)
-        self.algo_combo.resize(90, 20)
+        self.algo_combo.resize(120, 20)
         algos = [
             '',  # blank so when displayed nothing is autoselected
             'Algorithm 1',
@@ -76,7 +76,7 @@ class Window(QWidget):
         self.algo_lbl.move(25, 375)
         self.algo_lbl.setWordWrap(True)
         self.algo_lbl.setAlignment(Qt.AlignCenter)
-
+ 
         # Tempo Slider
         self.tempo_lbl = QLabel(self)
         self.tempo_lbl.setText('Tempo:')
@@ -92,8 +92,8 @@ class Window(QWidget):
         self.tempo_sld.move(75, 225)
         self.tempo_sld.valueChanged.connect(
             lambda val: self.tempo_val.setText(str(val) + '%'))
-
-        # Frequency Slider
+            
+          # Frequency Slider
         self.frq_lbl = QLabel(self)
         self.frq_lbl.setText('Frequency:')
         self.frq_lbl.move(10, 250)
@@ -156,23 +156,7 @@ class Window(QWidget):
         self.octave_sld.move(75, 325)
         self.octave_sld.valueChanged.connect(
             lambda val: self.octave_val.setText(str(val) + '%'))
-
-        # Other Slider
-        self.bs_lbl = QLabel(self)
-        self.bs_lbl.setText('Bull Shit:')
-        self.bs_lbl.move(10, 350)
-        self.bs_val = QLabel(self)
-        self.bs_val.move(165, 350)
-        self.bs_val.resize(35, 10)
-        self.bs_val.setText('0%')
-        self.bs_sld = QSlider(Qt.Horizontal, self)
-        self.bs_sld.setRange(-100, 100)
-        self.bs_sld.setFocusPolicy(Qt.NoFocus)
-        self.bs_sld.setPageStep(1)
-        self.bs_sld.move(75, 350)
-        self.bs_sld.valueChanged.connect(
-            lambda val: self.bs_val.setText(str(val) + '%'))
-
+            
         # button to process file
         self.proc_file = QPushButton('Process...', self)
         self.proc_file.setGeometry(150, 150, 100, 40)
@@ -181,7 +165,7 @@ class Window(QWidget):
 
         # place holder for processed image
         self.canvas = qt_canvas.QtCanvas(self)
-        self.canvas.move(200,200)
+        self.canvas.move(200, 200)
 
     def dark_mode(self):
         # https://gist.github.com/mstuttgart/37c0e6d8f67a0611674e08294f3daef7
@@ -219,11 +203,12 @@ class Window(QWidget):
             'Algorithm 5': 'Brief description for algorithm 5',
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
-        self.algo_lbl.resize(150,80)
+        self.algo_lbl.resize(150, 80)
 
     def process_file(self):
         if self.algo_combo.currentText() == 'Algorithm 1':
-            notes_to_canvas(self.file_path.text(), self.tempo_sld.value(), self.octave_sld.value())
+            notes_to_canvas(self.file_path.text(),
+                            self.tempo_sld.value(), self.octave_sld.value())
 
         # Test 1
         img = tests.blank_image()
@@ -250,8 +235,6 @@ def main_func():
     window.show()
     app.exec()
 
+
 if __name__ == '__main__':
     main_func()
-
-
-
