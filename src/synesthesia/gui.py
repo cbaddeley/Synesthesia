@@ -12,13 +12,13 @@ class Window(QWidget):
         super().__init__()
         # set widow titles
         self.setWindowTitle(' ')
-        self.setWindowIcon(QIcon('./src/synesthesia/images/title_logo.png'))
+        self.setWindowIcon(QIcon('./images/title_logo.png'))
 
         # resize window
         self.resize(620, 620)
 
         # set the logo
-        logo_file = QPixmap('./src/synesthesia/images/main_logo.svg')
+        logo_file = QPixmap('./images/main_logo.svg')
         logo_file = logo_file.scaled(400, 150)
         self.logo = QLabel(self)
         self.logo.setPixmap(logo_file)
