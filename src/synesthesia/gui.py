@@ -1,3 +1,6 @@
+import glob, os, shutil, os, sys
+print(os.getcwd())
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -226,6 +229,11 @@ def main_func():
     window.show()
     app.exec()
 
+def pip_main_func():
+    # only called with pip package. Special changing of directory below
+    print("Welcome to Synesthesia (installed via Pip)")
+    os.chdir('synesthesia')
+    main_func()
 
 if __name__ == '__main__':
     main_func()

@@ -10,4 +10,6 @@
 | Cory Baddeley    | 06/08/21     | WSL Setup                     |
 | Scott Engelhardt | 06/09/21     | Librosa setup and research    |
 | George Kolasa    | 06/10/21     | Essentia Tensorflow setup     |
+| George Kolasa    | 06/15/21     | Set up Pip package            |
 | Scott Engelhardt | 06/19/21     | Librosa and turtle interface  |
+| George Kolasa    | 06/23/21     | Fixed images & imports w/Pip  |
