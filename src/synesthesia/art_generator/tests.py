@@ -57,7 +57,7 @@ def layer():
     return canvas.export()
 
 
-def circle():
+def circle(r):
     context = Context(500, 500)
-    Circle(context, 200, 200, 100).draw()
+    Circle(context, 200, 200, r).draw()
     return Image.fromarray(context.export())

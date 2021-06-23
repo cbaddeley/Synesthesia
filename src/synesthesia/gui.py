@@ -6,9 +6,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from wsl import *
 from PIL.ImageQt import ImageQt
-from art_generator import tests, qt_canvas
+from art_generator import tests, qt_canvas, shapes_algo
 # from essentia_helper import *
-from lib import notes_to_canvas
 
 class Window(QWidget):
     def __init__(self):
@@ -29,10 +28,10 @@ class Window(QWidget):
 
         # line seperators
         sep = QPixmap('./images/line.png')
-        sep = sep.scaled(610, 1)
+        sep = sep.scaled(700, 1)
         self.mid_line = QLabel(self)
         self.mid_line.setPixmap(sep)
-        self.mid_line.move(-10, 190)
+        self.mid_line.move(-50, 190)
         sep = sep.scaled(1, 450)  # rotate vertically
         self.vert_line = QLabel(self)
         self.vert_line.setPixmap(sep)
@@ -40,7 +39,7 @@ class Window(QWidget):
 
         # select file label
         self.select_file = QLabel(self)
-        self.select_file.move(10, 153)
+        self.select_file.move(8, 153)
         self.select_file.setText('Audio File:')
 
         # input for folder path
@@ -56,7 +55,7 @@ class Window(QWidget):
 
         # select algorithm label
         self.select_algo = QLabel(self)
-        self.select_algo.move(10, 200)
+        self.select_algo.move(8, 202)
         self.select_algo.setText('Algorithm:')
 
         # ComboBox for different algorithms
@@ -80,14 +79,15 @@ class Window(QWidget):
         self.algo_lbl.setWordWrap(True)
         self.algo_lbl.setAlignment(Qt.AlignCenter)
  
-        # Tempo Slider
+    # Tempo Slider
         self.tempo_lbl = QLabel(self)
         self.tempo_lbl.setText('Tempo:')
-        self.tempo_lbl.move(10, 225)
+        self.tempo_lbl.move(8, 225)
         self.tempo_val = QLabel(self)
         self.tempo_val.move(165, 225)
         self.tempo_val.resize(35, 10)
         self.tempo_val.setText('0%')
+        self.tempo_val.setFont(QFont('', 8))
         self.tempo_sld = QSlider(Qt.Horizontal, self)
         self.tempo_sld.setRange(-100, 100)
         self.tempo_sld.setFocusPolicy(Qt.NoFocus)
@@ -95,15 +95,16 @@ class Window(QWidget):
         self.tempo_sld.move(75, 225)
         self.tempo_sld.valueChanged.connect(
             lambda val: self.tempo_val.setText(str(val) + '%'))
-            
-          # Frequency Slider
+
+    # Frequency Slider
         self.frq_lbl = QLabel(self)
         self.frq_lbl.setText('Frequency:')
-        self.frq_lbl.move(10, 250)
+        self.frq_lbl.move(8, 250)
         self.frq_val = QLabel(self)
         self.frq_val.move(165, 250)
         self.frq_val.resize(35, 10)
         self.frq_val.setText('0%')
+        self.frq_val.setFont(QFont('', 8))
         self.frq_sld = QSlider(Qt.Horizontal, self)
         self.frq_sld.setRange(-100, 100)
         self.frq_sld.setFocusPolicy(Qt.NoFocus)
@@ -112,14 +113,15 @@ class Window(QWidget):
         self.frq_sld.valueChanged.connect(
             lambda val: self.frq_val.setText(str(val) + '%'))
 
-        # Tone Slider
+    # Tone Slider
         self.tone_lbl = QLabel(self)
         self.tone_lbl.setText('Tone:')
-        self.tone_lbl.move(10, 275)
+        self.tone_lbl.move(8, 275)
         self.tone_val = QLabel(self)
         self.tone_val.move(165, 275)
         self.tone_val.resize(35, 10)
         self.tone_val.setText('0%')
+        self.tone_val.setFont(QFont('', 8))
         self.tone_sld = QSlider(Qt.Horizontal, self)
         self.tone_sld.setRange(-100, 100)
         self.tone_sld.setFocusPolicy(Qt.NoFocus)
@@ -128,14 +130,15 @@ class Window(QWidget):
         self.tone_sld.valueChanged.connect(
             lambda val: self.tone_val.setText(str(val) + '%'))
 
-        # Pitch Slider
+    # Pitch Slider
         self.pitch_lbl = QLabel(self)
         self.pitch_lbl.setText('Pitch:')
-        self.pitch_lbl.move(10, 300)
+        self.pitch_lbl.move(8, 300)
         self.pitch_val = QLabel(self)
         self.pitch_val.move(165, 300)
         self.pitch_val.resize(35, 10)
         self.pitch_val.setText('0%')
+        self.pitch_val.setFont(QFont('', 8))
         self.pitch_sld = QSlider(Qt.Horizontal, self)
         self.pitch_sld.setRange(-100, 100)
         self.pitch_sld.setFocusPolicy(Qt.NoFocus)
@@ -144,14 +147,15 @@ class Window(QWidget):
         self.pitch_sld.valueChanged.connect(
             lambda val: self.pitch_val.setText(str(val) + '%'))
 
-        # Octave Sliders
+    # Octave Sliders
         self.octave_lbl = QLabel(self)
         self.octave_lbl.setText('Octave:')
-        self.octave_lbl.move(10, 325)
+        self.octave_lbl.move(8, 325)
         self.octave_val = QLabel(self)
         self.octave_val.move(165, 325)
         self.octave_val.resize(35, 10)
         self.octave_val.setText('0%')
+        self.octave_val.setFont(QFont('', 8))
         self.octave_sld = QSlider(Qt.Horizontal, self)
         self.octave_sld.setRange(-100, 100)
         self.octave_sld.setFocusPolicy(Qt.NoFocus)
@@ -160,15 +164,15 @@ class Window(QWidget):
         self.octave_sld.valueChanged.connect(
             lambda val: self.octave_val.setText(str(val) + '%'))
             
-        # button to process file
+    # button to process file
         self.proc_file = QPushButton('Process...', self)
         self.proc_file.setGeometry(150, 150, 100, 40)
         self.proc_file.move(50, 500)
         self.proc_file.clicked.connect(self.process_file)
 
-        # place holder for processed image
+    # create the canvas for drawing
         self.canvas = qt_canvas.QtCanvas(self)
-        self.canvas.move(200, 200)
+        self.canvas.move(210,200)
 
     def dark_mode(self):
         # https://gist.github.com/mstuttgart/37c0e6d8f67a0611674e08294f3daef7
@@ -210,22 +214,9 @@ class Window(QWidget):
 
     def process_file(self):
         if self.algo_combo.currentText() == 'Algorithm 1':
-            notes_to_canvas(self.file_path.text(),
+            shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
                             self.tempo_sld.value(), self.octave_sld.value())
-
-        # Test 1
-        img = tests.blank_image()
-        # Test 2
-        # img = tests.cairo_image()
-        # Test 3
-        # img = tests.layer()
-        # Test 4
-        # img = tests.circle()
-        qim = ImageQt(img)
-        proc_img = QPixmap.fromImage(qim)
-        # self.canvas.setPixmap(proc_img)
-        # self.canvas.adjustSize()
-        self.canvas.refresh()
+           
 
 
 def main_func():
