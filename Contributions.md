@@ -12,4 +12,7 @@
 | George Kolasa    | 06/10/21     | Essentia Tensorflow setup     |
 | George Kolasa    | 06/15/21     | Set up Pip package            |
 | Scott Engelhardt | 06/19/21     | Librosa and turtle interface  |
+| Scott Engelhardt | 06/21/21     | Librosa and PyQt painting     |
+| Scott Engelhardt | 06/22/21     | Librosa and PyQt painting     |
 | George Kolasa    | 06/23/21     | Fixed images & imports w/Pip  |
+| Scott Engelhardt | 06/23/21     | Librosa and PyQt painting     |
