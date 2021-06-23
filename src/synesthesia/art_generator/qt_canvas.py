@@ -1,6 +1,6 @@
 import random
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 from random import randrange
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -11,12 +11,14 @@ class QtCanvas(QtWidgets.QWidget):
         super(QtCanvas, self).__init__(parent)
         self._pixmap = QPixmap()
         self.resize(400, 400)
-        self.x = 200
-        self.y = 200
-        self.lines = []
-        self.arcs = []
-        self.grads = []
-        self.brush = QBrush(Qt.red, Qt.SolidPattern)
+        self.x = 215
+        self.y = 215
+        self.color = Qt.black
+        self.size = 1
+        self.style = Qt.SolidLine
+        self.args = []
+        self.shapes = []
+        self.is_ready = False
 
     @property
     def pixmap(self):
@@ -32,30 +34,34 @@ class QtCanvas(QtWidgets.QWidget):
         else:
             self.resize(400, 400)
 
+      
+    def ready(self, val):
+        self.is_ready = val
+        self.repaint()
+
+    def clear_args(self):
+        self.args.clear()
+        self.is_ready = False
+    
+    def append_args(self, val):
+        self.args.append(val)
+        
+
     def paintEvent(self,e):
-        event = randrange(100)
-        if event < 50:
-            self.add_line()
-        elif event < 90:
-            self.add_arc()
-        else:
-            self.add_gradient()
+        if not self.is_ready:
+            return
 
-        painter = QtGui.QPainter(self)
-        painter.drawPixmap(self.rect(), self.pixmap)
+        painter = QPainter(self)
 
-        for x, y, width, height, grad, pen in self.grads:
-            painter.setPen(pen)
-            painter.setBrush(QBrush(grad))
-            painter.drawRect(x, y, width, height)
+        self.shapes.append([i for i in self.args])
 
-        for x1, y1, x2, y2, pen in self.lines:
-            painter.setPen(pen)
-            painter.drawLine(x1, y1, x2, y2)
+        for shape in self.shapes:
+            shape_type, x, y, color, size, style, *dimensions = shape
+            if shape_type == 'circle':
+                painter.setPen(QPen(color, size, style))
+                painter.drawEllipse(x, y, dimensions[0], dimensions[1])
+        
 
-        for x, y, width, height, start_angle, span_angle, pen in self.arcs:
-            painter.setPen(pen)
-            painter.drawArc(x, y, width, height,start_angle, span_angle)
 
     def add_line(self):
         new_x = randrange(400)
