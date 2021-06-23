@@ -3,7 +3,7 @@ import codecs
 import os
 
 
-VERSION = '0.0.16'
+VERSION = '0.0.60'
 DESCRIPTION = 'A Python audio image creation tool'
 LONG_DESCRIPTION = 'A Python audio image creation tool that takes audio and creates images from them.'
 
@@ -25,7 +25,7 @@ setup(
     entry_points =
     {   "console_scripts":
         [
-            "syne = synesthesia:main_func"
+            "syne = synesthesia:pip_main_func"
         ]
     }
 
