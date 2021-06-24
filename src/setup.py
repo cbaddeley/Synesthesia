@@ -3,7 +3,7 @@ import codecs
 import os
 
 
-VERSION = '0.0.60'
+VERSION = '0.0.61'
 DESCRIPTION = 'A Python audio image creation tool'
 LONG_DESCRIPTION = 'A Python audio image creation tool that takes audio and creates images from them.'
 
@@ -19,7 +19,7 @@ setup(
     url="https://github.com/cbaddeley/Synesthesia",
     license="GPL 3",
     install_requires=['PyQt5', 'librosa', 'essentia',
-                      'pillow', 'pycairo'],
+                      'pillow', 'pycairo', 'musicnn'],
     keywords=['audio', 'visualizer', "image"],
 
     entry_points =
