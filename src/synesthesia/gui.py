@@ -6,8 +6,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from wsl import *
 from PIL.ImageQt import ImageQt
-from art_generator import tests, qt_canvas, shapes_algo
-# from essentia_helper import *
+from art_generator import qt_canvas, shapes_algo
+import multiprocessing
 
 class Window(QWidget):
     def __init__(self):
@@ -214,8 +214,10 @@ class Window(QWidget):
 
     def process_file(self):
         if self.algo_combo.currentText() == 'Algorithm 1':
-            shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                            self.tempo_sld.value(), self.octave_sld.value())
+            p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
+            p.start()
+            # shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
+            #                 self.tempo_sld.value(), self.octave_sld.value())
            
 
 
