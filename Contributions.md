@@ -17,3 +17,4 @@
 | George Kolasa    | 06/23/21     | Fixed images & imports w/Pip  |
 | Scott Engelhardt | 06/23/21     | Librosa and PyQt painting     |
 | Cory Baddeley    | 06/23/21     | Cleanup and multiprocess      |
+| George Kolasa    | 06/23/21     | Genre Classification          |
