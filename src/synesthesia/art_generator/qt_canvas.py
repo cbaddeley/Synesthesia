@@ -66,54 +66,78 @@ class QtCanvas(QtWidgets.QWidget):
                     y += dim
                     painter.drawLine(x, y, x + dim, y - dim)
                     x += dim
-                    y -= dim # return y to original pos
+                    y -= dim  # return y to original pos
                     painter.drawLine(x, y, x - dim * 2, y)
-                    x -= dim * 2 # return x to original pos
+                    x -= dim * 2  # return x to original pos
                 elif shape_type == 'hexagon':
-                     # go right, down and right, down left, left, up left, up right
-                    painter.drawLine(x, y, x + dim, y) # right 
+                    # go right, down and right, down left, left, up left, up right
+                    painter.drawLine(x, y, x + dim, y)  # right
                     x += dim
-                    painter.drawLine(x, y, x + dim, y - dim) #  down and right
+                    painter.drawLine(x, y, x + dim, y - dim)  # down and right
                     x += dim
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y - dim) # down left
+                    painter.drawLine(x, y, x - dim, y - dim)  # down left
                     x -= dim
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y) # left
+                    painter.drawLine(x, y, x - dim, y)  # left
                     x -= dim
-                    painter.drawLine(x, y, x - dim, y + dim) # up left
+                    painter.drawLine(x, y, x - dim, y + dim)  # up left
                     x -= dim
                     y += dim
-                    painter.drawLine(x, y, x + dim, y + dim) # up right
+                    painter.drawLine(x, y, x + dim, y + dim)  # up right
                     x += dim
                     y += dim
                 elif shape_type == 'octogon':
-                     # go right, down and right, down, down left, left, up left, up, up right
-                    painter.drawLine(x, y, x + dim, y) # right 
+                    # go right, down and right, down, down left, left, up left, up, up right
+                    painter.drawLine(x, y, x + dim, y)  # right
                     x += dim
-                    painter.drawLine(x, y, x + dim, y - dim) #  down and right
+                    painter.drawLine(x, y, x + dim, y - dim)  # down and right
                     x += dim
                     y -= dim
-                    painter.drawLine(x, y, x, y - dim) # down 
+                    painter.drawLine(x, y, x, y - dim)  # down
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y - dim) # down left
+                    painter.drawLine(x, y, x - dim, y - dim)  # down left
                     x -= dim
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y) # left
+                    painter.drawLine(x, y, x - dim, y)  # left
                     x -= dim
-                    painter.drawLine(x, y, x - dim, y + dim) # up left
+                    painter.drawLine(x, y, x - dim, y + dim)  # up left
                     x -= dim
                     y += dim
-                    painter.drawLine(x, y, x, y + dim) # up 
+                    painter.drawLine(x, y, x, y + dim)  # up
                     y += dim
-                    painter.drawLine(x, y, x + dim, y + dim) # up right
+                    painter.drawLine(x, y, x + dim, y + dim)  # up right
                     x += dim
                     y += dim
                 elif shape_type == 'star':
-                   points = [
-                       [x,y],
-                       
-                   ]
-
+                    painter.drawLine(x, y, x + dim, y + dim/2)  # up right
+                    x += dim
+                    y += dim/2
+                    painter.drawLine(x, y, x + dim/2, y + dim)  # up right
+                    x += dim/2
+                    y += dim
+                    painter.drawLine(x, y, x + dim/2, y - dim)  # down right
+                    x += dim/2
+                    y -= dim
+                    painter.drawLine(x, y, x + dim, y - dim/2)  # down right
+                    x += dim
+                    y -= dim/2
+                    painter.drawLine(x, y, x - dim, y - dim/2)  # down left
+                    x -= dim
+                    y -= dim/2
+                    painter.drawLine(x, y, x, y - dim)  # down 
+                    y -= dim
+                    painter.drawLine(x, y, x - dim/2, y + dim)  # up left
+                    x -= dim/2
+                    y += dim
+                    painter.drawLine(x, y, x - dim/2, y - dim)  # down left
+                    x -= dim/2
+                    y -= dim
+                    painter.drawLine(x, y, x, y + dim)  # up
+                    y += dim
+                    painter.drawLine(x, y, x - dim, y + dim/2)  # up left
+                    x -= dim
+                    y += dim/2
+                    
     def refresh(self):
         self.update()
