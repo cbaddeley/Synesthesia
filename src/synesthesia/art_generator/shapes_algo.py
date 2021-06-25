@@ -22,7 +22,7 @@ def draw_note(canvas, note, octave_scale, colors):
     octave = int(int(note[1]) * (3 + (octave_scale / 100)))
     note = note[0] # exclude sharps
     canvas.clear_args()
-    color = colors[random.randint(0, len(colors) - 1)]
+    color = colors[random.randint(0, len(colors) - 1)] # picks random color from list
 
     if note == 'A':  # draw a circle
         canvas.append_args('circle')
