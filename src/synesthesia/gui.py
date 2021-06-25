@@ -196,7 +196,7 @@ class Window(QWidget):
         # https://pythonspot.com/pyqt5-file-dialog/
         # params for getOpenFileName are the window, the title, default file, file types
         file_name, _ = QFileDialog.getOpenFileName(
-            self, 'Select MP3 file', '', 'MP3 File (*.mp3)')
+            self, 'Select Audio file', '', 'Audio Files (*.mp3 *.wav)')
         if file_name:
             self.file_path.setText(file_name)
 
@@ -214,10 +214,10 @@ class Window(QWidget):
 
     def process_file(self):
         if self.algo_combo.currentText() == 'Algorithm 1':
-            p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
-            p.start()
-            # shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-            #                 self.tempo_sld.value(), self.octave_sld.value())
+            # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
+            # p.start()
+            shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
+                            self.tempo_sld.value(), self.octave_sld.value())
            
 
 
