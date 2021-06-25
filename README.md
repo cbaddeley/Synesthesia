@@ -1,5 +1,5 @@
 # Synesthesia
-Synesthesia is a lightweight audio visualization tool. Add an MP3 or WAV file and select your parameters, and Synesthesia creates an image based on the mood, rhythym, and melody of your audio file.
+Synesthesia is a lightweight audio visualization tool. Add an MP3 or WAV file and select your parameters, and Synesthesia creates an image based on the mood, rhythm, and melody of your audio file.
 
 
 ## Running it via Pip ## 
