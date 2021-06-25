@@ -60,6 +60,9 @@ class QtCanvas(QtWidgets.QWidget):
             if shape_type == 'circle':
                 painter.setPen(QPen(color, size, style))
                 painter.drawEllipse(x, y, dimensions[0], dimensions[1])
+            if shape_type == 'square':
+                painter.setPen(QPen(color, size, style))
+                painter.drawRect(QRect(x, y, dimensions[0], dimensions[1]))
         
 
 

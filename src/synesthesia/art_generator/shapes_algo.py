@@ -4,6 +4,9 @@ from PyQt5.QtCore import Qt
 from wsl import *
 import warnings
 set_display_to_host()
+from collections import Counter
+import subprocess
+import os
 
 
 # Purely for reference: All possible music genres a song can be (can be deleted later)
@@ -29,8 +32,15 @@ def draw_note(canvas, note, octave_scale):
         canvas.append_args(octave)  # width
         canvas.ready(True)
     elif note == 'B':  # draw a square
-        for _ in range(4):
-            pass
+        canvas.append_args('square')
+        canvas.append_args(canvas.x)
+        canvas.append_args(canvas.y)
+        canvas.append_args(canvas.color)
+        canvas.append_args(canvas.size)
+        canvas.append_args(canvas.style)
+        canvas.append_args(octave)  # height
+        canvas.append_args(octave)  # width
+        canvas.ready(True)
     elif note == 'C':  # draw a triangle
         for _ in range(3):
             pass
@@ -64,7 +74,16 @@ def draw_note(canvas, note, octave_scale):
 
 
 def notes_to_canvas(canvas, song_path, speed_scale, octave_scale):
-    y, sr = librosa.load(librosa.ex('trumpet'), sr=22050)
+    delete_wav_file = False
+    if song_path[-4:] == '.mp3':
+        wav_song_path = song_path[:-4] + '.wav'
+        if not os.path.exists(wav_song_path):
+            subprocess.call(['ffmpeg', '-i', song_path,
+                             wav_song_path])
+        song_path = wav_song_path
+        delete_wav_file = True
+
+    y, sr = librosa.load(song_path, sr=1411)
     S = np.abs(librosa.stft(y))
     bars = librosa.hz_to_note(S)
 
@@ -80,6 +99,14 @@ def notes_to_canvas(canvas, song_path, speed_scale, octave_scale):
         print("\nNo file path given.")
 
     for bar in bars:
-        for note in bar:
-            if '-' in note:
-                draw_note(canvas, note.split('-'), octave_scale)
+        d = Counter(bar)
+        # for note in bar:
+        #     if '-' in note:
+        #         d[note] += 1
+        result = d.most_common(1)
+        note = result[0]
+        if '-' in note[0]:
+            draw_note(canvas, note[0].split('-'), octave_scale)
+
+    if delete_wav_file:
+        os.remove(song_path)
