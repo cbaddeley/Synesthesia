@@ -68,7 +68,6 @@ def draw_note(canvas, note, octave_scale):
         canvas.append_args(canvas.color)
         canvas.append_args(canvas.size)
         canvas.append_args(canvas.style)
-        canvas.append_args(octave) 
         canvas.append_args(octave)  
     elif note == 'G': # change pen style
         styles = [Qt.SolidLine, Qt.DashLine, Qt.DotLine,
