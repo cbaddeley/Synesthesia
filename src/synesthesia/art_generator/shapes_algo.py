@@ -114,7 +114,11 @@ def notes_to_canvas(canvas, song_path, tempo_scale, octave_scale, freq_scale):
         d = Counter(bar)
         result = d.most_common(1)
         note = result[0]
+<<<<<<< HEAD
         if '-' in note[0]:
+=======
+        if '-' in note[0]:  
+>>>>>>> 596bc6105c8b32f165e860cfa869f532b0932e13
             draw_note(canvas, note[0].split('-'), octave_scale, genre_colors.getColors(musicGenre))
     
     if delete_wav_file:
