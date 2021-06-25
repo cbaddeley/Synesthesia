@@ -17,9 +17,9 @@ musicGenre = ''
 
 def draw_note(canvas, note, octave_scale):
     octave = int(int(note[1]) * (3 + (octave_scale / 100)))
-    note = note[0] # exclude sharps
+    note = note[0][0] # exclude sharps
     canvas.clear_args()
-
+    
     if note == 'A':  # draw a circle
         canvas.append_args('circle')
     elif note == 'B':  # draw a square
@@ -82,7 +82,8 @@ def notes_to_canvas(canvas, song_path, tempo_scale, octave_scale, freq_scale):
         song_path = wav_song_path
         delete_wav_file = True
 
-    sr = 11025 * (1 - (tempo_scale / 100))
+    sr = 10525 * (1 - (tempo_scale / 100)) + 1000
+
     y, sr = librosa.load(song_path, sr=sr)
     S = np.abs(librosa.stft(y))
     if freq_scale != 0:
@@ -110,6 +111,7 @@ def notes_to_canvas(canvas, song_path, tempo_scale, octave_scale, freq_scale):
         note = result[0]
         if '-' in note[0]:
             draw_note(canvas, note[0].split('-'), octave_scale)
+                
     
     if delete_wav_file:
         os.remove(song_path)

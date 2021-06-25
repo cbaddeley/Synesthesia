@@ -110,18 +110,34 @@ class QtCanvas(QtWidgets.QWidget):
                     x += dim
                     y += dim
                 elif shape_type == 'star':
-                    # https://www.programmersought.com/article/63306142781/
-                    for i in range(5):
-                        old_x = x
-                        old_y = y
-                        x = int(cos((18 + i * 72) / 180 * pi) * dim + x)
-                        y = int(-sin((18 + i * 72) / 180 * pi) * dim + y)
-                        painter.drawLine(old_x, old_y, x, y)
-
-                        old_x = x
-                        old_y = y
-                        x = int(cos((54 + i * 72) / 180 * pi) * dim/2 + x)
-                        y = int(-sin((54 + i * 72) / 180 * pi) * dim/2 + y)
-                        painter.drawLine(old_x, old_y, x,y)
+                    painter.drawLine(x, y, x + dim, y + dim/2)  # up right
+                    x += dim
+                    y += dim/2
+                    painter.drawLine(x, y, x + dim/2, y + dim)  # up right
+                    x += dim/2
+                    y += dim
+                    painter.drawLine(x, y, x + dim/2, y - dim)  # down right
+                    x += dim/2
+                    y -= dim
+                    painter.drawLine(x, y, x + dim, y - dim/2)  # down right
+                    x += dim
+                    y -= dim/2
+                    painter.drawLine(x, y, x - dim, y - dim/2)  # down left
+                    x -= dim
+                    y -= dim/2
+                    painter.drawLine(x, y, x, y - dim)  # down 
+                    y -= dim
+                    painter.drawLine(x, y, x - dim/2, y + dim)  # up left
+                    x -= dim/2
+                    y += dim
+                    painter.drawLine(x, y, x - dim/2, y - dim)  # down left
+                    x -= dim/2
+                    y -= dim
+                    painter.drawLine(x, y, x, y + dim)  # up
+                    y += dim
+                    painter.drawLine(x, y, x - dim, y + dim/2)  # up left
+                    x -= dim
+                    y += dim/2
+                    
     def refresh(self):
         self.update()
