@@ -66,54 +66,62 @@ class QtCanvas(QtWidgets.QWidget):
                     y += dim
                     painter.drawLine(x, y, x + dim, y - dim)
                     x += dim
-                    y -= dim # return y to original pos
+                    y -= dim  # return y to original pos
                     painter.drawLine(x, y, x - dim * 2, y)
-                    x -= dim * 2 # return x to original pos
+                    x -= dim * 2  # return x to original pos
                 elif shape_type == 'hexagon':
-                     # go right, down and right, down left, left, up left, up right
-                    painter.drawLine(x, y, x + dim, y) # right 
+                    # go right, down and right, down left, left, up left, up right
+                    painter.drawLine(x, y, x + dim, y)  # right
                     x += dim
-                    painter.drawLine(x, y, x + dim, y - dim) #  down and right
+                    painter.drawLine(x, y, x + dim, y - dim)  # down and right
                     x += dim
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y - dim) # down left
+                    painter.drawLine(x, y, x - dim, y - dim)  # down left
                     x -= dim
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y) # left
+                    painter.drawLine(x, y, x - dim, y)  # left
                     x -= dim
-                    painter.drawLine(x, y, x - dim, y + dim) # up left
+                    painter.drawLine(x, y, x - dim, y + dim)  # up left
                     x -= dim
                     y += dim
-                    painter.drawLine(x, y, x + dim, y + dim) # up right
+                    painter.drawLine(x, y, x + dim, y + dim)  # up right
                     x += dim
                     y += dim
                 elif shape_type == 'octogon':
-                     # go right, down and right, down, down left, left, up left, up, up right
-                    painter.drawLine(x, y, x + dim, y) # right 
+                    # go right, down and right, down, down left, left, up left, up, up right
+                    painter.drawLine(x, y, x + dim, y)  # right
                     x += dim
-                    painter.drawLine(x, y, x + dim, y - dim) #  down and right
+                    painter.drawLine(x, y, x + dim, y - dim)  # down and right
                     x += dim
                     y -= dim
-                    painter.drawLine(x, y, x, y - dim) # down 
+                    painter.drawLine(x, y, x, y - dim)  # down
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y - dim) # down left
+                    painter.drawLine(x, y, x - dim, y - dim)  # down left
                     x -= dim
                     y -= dim
-                    painter.drawLine(x, y, x - dim, y) # left
+                    painter.drawLine(x, y, x - dim, y)  # left
                     x -= dim
-                    painter.drawLine(x, y, x - dim, y + dim) # up left
+                    painter.drawLine(x, y, x - dim, y + dim)  # up left
                     x -= dim
                     y += dim
-                    painter.drawLine(x, y, x, y + dim) # up 
+                    painter.drawLine(x, y, x, y + dim)  # up
                     y += dim
-                    painter.drawLine(x, y, x + dim, y + dim) # up right
+                    painter.drawLine(x, y, x + dim, y + dim)  # up right
                     x += dim
                     y += dim
                 elif shape_type == 'star':
-                   points = [
-                       [x,y],
-                       
-                   ]
+                    # https://www.programmersought.com/article/63306142781/
+                    for i in range(5):
+                        old_x = x
+                        old_y = y
+                        x = int(cos((18 + i * 72) / 180 * pi) * dim + x)
+                        y = int(-sin((18 + i * 72) / 180 * pi) * dim + y)
+                        painter.drawLine(old_x, old_y, x, y)
 
+                        old_x = x
+                        old_y = y
+                        x = int(cos((54 + i * 72) / 180 * pi) * dim/2 + x)
+                        y = int(-sin((54 + i * 72) / 180 * pi) * dim/2 + y)
+                        painter.drawLine(old_x, old_y, x,y)
     def refresh(self):
         self.update()

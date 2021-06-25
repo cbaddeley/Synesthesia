@@ -15,7 +15,6 @@ import os
 # blank until gotten below
 musicGenre = ''
 
-
 def draw_note(canvas, note, octave_scale):
     octave = int(int(note[1]) * (3 + (octave_scale / 100)))
     note = note[0] # exclude sharps
@@ -23,52 +22,16 @@ def draw_note(canvas, note, octave_scale):
 
     if note == 'A':  # draw a circle
         canvas.append_args('circle')
-        canvas.append_args(canvas.x)
-        canvas.append_args(canvas.y)
-        canvas.append_args(canvas.color)
-        canvas.append_args(canvas.size)
-        canvas.append_args(canvas.style)
-        canvas.append_args(octave)  # height/width
     elif note == 'B':  # draw a square
         canvas.append_args('square')
-        canvas.append_args(canvas.x)
-        canvas.append_args(canvas.y)
-        canvas.append_args(canvas.color)
-        canvas.append_args(canvas.size)
-        canvas.append_args(canvas.style)
-        canvas.append_args(octave)  # height/wigth
     elif note == 'C':  # draw a triangle
         canvas.append_args('triangle')
-        canvas.append_args(canvas.x)
-        canvas.append_args(canvas.y)
-        canvas.append_args(canvas.color)
-        canvas.append_args(canvas.size)
-        canvas.append_args(canvas.style)
-        canvas.append_args(octave) 
     elif note == 'D':  # draw a hexagon
         canvas.append_args('hexagon')
-        canvas.append_args(canvas.x)
-        canvas.append_args(canvas.y)
-        canvas.append_args(canvas.color)
-        canvas.append_args(canvas.size)
-        canvas.append_args(canvas.style)
-        canvas.append_args(octave) 
     elif note == 'E':  # draw an octogon
         canvas.append_args('octogon')
-        canvas.append_args(canvas.x)
-        canvas.append_args(canvas.y)
-        canvas.append_args(canvas.color)
-        canvas.append_args(canvas.size)
-        canvas.append_args(canvas.style)
-        canvas.append_args(octave) 
     elif note == 'F': # draw a star
-        canvas.append_args('circle')
-        canvas.append_args(canvas.x)
-        canvas.append_args(canvas.y)
-        canvas.append_args(canvas.color)
-        canvas.append_args(canvas.size)
-        canvas.append_args(canvas.style)
-        canvas.append_args(octave)  
+        canvas.append_args('star') 
     elif note == 'G': # change pen style
         styles = [Qt.SolidLine, Qt.DashLine, Qt.DotLine,
                    Qt.DashDotLine, Qt.DashDotDotLine, Qt.CustomDashLine]
@@ -95,7 +58,13 @@ def draw_note(canvas, note, octave_scale):
         canvas.y = (canvas.y - octave) % 400
         canvas.x = (canvas.x - octave) % 400
 
-    if note != 'F' or note != 'G':
+    if note != 'G':
+        canvas.append_args(canvas.x)
+        canvas.append_args(canvas.y)
+        canvas.append_args(canvas.color)
+        canvas.append_args(canvas.size)
+        canvas.append_args(canvas.style)
+        canvas.append_args(octave) 
         canvas.ready()
     # elif note[0] == 'F':  # change the pen color to random color
     #     colors = [Qt.red, Qt.magenta, Qt.yellow,
@@ -114,9 +83,7 @@ def notes_to_canvas(canvas, song_path, tempo_scale, octave_scale, freq_scale):
         delete_wav_file = True
 
     sr = 11025 * (1 - (tempo_scale / 100))
-    
-
-    y, sr = librosa.load(song_path)
+    y, sr = librosa.load(song_path, sr=sr)
     S = np.abs(librosa.stft(y))
     if freq_scale != 0:
         if freq_scale == -100:

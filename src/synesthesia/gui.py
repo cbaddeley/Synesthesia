@@ -134,7 +134,7 @@ class Window(QWidget):
         self.proc_file.move(50, 400)
         self.proc_file.clicked.connect(self.process_file)
         self.proc_lbl = QLabel('', self)
-        self.proc_lbl.move(60, 500)
+        self.proc_lbl.move(50, 500)
         self.proc_lbl.setFont(QFont('', 12))
 
     # create the canvas for drawing
@@ -188,7 +188,7 @@ class Window(QWidget):
                     # p.start()
                     shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
                                     self.tempo_sld.value(), self.octave_sld.value(), self.frq_sld.value())
-                self.canvas.repaint()
+                self.canvas.shapes = []
                 self.proc_lbl.setText('')
 
 
