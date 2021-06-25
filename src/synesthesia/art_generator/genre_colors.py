@@ -1,4 +1,5 @@
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
 
 def getColors(genre):
 
@@ -25,7 +26,7 @@ def getColors(genre):
         'rock'              : [], 
         'pop'               : [], 
         'alternative'       : [], 
-        'indie'             : [],
+        'indie'             : [QColor(244, 125, 74), QColor(225,45,90), QColor(255,236,92), QColor(0,141,203)],
         'electronic'        : [], 
         'female vocalists'  : [],
         'dance'             : [], 
