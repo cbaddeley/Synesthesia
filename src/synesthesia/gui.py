@@ -213,11 +213,13 @@ class Window(QWidget):
         self.algo_lbl.resize(150, 80)
 
     def process_file(self):
-        if self.algo_combo.currentText() == 'Algorithm 1':
-            # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
-            # p.start()
-            shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                            self.tempo_sld.value(), self.octave_sld.value())
+        if self.file_path.text()[-4:].lower() in ('.mp3', '.wav'):
+            if os.path.exists(self.file_path.text()):      
+                if self.algo_combo.currentText() == 'Algorithm 1':
+                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
+                    # p.start()
+                    shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
+                                    self.tempo_sld.value(), self.octave_sld.value())
            
 
 

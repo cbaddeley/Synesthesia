@@ -18,7 +18,7 @@ musicGenre = ''
 
 def draw_note(canvas, note, octave_scale):
     octave = int(int(note[1]) * (1 + (octave_scale / 100)))
-    note = note[0]
+    note = note[0] # exclude sharps
     canvas.clear_args()
 
     if note == 'A':  # draw a circle
@@ -30,7 +30,6 @@ def draw_note(canvas, note, octave_scale):
         canvas.append_args(canvas.style)
         canvas.append_args(octave)  # height
         canvas.append_args(octave)  # width
-        canvas.ready(True)
     elif note == 'B':  # draw a square
         canvas.append_args('square')
         canvas.append_args(canvas.x)
@@ -40,37 +39,39 @@ def draw_note(canvas, note, octave_scale):
         canvas.append_args(canvas.style)
         canvas.append_args(octave)  # height
         canvas.append_args(octave)  # width
-        canvas.ready(True)
     elif note == 'C':  # draw a triangle
-        for _ in range(3):
-            pass
-    elif note == 'D':  # draw a octogon
+        canvas.append_args('triangle')
+        canvas.append_args(canvas.x)
+        canvas.append_args(canvas.y)
+        canvas.append_args(canvas.color)
+        canvas.append_args(canvas.size)
+        canvas.append_args(canvas.style)
+        canvas.append_args(octave) 
+    elif note == 'D':  # draw a hexagon
         for _ in range(8):
             pass
-    elif note == 'E':  # draw a hexagon
+    elif note == 'E':   # draw a star
         for _ in range(6):
             pass
-    elif note == 'F':  # draw a star
-        for _ in range(5):
-            pass
-    # sharp notes, don't want the sharp char to cause issues
-    elif note[0] == 'A':  # move up by octave pixels
-        canvas.y = (canvas.y + octave) % 400
-    elif note[0] == 'B':   # move down by octave pixels
-        canvas.y = (canvas.y - octave) % 400
-    elif note[0] == 'C':  # move right by octave pixels
-        canvas.x = (canvas.x + octave) % 400
-    elif note[0] == 'D':  # move left by octave pixels
-        canvas.x = (canvas.x - octave) % 400
-    elif note[0] == 'E':  # pick up pen to octave places back
-        styles = [Qt.SolidLine, Qt.DashLine, Qt.DotLine,
-                  Qt.DashDotLine, Qt.DashDotDotLine, Qt.CustomDashLine]
-        canvas.style = styles[octave % len(styles)]
+    elif note == 'F': 
+        if octave % 4 == 0: # move up
+            canvas.y = (canvas.y + octave) % 400
+        elif octave % 4 == 1: # move down
+            canvas.y = (canvas.y - octave) % 400
+        elif octave % 4 == 2:  # move right
+            canvas.x = (canvas.x + octave) % 400
+        elif octave % 4 == 2: # move left
+            canvas.x = (canvas.x - octave) % 400
+    canvas.ready(True)
+    # elif note[0] == 'E':  # pick up pen to octave places back
+    #     styles = [Qt.SolidLine, Qt.DashLine, Qt.DotLine,
+    #               Qt.DashDotLine, Qt.DashDotDotLine, Qt.CustomDashLine]
+    #     canvas.style = styles[octave % len(styles)]
 
-    elif note[0] == 'F':  # change the pen color to random color
-        colors = [Qt.red, Qt.magenta, Qt.yellow,
-                  Qt.green, Qt.blue, Qt.white, Qt.cyan]
-        canvas.color = colors[octave % len(colors)]
+    # elif note[0] == 'F':  # change the pen color to random color
+    #     colors = [Qt.red, Qt.magenta, Qt.yellow,
+    #               Qt.green, Qt.blue, Qt.white, Qt.cyan]
+    #     canvas.color = colors[octave % len(colors)]
 
 
 def notes_to_canvas(canvas, song_path, speed_scale, octave_scale):
@@ -100,13 +101,10 @@ def notes_to_canvas(canvas, song_path, speed_scale, octave_scale):
 
     for bar in bars:
         d = Counter(bar)
-        # for note in bar:
-        #     if '-' in note:
-        #         d[note] += 1
         result = d.most_common(1)
         note = result[0]
         if '-' in note[0]:
             draw_note(canvas, note[0].split('-'), octave_scale)
-
+    
     if delete_wav_file:
         os.remove(song_path)
