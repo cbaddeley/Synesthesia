@@ -64,18 +64,16 @@ class Window(QWidget):
         self.algo_combo.resize(120, 20)
         algos = [
             '',  # blank so when displayed nothing is autoselected
-            'Algorithm 1',
+            'Shape of You',
             'Algorithm 2',
             'Algorithm 3',
-            'Algorithm 4',
-            'Algorithm 5',
         ]
         self.algo_combo.addItems(algos)
         self.algo_combo.activated[str].connect(self.on_algo_change)
 
         # label for algorithm label
         self.algo_lbl = QLabel(self)
-        self.algo_lbl.move(25, 375)
+        self.algo_lbl.move(25, 300)
         self.algo_lbl.setWordWrap(True)
         self.algo_lbl.setAlignment(Qt.AlignCenter)
  
@@ -113,46 +111,12 @@ class Window(QWidget):
         self.frq_sld.valueChanged.connect(
             lambda val: self.frq_val.setText(str(val) + '%'))
 
-    # Tone Slider
-        self.tone_lbl = QLabel(self)
-        self.tone_lbl.setText('Tone:')
-        self.tone_lbl.move(8, 275)
-        self.tone_val = QLabel(self)
-        self.tone_val.move(165, 275)
-        self.tone_val.resize(35, 10)
-        self.tone_val.setText('0%')
-        self.tone_val.setFont(QFont('', 8))
-        self.tone_sld = QSlider(Qt.Horizontal, self)
-        self.tone_sld.setRange(-100, 100)
-        self.tone_sld.setFocusPolicy(Qt.NoFocus)
-        self.tone_sld.setPageStep(1)
-        self.tone_sld.move(75, 275)
-        self.tone_sld.valueChanged.connect(
-            lambda val: self.tone_val.setText(str(val) + '%'))
-
-    # Pitch Slider
-        self.pitch_lbl = QLabel(self)
-        self.pitch_lbl.setText('Pitch:')
-        self.pitch_lbl.move(8, 300)
-        self.pitch_val = QLabel(self)
-        self.pitch_val.move(165, 300)
-        self.pitch_val.resize(35, 10)
-        self.pitch_val.setText('0%')
-        self.pitch_val.setFont(QFont('', 8))
-        self.pitch_sld = QSlider(Qt.Horizontal, self)
-        self.pitch_sld.setRange(-100, 100)
-        self.pitch_sld.setFocusPolicy(Qt.NoFocus)
-        self.pitch_sld.setPageStep(1)
-        self.pitch_sld.move(75, 300)
-        self.pitch_sld.valueChanged.connect(
-            lambda val: self.pitch_val.setText(str(val) + '%'))
-
     # Octave Sliders
         self.octave_lbl = QLabel(self)
         self.octave_lbl.setText('Octave:')
-        self.octave_lbl.move(8, 325)
+        self.octave_lbl.move(8, 275)
         self.octave_val = QLabel(self)
-        self.octave_val.move(165, 325)
+        self.octave_val.move(165, 275)
         self.octave_val.resize(35, 10)
         self.octave_val.setText('0%')
         self.octave_val.setFont(QFont('', 8))
@@ -160,15 +124,18 @@ class Window(QWidget):
         self.octave_sld.setRange(-100, 100)
         self.octave_sld.setFocusPolicy(Qt.NoFocus)
         self.octave_sld.setPageStep(1)
-        self.octave_sld.move(75, 325)
+        self.octave_sld.move(75, 275)
         self.octave_sld.valueChanged.connect(
             lambda val: self.octave_val.setText(str(val) + '%'))
             
     # button to process file
         self.proc_file = QPushButton('Process...', self)
         self.proc_file.setGeometry(150, 150, 100, 40)
-        self.proc_file.move(50, 500)
+        self.proc_file.move(50, 400)
         self.proc_file.clicked.connect(self.process_file)
+        self.proc_lbl = QLabel('', self)
+        self.proc_lbl.move(60, 500)
+        self.proc_lbl.setFont(QFont('', 12))
 
     # create the canvas for drawing
         self.canvas = qt_canvas.QtCanvas(self)
@@ -203,24 +170,26 @@ class Window(QWidget):
     def on_algo_change(self):
         algo_desc = {
             '': '',
-            'Algorithm 1': 'Draw a collection of shapes and colors based on the notes and octaves',
+            'Shape of You': 'Draw a collection of shapes based on notes and octaves',
             'Algorithm 2': "A longer desctription for how algorithm 2 works with some of it's functionalities",
             'Algorithm 3': 'Brief description for algorithm 3',
-            'Algorithm 4': 'Brief description for algorithm 4',
-            'Algorithm 5': 'Brief description for algorithm 5',
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
         self.algo_lbl.resize(150, 80)
 
     def process_file(self):
         if self.file_path.text()[-4:].lower() in ('.mp3', '.wav'):
-            if os.path.exists(self.file_path.text()):      
-                if self.algo_combo.currentText() == 'Algorithm 1':
+            if os.path.exists(self.file_path.text()):
+                self.proc_lbl.setText('Processing...')
+                self.proc_lbl.adjustSize()
+                self.canvas.repaint()     
+                if self.algo_combo.currentText() == 'Shape of You':
                     # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
                     # p.start()
                     shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                                    self.tempo_sld.value(), self.octave_sld.value())
-           
+                                    self.tempo_sld.value(), self.octave_sld.value(), self.frq_sld.value())
+                self.canvas.repaint()
+                self.proc_lbl.setText('')
 
 
 def main_func():
