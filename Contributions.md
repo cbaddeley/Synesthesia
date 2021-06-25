@@ -18,3 +18,5 @@
 | Scott Engelhardt | 06/23/21     | Librosa and PyQt painting     |
 | Cory Baddeley    | 06/23/21     | Cleanup and multiprocess      |
 | George Kolasa    | 06/23/21     | Genre Classification          |
+| Cory Baddeley    | 06/24/21     | Work w/ Scott on Shapes/Audio |
+| Scott Engelhardt | 06/24/21     | Work w/ Cory on Shapes/Audio  |
