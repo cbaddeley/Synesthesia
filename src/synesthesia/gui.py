@@ -6,8 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from wsl import *
 from PIL.ImageQt import ImageQt
-from art_generator import qt_canvas, lines_algo, shapes_algo, curvy_algo
-import multiprocessing
+from art_generator import qt_canvas, process_audio
 
 class Window(QWidget):
     def __init__(self):
@@ -150,7 +149,7 @@ class Window(QWidget):
         self.proc_file.move(50, 400)
         self.proc_file.clicked.connect(self.process_file)
         self.proc_lbl = QLabel('', self)
-        self.proc_lbl.move(50, 500)
+        self.proc_lbl.move(53, 500)
         self.proc_lbl.setFont(QFont('', 12))
 
     # create the canvas for drawing
@@ -199,23 +198,14 @@ class Window(QWidget):
             if os.path.exists(self.file_path.text()):
                 self.proc_lbl.setText('Processing...')
                 self.proc_lbl.adjustSize()
-                self.canvas.repaint()     
-                if self.algo_combo.currentText() == 'Shape of You':
-                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.sr_sld.value(),self.octave_sld.value()))
-                    # p.start()
-                    shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
-                elif self.algo_combo.currentText() == 'Line Rider':
-                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
-                    # p.start()
-                    lines_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
-                elif self.algo_combo.currentText() == '/r/curvy':
-                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
-                    # p.start()
-                    curvy_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
+                self.canvas.clear_args()
                 self.canvas.shapes = []
+                self.canvas.repaint()   
+
+                # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.sr_sld.value(),self.octave_sld.value()))
+                # p.start()
+                process_audio.proc_audio(self.algo_combo.currentText(),self.canvas, self.file_path.text(),
+                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
                 self.proc_lbl.setText('')
 
 
