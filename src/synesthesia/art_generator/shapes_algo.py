@@ -13,10 +13,8 @@ import random
 # blank until gotten below
 musicGenre = ''
 
-
-def draw_note(canvas, note, octave_scale, colors):
-
-    octave = int(int(note[1]) * (3 + (octave_scale / 100)))
+def draw_note(canvas, note, oct_selection):
+    octave = int(note[1]) * (3 + oct_selection)
     note = note[0][0] # exclude sharps
     canvas.clear_args()
     color = colors[random.randint(0, len(colors) - 1)] # picks random color from list
@@ -74,7 +72,7 @@ def draw_note(canvas, note, octave_scale, colors):
     #     canvas.color = colors[octave % len(colors)]
 
 
-def notes_to_canvas(canvas, song_path, tempo_scale, octave_scale, freq_scale):
+def notes_to_canvas(canvas, song_path, sr_selection, oct_selection, freq_scale):
     delete_wav_file = False
     if song_path[-4:] == '.mp3':
         wav_song_path = song_path[:-4] + '.wav'
@@ -84,13 +82,11 @@ def notes_to_canvas(canvas, song_path, tempo_scale, octave_scale, freq_scale):
         song_path = wav_song_path
         delete_wav_file = True
 
-    sr = 10525 * (1 - (tempo_scale / 100)) + 1000
+    sr = sr_selection
 
     y, sr = librosa.load(song_path, sr=sr)
     S = np.abs(librosa.stft(y))
     if freq_scale != 0:
-        if freq_scale == -100:
-            freq_scale == -99
         S *= (1 +  (freq_scale / 100))
     bars = librosa.hz_to_note(S)
 
@@ -112,7 +108,7 @@ def notes_to_canvas(canvas, song_path, tempo_scale, octave_scale, freq_scale):
         result = d.most_common(1)
         note = result[0]
         if '-' in note[0]:  
-            draw_note(canvas, note[0].split('-'), octave_scale, genre_colors.getColors(musicGenre))
+            draw_note(canvas, note[0].split('-'), oct_selection, genre_colors.getColors(musicGenre))
     
     if delete_wav_file:
         os.remove(song_path)
