@@ -2,6 +2,7 @@
 import librosa
 import numpy as np
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPainterPath
 from wsl import *
 import warnings
 set_display_to_host()
@@ -39,7 +40,7 @@ def proc_audio(algo,canvas, song_path, sr_selection, oct_selection, freq_scale):
     except:
         musicGenre = ''
         print("\nNo file path given.")
-
+    path = QPainterPath()
     for i, bar in enumerate(bars):
         if i == len(bars) -1:
             pass
@@ -52,7 +53,7 @@ def proc_audio(algo,canvas, song_path, sr_selection, oct_selection, freq_scale):
             elif algo == 'Line Rider':
                 lines_algo.draw_note(canvas, note[0].split('-'), oct_selection, genre_colors.getColors(musicGenre))
             elif algo == '/r/curvy':
-                curvy_algo.draw_note(canvas, note[0].split('-'), oct_selection, genre_colors.getColors(musicGenre))
+                curvy_algo.draw_note(canvas, note[0].split('-'), oct_selection, genre_colors.getColors(musicGenre), path)
             
     if delete_wav_file:
         os.remove(song_path)

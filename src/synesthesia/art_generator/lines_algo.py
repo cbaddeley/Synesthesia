@@ -4,8 +4,8 @@ def draw_note(canvas, note, octave_scale, colors):
 
     octave = int(int(note[1]) * (3 + (octave_scale / 100)))
     note = note[0]
-    x = canvas.x
-    y = canvas.y
+    x = canvas.x % 400
+    y = canvas.y % 400
     xdiff = 0
     ydiff = 0
     stretch_factor = 1
@@ -30,16 +30,16 @@ def draw_note(canvas, note, octave_scale, colors):
         xdiff = -7
     elif note == 'G': # move W
         xdiff = -10
-    elif note[0] == 'A': # move NW
+    elif note[0] == 'A#': # move NW
         xdiff = -7
         ydiff = 7
-    elif note[0] == 'C': # move NNE
+    elif note[0] == 'C#': # move NNE
         ydiff = 8
         xdiff = 6
-    elif note[0] == 'F': # move WSW
+    elif note[0] == 'F#': # move WSW
         xdiff = -8
         ydiff = -6
-    elif note[0] == 'G': # move SSE
+    elif note[0] == 'G#': # move SSE
         ydiff = -8
         xdiff = 6
         
