@@ -65,6 +65,12 @@ class QtCanvas(QtWidgets.QWidget):
                     self.x %= 400
                     self.y += ydiff
                     self.y %= 400
+                elif shape_type == 'arc':
+                    painter.drawArc(x % 400, y % 400, dim, ydiff, dim + ydiff, dim * ydiff)
+                    self.x += dim
+                    self.x %= 400
+                    self.y += ydiff
+                    self.y %= 400
                 elif shape_type == 'triangle':
                     # go up and right, down and right, left left forming isosceles
                     painter.drawLine(x, y, x + dim, y + dim)
