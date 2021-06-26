@@ -83,7 +83,7 @@ def getColors(genre):
         }
 
     colors = genre_colors.get(genre)
-    if colors is None or colors == []: # if genre not found, assigns list of 20 random colors
+    if colors is None or colors == []: # if genre not found, assigns list of 20 random git colors
         colors = all_colors
     else:
         colors = hex_to_colors(colors)
