@@ -204,12 +204,12 @@ class Window(QWidget):
                     # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.sr_sld.value(),self.octave_sld.value()))
                     # p.start()
                     shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                                    self.tempo_sld.value(), self.octave_sld.value(), self.frq_sld.value())
+                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
                 elif self.algo_combo.currentText() == 'Line Rider':
                     # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
                     # p.start()
                     lines_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                                    self.tempo_sld.value(), self.octave_sld.value(), self.frq_sld.value())
+                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
                 self.canvas.shapes = []
                 self.proc_lbl.setText('')
 

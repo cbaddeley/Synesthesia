@@ -13,7 +13,7 @@ import random
 # blank until gotten below
 musicGenre = ''
 
-def draw_note(canvas, note, oct_selection):
+def draw_note(canvas, note, oct_selection, colors):
     octave = int(note[1]) * (3 + oct_selection)
     note = note[0][0] # exclude sharps
     canvas.clear_args()
