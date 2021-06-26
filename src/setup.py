@@ -1,11 +1,13 @@
 from setuptools import setup, find_packages
+from setuptools.command.install import install
 import codecs
-import os
+import os, sys, subprocess
 
 
-VERSION = '0.0.61'
+VERSION = '0.0.77'
 DESCRIPTION = 'A Python audio image creation tool'
 LONG_DESCRIPTION = 'A Python audio image creation tool that takes audio and creates images from them.'
+
 
 # Setting up
 setup(
@@ -30,3 +32,6 @@ setup(
     }
 
 )
+
+
+

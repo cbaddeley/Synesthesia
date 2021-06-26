@@ -20,3 +20,5 @@
 | George Kolasa    | 06/23/21     | Genre Classification          |
 | Cory Baddeley    | 06/24/21     | Work w/ Scott on Shapes/Audio |
 | Scott Engelhardt | 06/24/21     | Work w/ Cory on Shapes/Audio  |
+| Scott Engelhardt | 06/25/21     | Finished shapes algorithm     |
+| George Kolasa    | 06/25/21     | Installs apt packages w/pip   |

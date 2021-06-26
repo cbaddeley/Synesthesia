@@ -7,10 +7,8 @@ set_display_to_host()
 from collections import Counter
 import subprocess
 import os
-
-
-# Purely for reference: All possible music genres a song can be (can be deleted later)
-# “rock”, “pop”, “alternative”, “indie”, “electronic”, “female vocalists”, “dance”, “00s”, “alternative rock”, “jazz”, “beautiful”, “metal”, “chillout”, “male vocalists”, “classic rock”, “soul”, “indie rock”, “Mellow”, “electronica”, “80s”, “folk”, “90s”, “chill”, “instrumental”, “punk”, “oldies”, “blues”, “hard rock”, “ambient”, “acoustic”, “experimental”, “female vocalist”, “guitar”, “Hip-Hop”, “70s”, “party”, “country”, “easy listening”, “sexy”, “catchy”, “funk”, “electro”, “heavy metal”, “Progressive rock”, “60s”, “rnb”, “indie pop”, “sad”, “House”, “happy”
+from . import genre_colors
+import random
 
 # blank until gotten below
 musicGenre = ''
@@ -19,6 +17,7 @@ def draw_note(canvas, note, oct_selection):
     octave = int(note[1]) * (3 + oct_selection)
     note = note[0][0] # exclude sharps
     canvas.clear_args()
+    color = colors[random.randint(0, len(colors) - 1)] # picks random color from list
     
     if note == 'A':  # draw a circle
         canvas.append_args('circle')
@@ -61,7 +60,7 @@ def draw_note(canvas, note, oct_selection):
     if note != 'G':
         canvas.append_args(canvas.x)
         canvas.append_args(canvas.y)
-        canvas.append_args(canvas.color)
+        canvas.append_args(color)
         canvas.append_args(canvas.size)
         canvas.append_args(canvas.style)
         canvas.append_args(octave) 
@@ -107,9 +106,8 @@ def notes_to_canvas(canvas, song_path, sr_selection, oct_selection, freq_scale):
         d = Counter(bar)
         result = d.most_common(1)
         note = result[0]
-        if '-' in note[0]:
-            draw_note(canvas, note[0].split('-'), oct_selection)
-                
+        if '-' in note[0]:  
+            draw_note(canvas, note[0].split('-'), octave_scale, genre_colors.getColors(musicGenre))
     
     if delete_wav_file:
         os.remove(song_path)
