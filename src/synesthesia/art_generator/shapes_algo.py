@@ -66,6 +66,7 @@ def draw_note(canvas, note, octave_scale, colors):
         canvas.append_args(canvas.size)
         canvas.append_args(canvas.style)
         canvas.append_args(octave) 
+        canvas.append_args(None) # this is for the 8th attribute which only applies to the line algo
         canvas.ready()
     # elif note[0] == 'F':  # change the pen color to random color
     #     colors = [Qt.red, Qt.magenta, Qt.yellow,

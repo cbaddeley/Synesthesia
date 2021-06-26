@@ -6,7 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from wsl import *
 from PIL.ImageQt import ImageQt
-from art_generator import qt_canvas, shapes_algo
+from art_generator import qt_canvas, lines_algo, shapes_algo
 import multiprocessing
 
 class Window(QWidget):
@@ -65,7 +65,7 @@ class Window(QWidget):
         algos = [
             '',  # blank so when displayed nothing is autoselected
             'Shape of You',
-            'Algorithm 2',
+            'Line Rider',
             'Algorithm 3',
         ]
         self.algo_combo.addItems(algos)
@@ -171,7 +171,7 @@ class Window(QWidget):
         algo_desc = {
             '': '',
             'Shape of You': 'Draw a collection of shapes based on notes and octaves',
-            'Algorithm 2': "A longer desctription for how algorithm 2 works with some of it's functionalities",
+            'Line Rider': 'Draws a collection of lines based on notes and octaves',
             'Algorithm 3': 'Brief description for algorithm 3',
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
@@ -187,6 +187,11 @@ class Window(QWidget):
                     # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
                     # p.start()
                     shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
+                                    self.tempo_sld.value(), self.octave_sld.value(), self.frq_sld.value())
+                elif self.algo_combo.currentText() == 'Line Rider':
+                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
+                    # p.start()
+                    lines_algo.notes_to_canvas(self.canvas, self.file_path.text(),
                                     self.tempo_sld.value(), self.octave_sld.value(), self.frq_sld.value())
                 self.canvas.shapes = []
                 self.proc_lbl.setText('')

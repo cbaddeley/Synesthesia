@@ -18,9 +18,11 @@ def draw_note(canvas, note, octave_scale, colors):
 
     octave = int(int(note[1]) * (3 + (octave_scale / 100)))
     note = note[0][0] # exclude sharps
-    x = canvas.x1
-    y = canvas.y1
-    xdiff, ydiff = 0, stretch_factor
+    x = canvas.x
+    y = canvas.y
+    xdiff = 0
+    ydiff = 0
+    stretch_factor = 1
     canvas.clear_args()
     color = colors[random.randint(0, len(colors) - 1)] # picks random color from list
     canvas.append_args('line')
@@ -56,18 +58,19 @@ def draw_note(canvas, note, octave_scale, colors):
         xdiff = 6
         
 
-    stretch_factor = (octave % 8) + 1
+    stretch_factor = ((octave % 8) + 1) / 2
     canvas.x = x
     canvas.y = y
-    canvas.x1 = x + (xdiff * stretch_factor)
-    canvas.y1 = y + (ydiff * stretch_factor)
+    xdiff *= stretch_factor
+    ydiff *= stretch_factor
 
     canvas.append_args(canvas.x)
     canvas.append_args(canvas.y)
     canvas.append_args(color)
     canvas.append_args(canvas.size)
     canvas.append_args(canvas.style)
-    canvas.append_args(octave) 
+    canvas.append_args(xdiff)
+    canvas.append_args(ydiff) 
     canvas.ready()
 
 
