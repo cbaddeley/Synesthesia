@@ -10,9 +10,6 @@ import os
 from . import genre_colors
 import random
 
-# blank until gotten below
-musicGenre = ''
-
 
 def draw_note(canvas, note, octave_scale, colors):
 
@@ -91,7 +88,8 @@ def notes_to_canvas(canvas, song_path, sr_selection, oct_selection, freq_scale):
     if freq_scale != 0:
         S *= (1 +  (freq_scale / 100))
     bars = librosa.hz_to_note(S)
-
+    
+    musicGenre = ''
     # Musicnn gives a bunch of useless console warnings that we don't need to see and should just try to block out AMAP
     try:
         warnings.filterwarnings("ignore")

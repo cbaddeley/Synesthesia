@@ -86,19 +86,19 @@ class Window(QWidget):
         self.sr_val = QLabel(self)
         self.sr_val.move(170, 227)
         self.sr_val.resize(35, 10)
-        self.sr_val.setText('10525')
+        self.sr_val.setText('11.5k')
         self.sr_val.setFont(QFont('', 8))
         self.sr_val.setToolTip(sr_tt)
         self.sr_sld = QSlider(Qt.Horizontal, self)
         self.sr_sld.setRange(1000, 22050)
-        self.sr_sld.setValue(10525)
+        self.sr_sld.setValue(11525)
         self.sr_sld.setFocusPolicy(Qt.NoFocus)
         self.sr_sld.setPageStep(1)
         self.sr_sld.setToolTip(sr_tt)
         self.sr_sld.move(90, 226)
         self.sr_sld.resize(75,15)
         self.sr_sld.valueChanged.connect(
-            lambda val: self.sr_val.setText(str(val)))
+            lambda val: self.sr_val.setText(str(round(val/1000,1)) + 'k'))
 
     # Frequency Slider
         frq_tt = 'Increases or decreases the frequencies by the percent selected'
