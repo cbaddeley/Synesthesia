@@ -77,56 +77,72 @@ class Window(QWidget):
         self.algo_lbl.setWordWrap(True)
         self.algo_lbl.setAlignment(Qt.AlignCenter)
  
-    # Tempo Slider
-        self.tempo_lbl = QLabel(self)
-        self.tempo_lbl.setText('Tempo:')
-        self.tempo_lbl.move(8, 225)
-        self.tempo_val = QLabel(self)
-        self.tempo_val.move(165, 225)
-        self.tempo_val.resize(35, 10)
-        self.tempo_val.setText('0%')
-        self.tempo_val.setFont(QFont('', 8))
-        self.tempo_sld = QSlider(Qt.Horizontal, self)
-        self.tempo_sld.setRange(-100, 100)
-        self.tempo_sld.setFocusPolicy(Qt.NoFocus)
-        self.tempo_sld.setPageStep(1)
-        self.tempo_sld.move(75, 225)
-        self.tempo_sld.valueChanged.connect(
-            lambda val: self.tempo_val.setText(str(val) + '%'))
+    # sr Slider
+        sr_tt = 'Determines the number of samples taken per second of audio'
+        self.sr_lbl = QLabel(self)
+        self.sr_lbl.setText('Sample Rate:')
+        self.sr_lbl.move(8, 225)
+        self.sr_lbl.setToolTip(sr_tt)
+        self.sr_val = QLabel(self)
+        self.sr_val.move(170, 227)
+        self.sr_val.resize(35, 10)
+        self.sr_val.setText('10525')
+        self.sr_val.setFont(QFont('', 8))
+        self.sr_val.setToolTip(sr_tt)
+        self.sr_sld = QSlider(Qt.Horizontal, self)
+        self.sr_sld.setRange(1000, 22050)
+        self.sr_sld.setValue(10525)
+        self.sr_sld.setFocusPolicy(Qt.NoFocus)
+        self.sr_sld.setPageStep(1)
+        self.sr_sld.setToolTip(sr_tt)
+        self.sr_sld.move(90, 226)
+        self.sr_sld.resize(75,15)
+        self.sr_sld.valueChanged.connect(
+            lambda val: self.sr_val.setText(str(val)))
 
     # Frequency Slider
+        frq_tt = 'Increases or decreases the frequencies by the percent selected'
         self.frq_lbl = QLabel(self)
         self.frq_lbl.setText('Frequency:')
         self.frq_lbl.move(8, 250)
+        self.frq_lbl.setToolTip(frq_tt)
         self.frq_val = QLabel(self)
-        self.frq_val.move(165, 250)
+        self.frq_val.move(170, 252)
         self.frq_val.resize(35, 10)
         self.frq_val.setText('0%')
         self.frq_val.setFont(QFont('', 8))
+        self.frq_val.setToolTip(frq_tt)
         self.frq_sld = QSlider(Qt.Horizontal, self)
-        self.frq_sld.setRange(-100, 100)
+        self.frq_sld.setRange(-99, 100)
         self.frq_sld.setFocusPolicy(Qt.NoFocus)
         self.frq_sld.setPageStep(1)
-        self.frq_sld.move(75, 250)
+        self.frq_sld.setToolTip(frq_tt)
+        self.frq_sld.move(90, 251)
+        self.frq_sld.resize(75,15)
         self.frq_sld.valueChanged.connect(
             lambda val: self.frq_val.setText(str(val) + '%'))
 
     # Octave Sliders
+        octave_tt = 'Increases or decreases the octaves by the number selected'
         self.octave_lbl = QLabel(self)
         self.octave_lbl.setText('Octave:')
         self.octave_lbl.move(8, 275)
+        self.octave_lbl.setToolTip(octave_tt)
         self.octave_val = QLabel(self)
-        self.octave_val.move(165, 275)
+        self.octave_val.move(170, 277)
         self.octave_val.resize(35, 10)
-        self.octave_val.setText('0%')
+        self.octave_val.setText('0')
         self.octave_val.setFont(QFont('', 8))
+        self.octave_val.setToolTip(octave_tt)
         self.octave_sld = QSlider(Qt.Horizontal, self)
-        self.octave_sld.setRange(-100, 100)
+        self.octave_sld.setRange(-7, 7)
         self.octave_sld.setFocusPolicy(Qt.NoFocus)
         self.octave_sld.setPageStep(1)
-        self.octave_sld.move(75, 275)
+        self.octave_sld.move(90, 276)
+        self.octave_sld.resize(75,15)
+        self.octave_sld.setToolTip(octave_tt)
         self.octave_sld.valueChanged.connect(
-            lambda val: self.octave_val.setText(str(val) + '%'))
+            lambda val: self.octave_val.setText(str(val)))
             
     # button to process file
         self.proc_file = QPushButton('Process...', self)
@@ -157,6 +173,7 @@ class Window(QWidget):
         dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
         dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
         dark_palette.setColor(QPalette.HighlightedText, Qt.black)
+        dark_palette.setColor(QPalette.ToolTipText, Qt.black)
         return dark_palette
 
     def pick_file(self):
@@ -184,10 +201,10 @@ class Window(QWidget):
                 self.proc_lbl.adjustSize()
                 self.canvas.repaint()     
                 if self.algo_combo.currentText() == 'Shape of You':
-                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
+                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.sr_sld.value(),self.octave_sld.value()))
                     # p.start()
                     shapes_algo.notes_to_canvas(self.canvas, self.file_path.text(),
-                                    self.tempo_sld.value(), self.octave_sld.value(), self.frq_sld.value())
+                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
                 self.canvas.shapes = []
                 self.proc_lbl.setText('')
 
