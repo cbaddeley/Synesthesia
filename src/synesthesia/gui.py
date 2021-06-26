@@ -6,7 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from wsl import *
 from PIL.ImageQt import ImageQt
-from art_generator import qt_canvas, lines_algo, shapes_algo
+from art_generator import qt_canvas, lines_algo, shapes_algo, curvy_algo
 import multiprocessing
 
 class Window(QWidget):
@@ -66,7 +66,7 @@ class Window(QWidget):
             '',  # blank so when displayed nothing is autoselected
             'Shape of You',
             'Line Rider',
-            'Algorithm 3',
+            '/r/curvy',
         ]
         self.algo_combo.addItems(algos)
         self.algo_combo.activated[str].connect(self.on_algo_change)
@@ -189,7 +189,7 @@ class Window(QWidget):
             '': '',
             'Shape of You': 'Draw a collection of shapes based on notes and octaves',
             'Line Rider': 'Draws a collection of lines based on notes and octaves',
-            'Algorithm 3': 'Brief description for algorithm 3',
+            '/r/curvy': 'Draws a collection of arcs based on notes and octaves',
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
         self.algo_lbl.resize(150, 80)
@@ -209,6 +209,11 @@ class Window(QWidget):
                     # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
                     # p.start()
                     lines_algo.notes_to_canvas(self.canvas, self.file_path.text(),
+                                    self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
+                elif self.algo_combo.currentText() == '/r/curvy':
+                    # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.tempo_sld.value(),self.octave_sld.value()))
+                    # p.start()
+                    curvy_algo.notes_to_canvas(self.canvas, self.file_path.text(),
                                     self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
                 self.canvas.shapes = []
                 self.proc_lbl.setText('')
