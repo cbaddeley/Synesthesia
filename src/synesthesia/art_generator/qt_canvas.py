@@ -53,12 +53,18 @@ class QtCanvas(QtWidgets.QWidget):
         self.shapes.append([i for i in self.args])
         for shape in self.shapes:
             if shape != []:
-                shape_type, x, y, color, size, style, dim = shape
+                shape_type, x, y, color, size, style, dim, ydiff = shape
                 painter.setPen(QPen(color, size, style))
                 if shape_type == 'circle':
                     painter.drawEllipse(x, y, dim, dim)
                 elif shape_type == 'square':
                     painter.drawRect(QRect(x, y, dim, dim))
+                elif shape_type == 'line':
+                    painter.drawLine(x % 400, y % 400, (x + dim) % 400, (y + ydiff) % 400)
+                    self.x += dim
+                    self.x %= 400
+                    self.y += ydiff
+                    self.y %= 400
                 elif shape_type == 'triangle':
                     # go up and right, down and right, left left forming isosceles
                     painter.drawLine(x, y, x + dim, y + dim)
