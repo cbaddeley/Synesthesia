@@ -24,3 +24,5 @@
 | George Kolasa    | 06/25/21     | Installs apt packages w/pip   |
 | Drew Garmon      | 06/25/21     | setup color schemes for genres|
 | Drew Garmon      | 06/25/21     | setup line and curve algorithm|
+| Scott Engelhardt | 06/26/21     | Testing and cleanup           |
+| Scott Engelhardt | 06/27/21     | Demo and deliverable work     |
