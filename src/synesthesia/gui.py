@@ -152,6 +152,12 @@ class Window(QWidget):
         self.proc_lbl.move(53, 500)
         self.proc_lbl.setFont(QFont('', 12))
 
+    # error Label
+        self.error_lbl = QLabel('', self)
+        self.error_lbl.resize(300,15)
+        self.error_lbl.move(215, 173)
+
+
     # create the canvas for drawing
         self.canvas = qt_canvas.QtCanvas(self)
         self.canvas.move(210,200)
@@ -164,7 +170,6 @@ class Window(QWidget):
         dark_palette.setColor(QPalette.Base, QColor(25, 25, 25))
         dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
         dark_palette.setColor(QPalette.ToolTipBase, Qt.white)
-        dark_palette.setColor(QPalette.ToolTipText, Qt.white)
         dark_palette.setColor(QPalette.Text, Qt.white)
         dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
         dark_palette.setColor(QPalette.ButtonText, Qt.white)
@@ -182,6 +187,7 @@ class Window(QWidget):
             self, 'Select Audio file', '', 'Audio Files (*.mp3 *.wav)')
         if file_name:
             self.file_path.setText(file_name)
+            self.error_lbl.setText('')
 
     def on_algo_change(self):
         algo_desc = {
@@ -194,8 +200,8 @@ class Window(QWidget):
         self.algo_lbl.resize(150, 80)
 
     def process_file(self):
-        if self.file_path.text()[-4:].lower() in ('.mp3', '.wav'):
-            if os.path.exists(self.file_path.text()):
+        if self.file_path.text()[-4:].lower() in ('.mp3', '.wav') and os.path.exists(self.file_path.text()):
+                self.error_lbl.setText('')
                 self.proc_lbl.setText('Processing...')
                 self.proc_lbl.adjustSize()
                 self.canvas.clear_args()
@@ -204,10 +210,13 @@ class Window(QWidget):
 
                 # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.sr_sld.value(),self.octave_sld.value()))
                 # p.start()
-                process_audio.proc_audio(self.algo_combo.currentText(),self.canvas, self.file_path.text(),
+                success = process_audio.proc_audio(self.algo_combo.currentText(),self.canvas, self.file_path.text(),
                                     self.sr_sld.value(), self.octave_sld.value(), self.frq_sld.value())
                 self.proc_lbl.setText('')
-
+        else:
+            self.error_lbl.setText('<font color=red>Error: Invalid Audio File</font>')
+        if not success:
+             self.error_lbl.setText('<font color=red>Error Processing Audio File</font>')
 
 def main_func():
     set_display_to_host()

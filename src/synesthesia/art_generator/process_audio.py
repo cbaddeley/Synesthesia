@@ -27,7 +27,10 @@ def proc_audio(algo,canvas, song_path, sr_selection, oct_selection, freq_scale):
     S = np.abs(librosa.stft(y))
     if freq_scale != 0:
         S *= (1 +  (freq_scale / 100))
-    bars = librosa.hz_to_note(S)
+    try:
+        bars = librosa.hz_to_note(S)
+    except:
+        return False
 
     # Musicnn gives a bunch of useless console warnings that we don't need to see and should just try to block out AMAP
     try:
@@ -36,10 +39,9 @@ def proc_audio(algo,canvas, song_path, sr_selection, oct_selection, freq_scale):
         musicGenre = top_tags(song_path, model='MSD_musicnn', topN=1)
         musicGenre = musicGenre[0]
         warnings.filterwarnings("default")
-        print("The genre is " + musicGenre)
     except:
         musicGenre = ''
-        print("\nNo file path given.")
+
     path = QPainterPath()
     for i, bar in enumerate(bars):
         if i == len(bars) -1:
@@ -57,3 +59,4 @@ def proc_audio(algo,canvas, song_path, sr_selection, oct_selection, freq_scale):
             
     if delete_wav_file:
         os.remove(song_path)
+    return True
