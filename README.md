@@ -1,4 +1,4 @@
-# Synesthesia #
+![Synesthesia](https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/main_logo.svg)
 Synesthesia is a lightweight audio visualization tool. Add an MP3 or WAV file and select your parameters, and Synesthesia creates an image based on the mood, rhythm, and melody of your audio file.
 
 ## Instructions ##
@@ -27,7 +27,7 @@ Included in the "install_requires" part of the setup.py file (should be installe
 Ubuntu (apt) dependencies can be automatically installed by running the program via pip.
 
 ## Github Repository ##
-![Synesthesia](https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/main_logo.svg)
+https://github.com/cbaddeley/Synesthesia
 
 ## Trello ##
 https://trello.com/b/VGXHTDLq/synesthesia
