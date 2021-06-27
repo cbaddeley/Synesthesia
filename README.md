@@ -17,10 +17,10 @@ Synesthesia is a lightweight audio visualization tool. Add an MP3 or WAV file an
 ## Running it via Pip ## 
 _Note: The pip package may not be as current as the code on Github._
 
-**Enter in Linux console:** <pip install synesthesia-uf>
+**Enter in Linux console:** `pip install synesthesia-uf`
 
 ## Dependencies ## 
-Included in the "install_requires" part of the setup.py file (should be installed when you run "pip install synesthesia-uf") 
+Included in the "install_requires" part of the setup.py file (should be installed when you run `pip install synesthesia-uf`) 
 
 Ubuntu (apt) dependencies can be automatically installed by running the program via pip.
 
