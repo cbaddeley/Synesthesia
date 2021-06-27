@@ -54,7 +54,7 @@ def proc_audio(algo,canvas, song_path, sr_selection, oct_selection, freq_scale):
                 shapes_algo.draw_note(canvas, note[0].split('-'), oct_selection, genre_colors.getColors(musicGenre))
             elif algo == 'Line Rider':
                 lines_algo.draw_note(canvas, note[0].split('-'), oct_selection, genre_colors.getColors(musicGenre))
-            elif algo == '/r/curvy':
+            elif algo == 'Curvy':
                 curvy_algo.draw_note(canvas, note[0].split('-'), oct_selection, genre_colors.getColors(musicGenre), path)
             
     if delete_wav_file:
