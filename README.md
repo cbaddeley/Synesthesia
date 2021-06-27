@@ -14,13 +14,13 @@ Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or W
     - <ins>Octave</ins>: Changes the octaves by the selected amount which impact the size of the shapes, lines, etc. in the resulting image.
 4. Select the "Process" button to digest the audio file apply any adjustments and create the artistic rendering of the audio.
 
-## Running it via Pip ## 
+## pip Installation ## 
 _Note: The pip package may not be as current as the code on Github._
 
-**Enter in Linux console:** `pip install synesthesia-uf`
+To install Synesthesia, enter an Ubuntu based terminal and run the command `pip install synesthesia-uf` or `pip3 install synesthesia-uf` depending on your python instillation.
 
 ## Dependencies ## 
-Included in the "install_requires" part of the setup.py file (should be installed when you run `pip install synesthesia-uf`) 
+Included in the "install_requires" part of the setup.py file (should be installed when you run the pip installation).
 
 Ubuntu (apt) dependencies can be automatically installed by running the program via pip.
 
