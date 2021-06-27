@@ -15,7 +15,7 @@ Synesthesia is a lightweight audio visualization tool. Add an MP3 or WAV file an
 4. Select the "Process" button to digest the audio file apply any adjustments and create the artistic rendering of the audio.
 
 ## Running it via Pip ## 
-_Note: The Pip package may be behind what is currently up here on Github_
+_Note: The pip package may not be as current as the code on Github_
 
 **Enter in Linux console:**
 
