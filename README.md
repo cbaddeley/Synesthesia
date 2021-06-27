@@ -17,7 +17,7 @@ Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or W
 ## pip Installation ## 
 _Note: The pip package may not be as current as the code on Github._
 
-To install Synesthesia, enter an Ubuntu based terminal inside of WSL and run the command `pip install synesthesia-uf` or `pip3 install synesthesia-uf` depending on your python instillation.
+To install Synesthesia, enter an Ubuntu based terminal and run the command `pip install synesthesia-uf` or `pip3 install synesthesia-uf` depending on your python instillation.
 
 ## Dependencies ## 
 _Note: All dependencies are included in the "install_requires" part of the setup.py file and should be installed when you run the application._
@@ -25,7 +25,7 @@ _Note: All dependencies are included in the "install_requires" part of the setup
 Dependencies include: PyQt5, librosa, essentia, and musicnn.
 
 ## Program Execution ##
-To run Synesthesia, enter an Ubuntu based terminal inside of WSL and run the command `syne`. After installing any dependicies, the application will be launched.
+To run Synesthesia, enter an Ubuntu based terminal and run the command `syne`. After installing any dependicies, the application will be launched.
 
 ## Github Repository ##
 https://github.com/cbaddeley/Synesthesia
