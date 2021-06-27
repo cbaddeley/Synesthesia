@@ -4,7 +4,7 @@ Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or W
 ## Instructions ##
 1. Once running the application, use the file picker ("Choose..." button) or enter a file path to a MP3 or WAV audio file. 
 2. Choose the desired algorithm from the algorithm combo box.
-    - Shape of You: Draw a collection of shapes based on notes and octaves.
+    - <u>Shape of You<u/>: Draw a collection of shapes based on notes and octaves.
     - Line Rider: Draws a collection of lines based on notes and octaves.
     - /r/curvy: Draws a collection of arcs based on notes and octaves.
 3. Use the sliders to adjust the parameters of the processed audio file.
