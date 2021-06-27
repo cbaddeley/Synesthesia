@@ -20,9 +20,12 @@ _Note: The pip package may not be as current as the code on Github._
 To install Synesthesia, enter an Ubuntu based terminal and run the command `pip install synesthesia-uf` or `pip3 install synesthesia-uf` depending on your python instillation.
 
 ## Dependencies ## 
-Included in the "install_requires" part of the setup.py file (should be installed when you run the pip installation).
+_Note: All dependencies are included in the "install_requires" part of the setup.py file and should be installed when you run the application._
 
-Ubuntu (apt) dependencies can be automatically installed by running the program via pip.
+Dependencies include: PyQt5, librosa, essentia, and musicnn.
+
+## Program Execution ##
+To run Synesthesia, enter an Ubuntu based terminal and run the command `syne`. After installing any dependicies, the application will be launched.
 
 ## Github Repository ##
 https://github.com/cbaddeley/Synesthesia
