@@ -1,4 +1,4 @@
-![Synesthesia](https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/main_logo.svg)
+<img src="https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/main_logo.svg" width="200" height="200" />
 Synesthesia is a lightweight audio visualization tool. Add an MP3 or WAV file and select your parameters, and Synesthesia creates an image based on the mood, rhythm, and melody of your audio file.
 
 ## Instructions ##
