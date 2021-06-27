@@ -1,5 +1,5 @@
 <img src="https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/main_logo.svg" width="500"/>
-Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file and select your parameters, and Synesthesia creates an image based on the mood, rhythm, and melody of your audio file.
+Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file, modify any parameters, and Synesthesia will create an image based on the mood, rhythm, and melody of your audio file.
 
 ## Instructions ##
 1. Once running the application, use the file picker ("Choose..." button) or enter a file path to a MP3 or WAV audio file. 
