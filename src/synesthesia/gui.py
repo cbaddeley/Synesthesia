@@ -65,7 +65,7 @@ class Window(QWidget):
             '',  # blank so when displayed nothing is autoselected
             'Shape of You',
             'Line Rider',
-            '/r/curvy',
+            'Curvy',
         ]
         self.algo_combo.addItems(algos)
         self.algo_combo.activated[str].connect(self.on_algo_change)
@@ -194,7 +194,7 @@ class Window(QWidget):
             '': '',
             'Shape of You': 'Draw a collection of shapes based on notes and octaves',
             'Line Rider': 'Draws a collection of lines based on notes and octaves',
-            '/r/curvy': 'Draws a collection of arcs based on notes and octaves',
+            'Curvy': 'Draws a collection of arcs based on notes and octaves',
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
         self.algo_lbl.resize(150, 80)
