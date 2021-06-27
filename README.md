@@ -27,7 +27,7 @@ Included in the "install_requires" part of the setup.py file (should be installe
 Ubuntu (apt) dependencies can be automatically installed by running the program via pip.
 
 ## Github Repository ##
-![Synesthesia](https://github.com/cbaddeley/Synesthesia)
+![Synesthesia](https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/main_logo.svg)
 
 ## Trello ##
 https://trello.com/b/VGXHTDLq/synesthesia
