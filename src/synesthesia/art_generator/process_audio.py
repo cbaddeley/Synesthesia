@@ -3,7 +3,7 @@ import librosa
 import numpy as np
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainterPath
-from wsl import *
+from synesthesia.wsl import *
 import warnings
 set_display_to_host()
 from collections import Counter
