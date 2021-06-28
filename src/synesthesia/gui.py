@@ -15,7 +15,11 @@ class Window(QWidget):
         super().__init__()
         # set widow titles
         self.setWindowTitle(' ')
-        self.setWindowIcon(QIcon('title_logo.png'))
+        url_data_title_logosvg = urllib.request.urlopen(
+            "https://raw.githubusercontent.com/cbaddeley/Synesthesia/main/src/synesthesia/images/title_logo.svg").read()
+        title_logosvg = QPixmap()
+        title_logosvg.loadFromData(url_data_title_logosvg)
+        self.setWindowIcon(QIcon(title_logosvg))
 
         # resize window
         self.resize(620, 620)
@@ -33,7 +37,7 @@ class Window(QWidget):
 
         # line seperators
         url_data_sep = urllib.request.urlopen(
-            "https://github.com/cbaddeley/Synesthesia/blob/d17641714e1f5978bf894684c8604c6ef320754a/src/synesthesia/images/line.png").read()
+            "https://raw.githubusercontent.com/cbaddeley/Synesthesia/main/src/synesthesia/images/line.svg").read()
         sep = QPixmap()
         sep.loadFromData(url_data_sep)
         # sep = QPixmap('line.png')
