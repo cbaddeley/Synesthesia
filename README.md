@@ -25,7 +25,7 @@ _Note: All dependencies are included in the "install_requires" part of the setup
 Dependencies include: PyQt5, librosa, essentia, and musicnn.
 
 ## Program Execution ##
-To run Synesthesia, enter an Ubuntu based terminal and run the command `syne`. After installing any dependicies, the application will be launched.
+To run Synesthesia, enter an Ubuntu based terminal and run the command `syne`. After installing any dependencies, the application will be launched.
 
 ## Github Repository ##
 https://github.com/cbaddeley/Synesthesia
