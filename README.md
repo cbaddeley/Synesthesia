@@ -20,7 +20,7 @@ _Note: The pip package may not be as current as the code on Github._
 To install Synesthesia, enter an Ubuntu based terminal and run the command `pip install synesthesia-uf` or `pip3 install synesthesia-uf` depending on your python instillation.
 
 ## Local build/installation
-If you want to build it locally, simply extract the tar and enter the "src" folder. From that folder, run command "make build" in the terminal to install and then
+If you want to build it locally, simply extract the tar and enter the "src" folder. From that folder, run command "make build" in the terminal to install and then run syne.
 
 
 ## Dependencies ## 
