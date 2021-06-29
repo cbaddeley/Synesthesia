@@ -30,3 +30,5 @@
 | Scott Engelhardt | 06/26/21     | Testing and cleanup           |
 | Scott Engelhardt | 06/27/21     | Demo and deliverable work     |
 | Zach Simmons     | 06/28/21     | Project State Research        |
+| George Kolasa    | 06/28/21     | Pip work w/art_gen + imgs     |
+| George Kolasa    | 06/28/21     | Edited & rendered group video |

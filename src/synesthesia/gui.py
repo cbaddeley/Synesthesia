@@ -36,12 +36,12 @@ class Window(QWidget):
         self.logo.move(110, 0)
 
         # line seperators
-        url_data_sep = urllib.request.urlopen(
-            "https://raw.githubusercontent.com/cbaddeley/Synesthesia/main/src/synesthesia/images/line.svg").read()
-        sep = QPixmap()
-        sep.loadFromData(url_data_sep)
+        url_data = urllib.request.urlopen(
+            "https://raw.githubusercontent.com/cbaddeley/Synesthesia/d17641714e1f5978bf894684c8604c6ef320754a/src/synesthesia/images/line.png").read()
+        pixmap2 = QPixmap()
+        pixmap2.loadFromData(url_data)
         # sep = QPixmap('line.png')
-        sep = sep.scaled(700, 1)
+        sep = pixmap2.scaled(700, 1)
         self.mid_line = QLabel(self)
         self.mid_line.setPixmap(sep)
         self.mid_line.move(-50, 190)
