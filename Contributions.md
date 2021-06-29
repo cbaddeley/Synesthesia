@@ -32,3 +32,4 @@
 | Zach Simmons     | 06/28/21     | Project State Research        |
 | George Kolasa    | 06/28/21     | Pip work w/art_gen + imgs     |
 | George Kolasa    | 06/28/21     | Edited & rendered group video |
+| George Kolasa    | 06/28/21     | local build setup             |
