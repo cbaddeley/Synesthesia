@@ -1,4 +1,4 @@
-<img src="https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/main_logo.svg" width="500"/>
+<img src="https://github.com/cbaddeley/Synesthesia/blob/main/src/synesthesia/images/git_main_logo.svg" width="500"/>
 Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file, modify any parameters, and Synesthesia will create an image based on the mood, rhythm, and melody of your audio file.
 
 ## Instructions ##
@@ -25,7 +25,7 @@ _Note: All dependencies are included in the "install_requires" part of the setup
 Dependencies include: PyQt5, librosa, essentia, and musicnn.
 
 ## Program Execution ##
-To run Synesthesia, enter an Ubuntu based terminal and run the command `syne`. After installing any dependencies, the application will be launched.
+To run Synesthesia after installing via pip, enter an Ubuntu based terminal and run the command `syne`. After installing any dependencies, the application will be launched.
 
 ## Github Repository ##
 https://github.com/cbaddeley/Synesthesia
