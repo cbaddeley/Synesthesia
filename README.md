@@ -32,3 +32,7 @@ https://github.com/cbaddeley/Synesthesia
 
 ## Trello ##
 https://trello.com/b/VGXHTDLq/synesthesia
+
+
+## Team Members ##
+Cory Baddeley, Scott Engelhardt, Drew Garmon, George Kolasa, Zack Simmons
