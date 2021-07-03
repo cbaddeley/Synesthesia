@@ -2,7 +2,7 @@ import random
 from PyQt5.QtCore import Qt
 
 def draw_note(canvas, note, oct_selection, colors):
-    octave = int(note[1]) * (2 + oct_selection)
+    octave = int(note[1]) + oct_selection
     note = note[0][0] # exclude sharps
     canvas.clear_args()
     color = colors[random.randint(0, len(colors) - 1)] # picks random color from list
@@ -54,3 +54,5 @@ def draw_note(canvas, note, oct_selection, colors):
         canvas.append_args(octave) 
         canvas.append_args(None) # this is for the 8th attribute which only applies to the line algo
         canvas.ready()
+
+        

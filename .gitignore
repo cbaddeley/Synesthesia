@@ -136,3 +136,6 @@ dmypy.json
 
 # misc
 .idea
+
+# database
+./src/synesthesia/art_generator/*.db

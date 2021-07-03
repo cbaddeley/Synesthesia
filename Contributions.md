@@ -26,3 +26,4 @@
 | Drew Garmon      | 06/25/21     | setup line and curve algorithm|
 | Scott Engelhardt | 06/26/21     | Testing and cleanup           |
 | Scott Engelhardt | 06/27/21     | Demo and deliverable work     |
+| Scott Engelhardt | 07/02/21     | Data base integration         |
