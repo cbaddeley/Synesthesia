@@ -4,7 +4,7 @@ import codecs
 import os, sys, subprocess
 
 
-VERSION = '0.0.77'
+VERSION = '0.1.10'
 DESCRIPTION = 'A Python audio image creation tool'
 LONG_DESCRIPTION = 'A Python audio image creation tool that takes audio and creates images from them.'
 
@@ -17,7 +17,7 @@ setup(
     author_email="<georgekolasa@ufl.edu",
     description=DESCRIPTION,
     packages=find_packages(),
-    package_data={'synesthesia': ['images/*.png', 'images/*.svg' ]},
+    include_package_data=True,
     url="https://github.com/cbaddeley/Synesthesia",
     license="GPL 3",
     install_requires=['PyQt5', 'librosa', 'essentia',

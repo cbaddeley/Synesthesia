@@ -7,11 +7,14 @@
 | George Kolasa    | 06/1/21      | Found most similar projects   |
 | Drew Garmon      | 06/02/21     | Researched MP3 libs           |
 | Scott Engelhardt | 06/02/21     | Updated GUI w/ slides         |
+| Zach Simmons     | 06/03/21     | Researched Audio Parsing      |
 | Cory Baddeley    | 06/08/21     | WSL Setup                     |
 | Scott Engelhardt | 06/09/21     | Librosa setup and research    |
 | George Kolasa    | 06/10/21     | Essentia Tensorflow setup     |
 | George Kolasa    | 06/15/21     | Set up Pip package            |
+| Zach Simmons     | 06/18/21     | PyQt painting initial testing |
 | Scott Engelhardt | 06/19/21     | Librosa and turtle interface  |
+| Zach Simmons     | 06/20/21     | Real-time Audio processing    |
 | Scott Engelhardt | 06/21/21     | Librosa and PyQt painting     |
 | Scott Engelhardt | 06/22/21     | Librosa and PyQt painting     |
 | George Kolasa    | 06/23/21     | Fixed images & imports w/Pip  |
@@ -26,4 +29,8 @@
 | Drew Garmon      | 06/25/21     | setup line and curve algorithm|
 | Scott Engelhardt | 06/26/21     | Testing and cleanup           |
 | Scott Engelhardt | 06/27/21     | Demo and deliverable work     |
+| Zach Simmons     | 06/28/21     | Project State Research        |
+| George Kolasa    | 06/28/21     | Pip work w/art_gen + imgs     |
+| George Kolasa    | 06/28/21     | Edited & rendered group video |
+| George Kolasa    | 06/28/21     | local build setup             |
 | Scott Engelhardt | 07/02/21     | Data base integration         |

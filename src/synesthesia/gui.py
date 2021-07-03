@@ -4,30 +4,44 @@ print(os.getcwd())
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from wsl import *
+import urllib.request
+from synesthesia.wsl import *
 from PIL.ImageQt import ImageQt
-from art_generator import qt_canvas, process_audio
+from synesthesia.art_generator import qt_canvas, process_audio
+from synesthesia.images import *
 
 class Window(QWidget):
     def __init__(self):
         super().__init__()
         # set widow titles
         self.setWindowTitle(' ')
-        self.setWindowIcon(QIcon('./images/title_logo.png'))
+        url_data_title_logosvg = urllib.request.urlopen(
+            "https://raw.githubusercontent.com/cbaddeley/Synesthesia/main/src/synesthesia/images/title_logo.svg").read()
+        title_logosvg = QPixmap()
+        title_logosvg.loadFromData(url_data_title_logosvg)
+        self.setWindowIcon(QIcon(title_logosvg))
 
         # resize window
         self.resize(620, 620)
 
         # set the logo
-        logo_file = QPixmap('./images/main_logo.svg')
-        logo_file = logo_file.scaled(400, 150)
+        url_data = urllib.request.urlopen("https://raw.githubusercontent.com/cbaddeley/Synesthesia/d17641714e1f5978bf894684c8604c6ef320754a/src/synesthesia/images/main_logo.svg").read()
+        pixmap = QPixmap()
+        pixmap.loadFromData(url_data)
+        # lbl.setPixmap(pixmap)
+        # logo_file = QPixmap('main_logo.svg')
+        logo_file = pixmap.scaled(400, 150)
         self.logo = QLabel(self)
         self.logo.setPixmap(logo_file)
         self.logo.move(110, 0)
 
         # line seperators
-        sep = QPixmap('./images/line.png')
-        sep = sep.scaled(700, 1)
+        url_data = urllib.request.urlopen(
+            "https://raw.githubusercontent.com/cbaddeley/Synesthesia/d17641714e1f5978bf894684c8604c6ef320754a/src/synesthesia/images/line.png").read()
+        pixmap2 = QPixmap()
+        pixmap2.loadFromData(url_data)
+        # sep = QPixmap('line.png')
+        sep = pixmap2.scaled(700, 1)
         self.mid_line = QLabel(self)
         self.mid_line.setPixmap(sep)
         self.mid_line.move(-50, 190)
@@ -230,7 +244,7 @@ def main_func():
 def pip_main_func():
     # only called with pip package. Special changing of directory below
     print("Welcome to Synesthesia (installed via Pip)")
-    os.chdir('synesthesia')
+    # os.chdir('synesthesia')
     main_func()
 
 if __name__ == '__main__':
