@@ -33,3 +33,4 @@
 | George Kolasa    | 06/28/21     | Pip work w/art_gen + imgs     |
 | George Kolasa    | 06/28/21     | Edited & rendered group video |
 | George Kolasa    | 06/28/21     | local build setup             |
+| Scott Engelhardt | 07/02/21     | Data base integration         |

@@ -171,7 +171,6 @@ class Window(QWidget):
         self.error_lbl.resize(300,15)
         self.error_lbl.move(215, 173)
 
-
     # create the canvas for drawing
         self.canvas = qt_canvas.QtCanvas(self)
         self.canvas.move(210,200)
