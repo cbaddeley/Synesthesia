@@ -213,6 +213,7 @@ class Window(QWidget):
         self.algo_lbl.resize(150, 80)
 
     def process_file(self):
+        success = False
         if self.file_path.text()[-4:].lower() in ('.mp3', '.wav') and os.path.exists(self.file_path.text()):
                 self.error_lbl.setText('')
                 self.proc_lbl.setText('Processing...')
