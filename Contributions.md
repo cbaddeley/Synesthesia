@@ -34,3 +34,5 @@
 | George Kolasa    | 06/28/21     | Edited & rendered group video |
 | George Kolasa    | 06/28/21     | local build setup             |
 | Scott Engelhardt | 07/02/21     | Data base integration         |
+| Scott Engelhardt | 07/07/21     | Fix visual issues             |
+| Scott Engelhardt | 07/07/21     | GUI updates for db            |
