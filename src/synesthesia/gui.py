@@ -1,14 +1,12 @@
 import glob, os, shutil, os, sys
-print(os.getcwd())
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import urllib.request
-from synesthesia.wsl import *
+from wsl import *
 from PIL.ImageQt import ImageQt
-from synesthesia.art_generator import qt_canvas, process_audio
-from synesthesia.images import *
+from art_generator import qt_canvas, process_audio
+from images import *
 
 class Window(QWidget):
     def __init__(self):

@@ -8,7 +8,7 @@ import librosa
 import numpy as np
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainterPath
-from synesthesia.wsl import *
+from wsl import *
 import warnings
 set_display_to_host()
 
@@ -33,10 +33,9 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
     try:
         S, bars, genre = dbm.db_driver(
             'r', song_path, freq_scale, sr_selection)[0]
-        S = np.frombuffer(S, dtype="float32")
         bars = pickle.loads(bars)
         have_sample = True
-    except IndexError or TypeError:  # when song not found
+    except:  # when song not found
         if song_path[-4:] == '.mp3':
             wav_path = song_path[:-4] + '.wav'
             is_mp3 = True
@@ -78,13 +77,13 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
             result = c.most_common(1)
             frq = result[0]
             disp_frq.append(frq)
-            drawer(algo, canvas, note, frq, oct_selection, genre)
+            drawer(canvas, algo, note, frq, oct_selection, genre)
 
-        dbm.db_driver('i', song_path, freq_scale, sr_selection, S, bars, genre)
+        dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
         if is_mp3:
             os.remove(wav_path)
     else: # we have a sample of the audio
         for i, note in enumerate(bars):
-            drawer(algo, canvas, note, S[i], oct_selection, genre)
+            drawer(canvas, algo, note, S[i], oct_selection, genre)
 
     return True

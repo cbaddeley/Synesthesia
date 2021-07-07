@@ -19,8 +19,9 @@ def retrieve(c, path, date, frq_selection, sr_selection):
 def insert(c, path, date, frq_selection, sr_selection, frq, notes, genre):
     files = retrieve(c, path, date, frq_selection, sr_selection)
     if files == []:
+        print(type(frq))
         c.execute('insert into samples values(?,?,?,?,?,?,?)',
-                  (path, date, frq_selection, sr_selection, frq.tobytes(), pickle.dumps(notes), genre))
+                  (path, date, frq_selection, sr_selection, pickle.dumps(frq), pickle.dumps(notes), genre))
 
 
 def get_samples(c):
