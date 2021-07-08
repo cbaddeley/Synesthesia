@@ -297,10 +297,10 @@ class Window(QWidget):
             success = process_audio.proc_audio(self.algo_combo.currentText(), self.canvas, self.file_path.text(),
                                                int(round(self.sr_sld.value()/1000,1) * 1000), self.octave_sld.value(), self.frq_sld.value())
             self.proc_lbl.setText('')
-            # file = self.sample_combo.currentText()
-            # self.get_samples()
-            # if file != '':
-            #     self.sample_combo.setCurrentText(file)
+            file = self.sample_combo.currentText()
+            self.sample_combo.addItems(self.get_samples())
+            if file != '':
+                self.sample_combo.setCurrentText(file)
         else:
             self.error_lbl.setText(
                 '<font color=red>Error: Invalid Audio File</font>')
