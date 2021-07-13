@@ -1,4 +1,6 @@
 
+from random import random
+import wordcloud
 from . import genre_colors, shapes_algo, curvy_algo, lines_algo, dbm
 import os
 import subprocess
@@ -10,6 +12,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainterPath
 from wsl import *
 import warnings
+from wordcloud import WordCloud, ImageColorGenerator
 set_display_to_host()
 
 
@@ -25,17 +28,32 @@ def drawer(canvas, algo, note, frq, oct_selection, genre):
             path = QPainterPath()
             curvy_algo.draw_note(canvas, note[0].split(
                 '-'), oct_selection, genre_colors.getColors(genre), path)
-        elif algo == 'Speech':
-            1 + 1  #TODO draw word cloud off most common words
+
 
 
 def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale):
-    if algo == 'Speech':
-        transcribedText = transcribeSpeech(song_path)
-        print(transcribedText)
-
     is_mp3 = False
     have_sample = False
+    if algo == 'Speech':
+        if song_path[-4:] == '.mp3':
+            wav_path = song_path[:-4] + '.wav'
+            is_mp3 = True
+            if not os.path.exists(wav_path):
+                subprocess.call(['ffmpeg', '-i', song_path, wav_path])
+        
+        if is_mp3:
+            transcribedText = transcribeSpeech(wav_path)
+        else:
+            transcribedText = transcribeSpeech(song_path)
+
+        print(transcribedText)
+        wordcloud = WordCloud(max_words=1000, margin=10, random_state=1).generate(transcribedText)
+        wordcloud.to_file(song_path[:-4] + '.png')
+        # TODO - make it print the image in the GUI
+        
+
+
+    
     try:
         S, bars, genre = dbm.db_driver(
             'r', song_path, freq_scale, sr_selection)[0]
