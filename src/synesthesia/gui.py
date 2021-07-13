@@ -61,8 +61,8 @@ class Window(QWidget):
 
         # input for folder path
         self.file_path = QLineEdit(self)
-        self.file_path.move(85, 140)
-        self.file_path.resize(440, 20)
+        self.file_path.move(75, 140)
+        self.file_path.resize(450, 20)
 
         # button for file picker
         self.get_file = QPushButton('Choose...', self)
@@ -73,18 +73,18 @@ class Window(QWidget):
         # audio sample label
         self.sample_lbl = QLabel(self)
         self.sample_lbl.move(8, 173)
-        self.sample_lbl.setText('Audio Sample:')
+        self.sample_lbl.setText('Sample:')
 
         # combo box for audio samples
         self.sample_combo = QComboBox(self)
-        self.sample_combo.move(85, 170)
-        self.sample_combo.resize(440, 20)
+        self.sample_combo.move(75, 170)
+        self.sample_combo.resize(450, 20)
         self.sample_combo.addItems(self.get_samples())
         self.sample_combo.activated[str].connect(self.set_specs)
 
         # select specs label
         self.spec_lbl = QLabel('', self)
-        self.spec_lbl.move(318, 197)
+        self.spec_lbl.move(295, 197)
 
         # combo box for specs
         self.spec_combo = QComboBox(self)
