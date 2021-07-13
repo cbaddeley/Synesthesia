@@ -14,9 +14,10 @@ from wsl import *
 import warnings
 from wordcloud import WordCloud, ImageColorGenerator
 set_display_to_host()
+from . import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
 
 
-def drawer(canvas, algo, note, frq, oct_selection, genre):
+def drawer(canvas, algo, note, frq, oct_selection, genre, bar_index):
     if '-' in note[0]:
         if algo == 'Shape of You':
             shapes_algo.draw_note(canvas, note[0].split(
@@ -28,6 +29,9 @@ def drawer(canvas, algo, note, frq, oct_selection, genre):
             path = QPainterPath()
             curvy_algo.draw_note(canvas, note[0].split(
                 '-'), oct_selection, genre_colors.getColors(genre), path)
+        elif algo == 'Grid':
+            grid_algo.draw_note(canvas, note[0].split(
+                '-'), oct_selection, genre_colors.getColors(genre), bar_index)
 
 
 
@@ -87,13 +91,15 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
         except:
             genre = ''
 
-
-
+    if algo == 'Grid':
+        canvas.set_grid_dimensions(len(bars))
+    
     if not have_sample:
         disp_notes = []
         disp_frq = []
-        for i, bar in enumerate(bars):
+        canvas.set_grid_dimensions(len(bars))
 
+        for i, bar in enumerate(bars):
             c = Counter(bar)
             result = c.most_common(1)
             note = result[0]
@@ -103,14 +109,14 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
             result = c.most_common(1)
             frq = result[0]
             disp_frq.append(frq)
-            drawer(canvas, algo, note, frq, oct_selection, genre)
+            drawer(canvas, algo, note, frq, oct_selection, genre, i)
 
         dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
         if is_mp3:
             os.remove(wav_path)
     else: # we have a sample of the audio
         for i, note in enumerate(bars):
-            drawer(canvas, algo, note, S[i], oct_selection, genre)
+            drawer(canvas, algo, note, S[i], oct_selection, genre, i)
 
     return True
 

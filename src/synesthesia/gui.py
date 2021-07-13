@@ -106,7 +106,8 @@ class Window(QWidget):
             'Shape of You',
             'Line Rider',
             'Curvy',
-            'Speech'
+            'Speech',
+            'Grid',
         ]
         self.algo_combo.addItems(algos)
         self.algo_combo.activated[str].connect(self.on_algo_change)
@@ -280,6 +281,7 @@ class Window(QWidget):
             'Line Rider': 'Draws a collection of lines based on notes and octaves',
             'Curvy': 'Draws a collection of arcs based on notes and octaves',
             'Speech': 'Draws a word map based on the most common words in the selected speech',
+            'Grid': 'Draws a collection of arcs based on notes and octaves',
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
         self.algo_lbl.resize(150, 80)
