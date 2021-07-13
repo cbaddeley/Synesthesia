@@ -4,7 +4,7 @@
 | Scott Engelhardt | 05/28/21     | Initial GUI Setup             |
 | Scott Engelhardt | 05/29/21     | Initial GUI Setup             |
 | Drew Garmon      | 05/29/21     | Made logo                     |
-| George Kolasa    | 06/1/21      | Found most similar projects   |
+| George Kolasa    | 06/01/21     | Found most similar projects   |
 | Drew Garmon      | 06/02/21     | Researched MP3 libs           |
 | Scott Engelhardt | 06/02/21     | Updated GUI w/ slides         |
 | Zach Simmons     | 06/03/21     | Researched Audio Parsing      |
@@ -37,3 +37,6 @@
 | Scott Engelhardt | 07/02/21     | Data base integration         |
 | Scott Engelhardt | 07/07/21     | Fix visual issues             |
 | Scott Engelhardt | 07/07/21     | GUI updates for db            |
+| George Kolasa    | 07/09/21     | NLP research & testing        |
+| George Kolasa    | 07/12/21     | NLP research & testing        |
+| George Kolasa    | 07/13/21     | Added speech recognition      |
