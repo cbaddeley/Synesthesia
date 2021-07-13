@@ -40,3 +40,4 @@
 | George Kolasa    | 07/09/21     | NLP research & testing        |
 | George Kolasa    | 07/12/21     | NLP research & testing        |
 | George Kolasa    | 07/13/21     | Added speech recognition      |
+| Zach Simmons     | 07/13/21     | Added word cloud functionality|
