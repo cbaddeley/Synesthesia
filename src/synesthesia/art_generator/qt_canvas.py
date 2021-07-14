@@ -10,7 +10,9 @@ class QtCanvas(QtWidgets.QWidget):
     def __init__(self, parent):
         super(QtCanvas, self).__init__(parent)
         self._pixmap = QPixmap()
-        self.resize(400, 400)
+        self.width = 400
+        self.height = 400
+        self.resize(self.width, self.height)
         self.x = 215
         self.y = 215
         self.color = Qt.white
@@ -19,10 +21,24 @@ class QtCanvas(QtWidgets.QWidget):
         self.args = []
         self.shapes = []
         self.is_ready = False
+        self._grid_dimensions = 0, 0
+        self._grid_state = [1, 0, 1, 0, 0, 200, 200]
 
     @property
     def pixmap(self):
         return self._pixmap
+
+    @property
+    def dimensions(self):
+        return self.width, self.height
+
+    @property
+    def grid_dimensions(self):
+        return self._grid_dimensions
+
+    @property
+    def grid_state(self):
+        return self._grid_state
 
     @pixmap.setter
     def pixmap(self, pixmap):
@@ -34,9 +50,30 @@ class QtCanvas(QtWidgets.QWidget):
         else:
             self.resize(400, 400)
 
+    def set_grid_dimensions(self, total_bars):
+        mod = 3
+        pixels_per_grid = floor(sqrt(self.width * self.height / (total_bars)))
+        self._grid_dimensions = floor(self.width / self.height * pixels_per_grid) * (mod/2), floor(self.height / self.width * pixels_per_grid) * (mod/2), mod
+        self.x = self.width / 2 - floor(self._grid_dimensions[0] / 2)
+        self.y = self.height / 2 - floor(self._grid_dimensions[1] / 2)
+        self._grid_state = [1, 0, 1, 0, total_bars, 200, 200]
+
     def ready(self):
         self.is_ready = True
         self.repaint()
+
+    def seg_passed(self):
+        self._grid_state[3] += 1
+
+    def inc_seg_len(self):
+        self._grid_state[2] += 1
+
+    def reset_seg_passed(self):
+        self._grid_state[3] = 0
+
+    def grid_x_y(self, x, y):
+        self._grid_state[5] = x
+        self._grid_state[6] = y
 
     def clear_args(self):
         self.args.clear()
@@ -53,14 +90,14 @@ class QtCanvas(QtWidgets.QWidget):
         self.shapes.append([i for i in self.args])
         for shape in self.shapes:
             if shape != []:
-                shape_type, x, y, color, size, style, dim, ydiff = shape # for line, dim is xdiff. for path, dim is path
+                shape_type, x, y, color, size, style, dim, ydiff = shape  # for line, dim is xdiff. for path, dim is path
                 painter.setPen(QPen(color, size, style))
                 if shape_type == 'circle':
                     painter.drawEllipse(x, y, dim, dim)
                 elif shape_type == 'square':
                     painter.drawRect(QRect(x, y, dim, dim))
                 elif shape_type == 'line':
-                    painter.drawLine(x , y, x + dim, y + ydiff)
+                    painter.drawLine(x, y, x + dim, y + ydiff)
                     self.x += dim
                     if self.x > 400:
                         self.x = 200
@@ -120,34 +157,34 @@ class QtCanvas(QtWidgets.QWidget):
                     x += dim
                     y += dim
                 elif shape_type == 'star':
-                    painter.drawLine(x, y, x + dim, y + dim/2)  # up right
+                    painter.drawLine(x, y, x + dim, y + dim / 2)  # up right
                     x += dim
-                    y += dim/2
-                    painter.drawLine(x, y, x + dim/2, y + dim)  # up right
-                    x += dim/2
+                    y += dim / 2
+                    painter.drawLine(x, y, x + dim / 2, y + dim)  # up right
+                    x += dim / 2
                     y += dim
-                    painter.drawLine(x, y, x + dim/2, y - dim)  # down right
-                    x += dim/2
+                    painter.drawLine(x, y, x + dim / 2, y - dim)  # down right
+                    x += dim / 2
                     y -= dim
-                    painter.drawLine(x, y, x + dim, y - dim/2)  # down right
+                    painter.drawLine(x, y, x + dim, y - dim / 2)  # down right
                     x += dim
-                    y -= dim/2
-                    painter.drawLine(x, y, x - dim, y - dim/2)  # down left
+                    y -= dim / 2
+                    painter.drawLine(x, y, x - dim, y - dim / 2)  # down left
                     x -= dim
-                    y -= dim/2
+                    y -= dim / 2
                     painter.drawLine(x, y, x, y - dim)  # down 
                     y -= dim
-                    painter.drawLine(x, y, x - dim/2, y + dim)  # up left
-                    x -= dim/2
+                    painter.drawLine(x, y, x - dim / 2, y + dim)  # up left
+                    x -= dim / 2
                     y += dim
-                    painter.drawLine(x, y, x - dim/2, y - dim)  # down left
-                    x -= dim/2
+                    painter.drawLine(x, y, x - dim / 2, y - dim)  # down left
+                    x -= dim / 2
                     y -= dim
                     painter.drawLine(x, y, x, y + dim)  # up
                     y += dim
-                    painter.drawLine(x, y, x - dim, y + dim/2)  # up left
+                    painter.drawLine(x, y, x - dim, y + dim / 2)  # up left
                     x -= dim
-                    y += dim/2
-                    
+                    y += dim / 2
+
     def refresh(self):
         self.update()
