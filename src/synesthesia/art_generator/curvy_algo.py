@@ -1,16 +1,15 @@
 import random
 from PyQt5.QtGui import QPainterPath
 
-def draw_note(canvas, note, octave_scale, colors, path):
+def draw_note(canvas, note, oct_selection, colors, path):
 
-    octave = int(int(note[1]) * (3 + (octave_scale / 100)))
+    octave = int(note[1]) + oct_selection
     note = note[0] # exclude sharps
     canvas.clear_args()
     color = colors[random.randint(0, len(colors) - 1)] # picks random color from list
     canvas.append_args('path')
 
     newpath = QPainterPath(path)
-    path.clear()
     x = (((ord(note[0]) % 65) * 50) + octave) % 400
     y = (((ord(note[0]) % 65) * 50) - octave) % 400
 

@@ -1,6 +1,5 @@
 
 from random import random
-import wordcloud
 from . import genre_colors, shapes_algo, curvy_algo, lines_algo, dbm
 import os
 import subprocess
@@ -54,9 +53,6 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
         wordcloud = WordCloud(max_words=1000, margin=10, random_state=1).generate(transcribedText)
         wordcloud.to_file(song_path[:-4] + '.png')
         # TODO - make it print the image in the GUI
-        
-
-
     
     try:
         S, bars, genre = dbm.db_driver(

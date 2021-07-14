@@ -61,8 +61,8 @@ class Window(QWidget):
 
         # input for folder path
         self.file_path = QLineEdit(self)
-        self.file_path.move(75, 140)
-        self.file_path.resize(450, 20)
+        self.file_path.move(85, 140)
+        self.file_path.resize(440, 20)
 
         # button for file picker
         self.get_file = QPushButton('Choose...', self)
@@ -73,18 +73,18 @@ class Window(QWidget):
         # audio sample label
         self.sample_lbl = QLabel(self)
         self.sample_lbl.move(8, 173)
-        self.sample_lbl.setText('Sample:')
+        self.sample_lbl.setText('Audio Sample:')
 
         # combo box for audio samples
         self.sample_combo = QComboBox(self)
-        self.sample_combo.move(75, 170)
-        self.sample_combo.resize(450, 20)
+        self.sample_combo.move(85, 170)
+        self.sample_combo.resize(440, 20)
         self.sample_combo.addItems(self.get_samples())
         self.sample_combo.activated[str].connect(self.set_specs)
 
         # select specs label
         self.spec_lbl = QLabel('', self)
-        self.spec_lbl.move(295, 197)
+        self.spec_lbl.move(318, 197)
 
         # combo box for specs
         self.spec_combo = QComboBox(self)
@@ -123,10 +123,11 @@ class Window(QWidget):
         self.frq_lbl = QLabel(self)
         self.frq_lbl.setText('Frequency:')
         self.frq_lbl.move(8, 255)
+        self.frq_lbl.resize(0,0)
         self.frq_lbl.setToolTip(frq_tt)
         self.frq_val = QLabel(self)
         self.frq_val.move(170, 257)
-        self.frq_val.resize(35, 10)
+        self.frq_val.resize(0, 0)
         self.frq_val.setText('0%')
         self.frq_val.setFont(QFont('', 8))
         self.frq_val.setToolTip(frq_tt)
@@ -136,7 +137,7 @@ class Window(QWidget):
         self.frq_sld.setPageStep(1)
         self.frq_sld.setToolTip(frq_tt)
         self.frq_sld.move(90, 257)
-        self.frq_sld.resize(75, 15)
+        self.frq_sld.resize(0, 0)
         self.frq_sld.valueChanged.connect(
             lambda val: self.frq_val.setText(str(val) + '%'))
 
@@ -146,9 +147,10 @@ class Window(QWidget):
         self.sr_lbl.setText('Sample Rate:')
         self.sr_lbl.move(8, 280)
         self.sr_lbl.setToolTip(sr_tt)
+        self.sr_lbl.resize(0,0)
         self.sr_val = QLabel(self)
         self.sr_val.move(170, 282)
-        self.sr_val.resize(35, 10)
+        self.sr_val.resize(0, 0)
         self.sr_val.setText('11.5k')
         self.sr_val.setFont(QFont('', 8))
         self.sr_val.setToolTip(sr_tt)
@@ -159,7 +161,7 @@ class Window(QWidget):
         self.sr_sld.setPageStep(1)
         self.sr_sld.setToolTip(sr_tt)
         self.sr_sld.move(90, 281)
-        self.sr_sld.resize(75, 15)
+        self.sr_sld.resize(0, 0)
         self.sr_sld.valueChanged.connect(
             lambda val: self.sr_val.setText(str(round(val/1000, 1)) + 'k'))
 
@@ -169,9 +171,10 @@ class Window(QWidget):
         self.octave_lbl.setText('Octave:')
         self.octave_lbl.move(8, 305)
         self.octave_lbl.setToolTip(octave_tt)
+        self.octave_lbl.resize(0,0)
         self.octave_val = QLabel(self)
         self.octave_val.move(170, 307)
-        self.octave_val.resize(35, 10)
+        self.octave_val.resize(0,0)
         self.octave_val.setText('0')
         self.octave_val.setFont(QFont('', 8))
         self.octave_val.setToolTip(octave_tt)
@@ -180,7 +183,7 @@ class Window(QWidget):
         self.octave_sld.setFocusPolicy(Qt.NoFocus)
         self.octave_sld.setPageStep(1)
         self.octave_sld.move(90, 306)
-        self.octave_sld.resize(75, 15)
+        self.octave_sld.resize(0,0)
         self.octave_sld.setToolTip(octave_tt)
         self.octave_sld.valueChanged.connect(
             lambda val: self.octave_val.setText(str(val)))
@@ -198,7 +201,7 @@ class Window(QWidget):
         self.error_lbl = QLabel('', self)
         self.error_lbl.resize(300, 20)
         self.error_lbl.move(20, 475)
-        self.error_lbl.setFont(QFont('', 10))
+        self.error_lbl.setFont(QFont('', 11))
 
         # create the canvas for drawing
         self.canvas = qt_canvas.QtCanvas(self)
@@ -237,8 +240,9 @@ class Window(QWidget):
     def set_specs(self):
         path = self.sample_combo.currentText()
         if path == '':
+            self.clear_specs()
             return
-        self.file_path.setText(path)
+        self.file_path.setText('')
         specs = dbm.db_driver('ss', path)
         self.clear_specs()
         self.spec_lbl.setText('Select Specs:')
@@ -250,45 +254,80 @@ class Window(QWidget):
         self.spec_combo.addItems(specs_list)
 
     def set_sample(self):
-        if self.sample_combo.currentText() == '': 
+        self.on_algo_change()
+        if self.sample_combo.currentText() == '' or self.spec_combo.currentText() == '':
             return
         specs = self.spec_combo.currentText().split(',')
         frq = specs[0].replace('FRQ=', '').replace('%', '')
         sr = int(float(specs[1].replace('SR=', '').replace('k', '')) * 1000)
         self.frq_sld.setValue(int(frq))
-        self.frq_val.setText(frq + '%')
         self.sr_sld.setValue(sr)
-        self.sr_val.setText(str(round(sr/1000, 1)) + 'k')
-        self.error_lbl.setText('')
-
 
     def get_samples(self):
         self.sample_combo.clear()
         samples = ['']
         samples += [s for s in dbm.db_driver('s')]
         return samples
-        
+
     def clear_specs(self):
         self.spec_combo.clear()
         self.spec_lbl.setText('')
-        self.spec_combo.resize(0,0)
-        self.spec_lbl.resize(0,0)
+        self.spec_combo.resize(0, 0)
+        self.spec_lbl.resize(0, 0)
+
+    def clear_toggles(self):
+        self.frq_val.setText('')
+        self.frq_sld.resize(0,0) 
+        self.frq_lbl.resize(0,0)
+        self.sr_val.setText('')
+        self.sr_sld.resize(0,0)
+        self.sr_lbl.resize(0,0)
+        self.octave_val.setText('')
+        self.octave_sld.resize(0,0)
+        self.octave_lbl.resize(0,0)
 
     def on_algo_change(self):
         algo_desc = {
-            '': '',
-            'Shape of You': 'Draw a collection of shapes based on notes and octaves',
-            'Line Rider': 'Draws a collection of lines based on notes and octaves',
-            'Curvy': 'Draws a collection of arcs based on notes and octaves',
-            'Speech': 'Draws a word map based on the most common words in the selected speech',
-            'Grid': 'Draws a collection of arcs based on notes and octaves',
+            '': ['',''],
+            'Shape of You': ['Draw a collection of shapes based on notes and octaves','fso'],
+            'Line Rider': ['Draws a collection of lines based on notes and octaves','fso'],
+            'Curvy': ['Draws a collection of arcs based on notes and octaves','fso'],
+            'Speech': ['Draws a word map based on the most common words in the selected speech',''],
+            'Grid': ['Draws a collection of arcs based on notes and octaves','fs'],
         }
-        self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()])
+        self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()][0])
         self.algo_lbl.resize(150, 80)
 
+        self.clear_toggles()
+        toggles = algo_desc[self.algo_combo.currentText()][1]
+        if self.spec_combo.currentText() != '':
+            toggles = toggles.replace('f','').replace('s','')
+
+        if 'f' in toggles:
+            self.frq_lbl.adjustSize()
+            self.frq_val.resize(35, 10)
+            self.frq_sld.resize(75, 15)
+            self.frq_val.setText(str(self.frq_sld.value()) + '%')
+        if 's' in toggles:
+            self.sr_lbl.adjustSize()
+            self.sr_val.resize(35, 10)
+            self.sr_sld.resize(75, 15)
+            self.sr_val.setText(str(round(self.sr_sld.value()/1000, 1)) + 'k')
+        if 'o' in toggles:
+            self.octave_lbl.adjustSize()
+            self.octave_val.resize(35, 10)
+            self.octave_sld.resize(75, 15)        
+            self.octave_val.setText(str(self.octave_sld.value()))
+
+
     def process_file(self):
+        if self.algo_combo.currentText() == '':
+            self.error_lbl.setText(
+                '<font color=red>Error: Choose an Algorithm</font>')
+            return
         success = False
-        if self.file_path.text()[-4:].lower() in ('.mp3', '.wav') and os.path.exists(self.file_path.text()):
+        file = self.file_path.text() if self.sample_combo.currentText() == '' else self.sample_combo.currentText()
+        if file[-4:].lower() in ('.mp3', '.wav') and os.path.exists(file):
             self.error_lbl.setText('')
             self.proc_lbl.setText('Processing...')
             self.proc_lbl.adjustSize()
@@ -296,10 +335,10 @@ class Window(QWidget):
             self.canvas.shapes = []
             self.canvas.repaint()
 
-            # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,self.file_path.text(),self.sr_sld.value(),self.octave_sld.value()))
+            # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,file),self.sr_sld.value(),self.octave_sld.value()))
             # p.start()
-            success = process_audio.proc_audio(self.algo_combo.currentText(), self.canvas, self.file_path.text(),
-                                               int(round(self.sr_sld.value()/1000,1) * 1000), self.octave_sld.value(), self.frq_sld.value())
+            success = process_audio.proc_audio(self.algo_combo.currentText(), self.canvas, file,
+                                               int(round(self.sr_sld.value()/1000, 1) * 1000), self.octave_sld.value(), self.frq_sld.value())
             self.proc_lbl.setText('')
             file = self.sample_combo.currentText()
             self.sample_combo.addItems(self.get_samples())
@@ -308,6 +347,7 @@ class Window(QWidget):
         else:
             self.error_lbl.setText(
                 '<font color=red>Error: Invalid Audio File</font>')
+            return
         if not success:
             self.error_lbl.setText(
                 '<font color=red>Error Processing Audio File</font>')

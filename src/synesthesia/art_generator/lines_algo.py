@@ -1,8 +1,8 @@
 import random 
 
-def draw_note(canvas, note, octave_scale, colors):
+def draw_note(canvas, note, oct_selection, colors):
 
-    octave = int(int(note[1]) * (3 + (octave_scale / 100)))
+    octave = int(note[1]) + oct_selection
     note = note[0]
     x = canvas.x % 400
     y = canvas.y % 400

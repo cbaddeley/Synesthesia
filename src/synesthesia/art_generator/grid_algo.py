@@ -2,7 +2,7 @@ import random
 from PyQt5.QtCore import Qt
 import math
 
-def draw_note(canvas, note, octave_scale, colors, bar_index):
+def draw_note(canvas, note, oct_selection, colors, bar_index):
     if bar_index == 0:
         canvas.clear_args()
         color = colors[random.randint(0, len(colors) - 1)]  # picks random color from list
@@ -31,7 +31,7 @@ def draw_note(canvas, note, octave_scale, colors, bar_index):
             if canvas.grid_state[1] == 0:
                 canvas.inc_seg_len()
 
-        octave = int(int(note[1]) * (3 + (octave_scale / 100)))
+        octave = int(note[1]) + oct_selection
         canvas.clear_args()
         color = colors[random.randint(0, len(colors) - 1)] # picks random color from list
         canvas.style = Qt.SolidLine
