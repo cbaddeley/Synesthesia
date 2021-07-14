@@ -42,3 +42,4 @@
 | George Kolasa    | 07/13/21     | Added speech recognition              |
 | Zach Simmons     | 07/13/21     | Added word cloud functionality        |
 | Cory Baddeley    | 07/13/21     | Added another algorithm for displaying|
+| Scott Engelhardt | 07/14/21     | Updated GUI to make it "discoverable" |
