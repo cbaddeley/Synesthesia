@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets
 from random import randrange
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from numpy import extract
 
 
 class QtCanvas(QtWidgets.QWidget):
@@ -185,6 +186,13 @@ class QtCanvas(QtWidgets.QWidget):
                     painter.drawLine(x, y, x - dim, y + dim / 2)  # up left
                     x -= dim
                     y += dim / 2
+
+    def save(self, path):
+        try:
+            return self.grab().save(path)
+        except:
+            return False
+    
 
     def refresh(self):
         self.update()

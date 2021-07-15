@@ -3,7 +3,7 @@ import os
 import shutil
 import os
 import sys
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import urllib.request
@@ -208,6 +208,10 @@ class Window(QWidget):
         self.canvas.resize(410, 410)
         self.canvas.move(210, 230)
 
+
+        # used when saving generated images
+        self.enable_save = False
+
     def dark_mode(self):
         # https://gist.github.com/mstuttgart/37c0e6d8f67a0611674e08294f3daef7
         dark_palette = QPalette()
@@ -337,6 +341,7 @@ class Window(QWidget):
 
             # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,file),self.sr_sld.value(),self.octave_sld.value()))
             # p.start()
+            self.enable_save = False
             success = process_audio.proc_audio(self.algo_combo.currentText(), self.canvas, file,
                                                int(round(self.sr_sld.value()/1000, 1) * 1000), self.octave_sld.value(), self.frq_sld.value())
             self.proc_lbl.setText('')
@@ -351,7 +356,23 @@ class Window(QWidget):
         if not success:
             self.error_lbl.setText(
                 '<font color=red>Error Processing Audio File</font>')
+        else:
+            self.enable_save = True
 
+    # https://stackoverflow.com/questions/20930764/how-to-add-a-right-click-menu-to-each-cell-of-qtableview-in-pyqt
+    def mousePressEvent(self, QMouseEvent):
+        if QMouseEvent.button() == Qt.RightButton and self.enable_save:
+            if QMouseEvent.pos().x() > 205 and QMouseEvent.pos().y() > 220:
+                menu = QMenu(self)
+                save_as = QAction('Save As', self)
+                save_as.triggered.connect(lambda: self.save_img())
+                menu.addAction(save_as)
+                menu.popup(QCursor.pos())
+
+    def save_img(self):
+        if not self.enable_save or not self.canvas.save(QFileDialog.getSaveFileName(self, 'Save Image')[0]):
+            self.error_lbl.setText(
+                '<font color=red>Errror: Image Not Saved</font>')
 
 def main_func():
     set_display_to_host()
@@ -369,7 +390,6 @@ def pip_main_func():
     print("Welcome to Synesthesia (installed via Pip)")
     # os.chdir('synesthesia')
     main_func()
-
 
 if __name__ == '__main__':
     main_func()
