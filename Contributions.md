@@ -43,3 +43,4 @@
 | Zach Simmons     | 07/13/21     | Added word cloud functionality        |
 | Cory Baddeley    | 07/13/21     | Added another algorithm for displaying|
 | Scott Engelhardt | 07/14/21     | Updated GUI to make it "discoverable" |
+| George Kolasa    | 07/16/21     | Essentia work on TF2 and Python3.8    |
