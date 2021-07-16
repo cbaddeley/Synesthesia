@@ -1,7 +1,7 @@
 import glob, os, shutil, os, sys, subprocess, asyncio
 sys.path.append("synesthesia")
 
-APT_PACKAGES = 'ffmpeg gstreamer1.0-plugins-base gstreamer1.0-plugins-ugly libqt5x11extras5 libcairo2-dev pkg-config'
+APT_PACKAGES = 'ffmpeg gstreamer1.0-plugins-base gstreamer1.0-plugins-ugly libqt5x11extras5'
 
 
 def package_installation():

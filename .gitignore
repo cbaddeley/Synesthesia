@@ -143,5 +143,9 @@ src/synesthesia/art_generator/audio_samples.db
 
 
 # essentia misc
-./essentia_models/audio-chunks
-./essentia_models/essentia
+essentia_models/audio-chunks/
+essentia_models/essentia/
+
+
+#speech recognition misc
+src/synesthesia/audio-chunks/

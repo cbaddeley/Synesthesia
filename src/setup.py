@@ -20,8 +20,8 @@ setup(
     include_package_data=True,
     url="https://github.com/cbaddeley/Synesthesia",
     license="GPL 3",
-    install_requires=['PyQt5', 'librosa', 'essentia', 'SpeechRecognition', 'pydub',
-                      'pillow', 'pycairo', 'musicnn'],
+    install_requires=['PyQt5', 'librosa', 'SpeechRecognition', 'pydub',
+                      'pillow', 'musicnn', 'matplotlib'],
     keywords=['audio', 'visualizer', "image"],
 
     entry_points =
