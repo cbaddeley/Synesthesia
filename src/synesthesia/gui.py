@@ -1,24 +1,19 @@
-import glob
-import os
-import shutil
-import os
 import sys
 from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import urllib.request
 from wsl import *
-from PIL.ImageQt import ImageQt
 from art_generator import qt_canvas, process_audio, dbm
-from images import *
+from collections import Counter
 
 
 class ProcessAudio(QObject):
     finished = pyqtSignal()
     success = None
 
-    def run(self, text, canvas, file, sr, oct, freq):
-        self.success = process_audio.proc_audio(text, canvas, file, sr, oct, freq)
+    def run(self, algo, file, sr, oct, freq):
+        self.success = process_audio.proc_audio(algo, file, sr, oct, freq)
         self.finished.emit()
 
 
@@ -358,7 +353,9 @@ class Window(QWidget):
             self.thread = QThread()
             self.worker = ProcessAudio()
             self.worker.moveToThread(self.thread)
-            self.thread.started.connect(lambda: self.worker.run(self.algo_combo.currentText(), self.canvas, file, int(round(self.sr_sld.value() / 1000, 1) * 1000),self.octave_sld.value(), self.frq_sld.value()))
+            self.thread.started.connect(lambda: self.worker.run(self.algo_combo.currentText(), file,
+                                                                int(round(self.sr_sld.value() / 1000, 1) * 1000),
+                                                                self.octave_sld.value(), self.frq_sld.value()))
             self.worker.finished.connect(self.thread.quit)
             self.worker.finished.connect(self.worker.deleteLater)
             self.thread.finished.connect(self.thread.deleteLater)
@@ -371,20 +368,55 @@ class Window(QWidget):
                 lambda: self.proc_file.setEnabled(True)
             )
             self.thread.finished.connect(
-                lambda: self.after_process_cleanup(self.worker.success)
+                lambda: self.after_process_cleanup(self.worker.success, file)
             )
         else:
             self.error_lbl.setText(
                 '<font color=red>Error: Invalid Audio File</font>')
             return
 
-    def after_process_cleanup(self, success):
+    def after_process_cleanup(self, success, file):
+        algo = self.algo_combo.currentText()
+        succ = success[0]
+        bars = success[1]
+        S = success[2]
+        genre = success[3]
+        have_sample = success[4]
+        freq_scale = success[5]
+        sr_selection = success[6]
+        oct_selection = success[7]
+        song_path = file
+        if algo == 'Grid':
+            self.canvas.set_grid_dimensions(len(bars))
+
+        if not have_sample:
+            disp_notes = []
+            disp_frq = []
+            self.canvas.set_grid_dimensions(len(bars))
+
+            for i, bar in enumerate(bars):
+                c = Counter(bar)
+                result = c.most_common(1)
+                note = result[0]
+                disp_notes.append(note)
+
+                c = Counter(S[i])
+                result = c.most_common(1)
+                frq = result[0]
+                disp_frq.append(frq)
+                process_audio.drawer(self.canvas, algo, note, frq, self.octave_sld.value(), genre, i)
+
+            dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
+        else:  # we have a sample of the audio
+            for i, note in enumerate(bars):
+                process_audio.drawer(self.canvas, algo, note, S[i], oct_selection, genre, i)
+
         self.proc_lbl.setText('')
         file = self.sample_combo.currentText()
         self.sample_combo.addItems(self.get_samples())
         if file != '':
             self.sample_combo.setCurrentText(file)
-        if not success:
+        if not succ:
             self.error_lbl.setText(
                 '<font color=red>Error Processing Audio File</font>')
         else:
@@ -414,7 +446,7 @@ def main_func():
     window = Window()
     app.setPalette(window.dark_mode())  # turn on dark mode
     window.show()
-    app.exec()
+    sys.exit(app.exec())
 
 
 def pip_main_func():

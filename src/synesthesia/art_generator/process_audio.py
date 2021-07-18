@@ -1,18 +1,14 @@
-
-from random import random
-from . import genre_colors, shapes_algo, curvy_algo, lines_algo, dbm
-import os
+from . import dbm
 import subprocess
-from collections import Counter
 import pickle
 import librosa
 import numpy as np
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainterPath
 from PyQt5.QtGui import QPixmap
 from wsl import *
 import warnings
-from wordcloud import WordCloud, ImageColorGenerator
+from wordcloud import WordCloud
+
 set_display_to_host()
 from . import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
 
@@ -34,8 +30,7 @@ def drawer(canvas, algo, note, frq, oct_selection, genre, bar_index):
                 '-'), oct_selection, genre_colors.getColors(genre), bar_index)
 
 
-
-def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale, word_cloud_display):
+def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
     is_mp3 = False
     have_sample = False
     if algo == 'Speech':
@@ -44,7 +39,7 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale,
             is_mp3 = True
             if not os.path.exists(wav_path):
                 subprocess.call(['ffmpeg', '-i', song_path, wav_path])
-        
+
         if is_mp3:
             transcribedText = transcribeSpeech(wav_path)
         else:
@@ -59,7 +54,7 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale,
         word_cloud_display.setPixmap(wc_pixmap)
         word_cloud_display.setHidden(False)
         return True
-    
+
     try:
         S, bars, genre = dbm.db_driver(
             'r', song_path, freq_scale, sr_selection)[0]
@@ -93,36 +88,9 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale,
         except:
             genre = ''
 
-    if algo == 'Grid':
-        canvas.set_grid_dimensions(len(bars))
-    
-    if not have_sample:
-        disp_notes = []
-        disp_frq = []
-        canvas.set_grid_dimensions(len(bars))
-
-        for i, bar in enumerate(bars):
-            c = Counter(bar)
-            result = c.most_common(1)
-            note = result[0]
-            disp_notes.append(note)
-
-            c = Counter(S[i])
-            result = c.most_common(1)
-            frq = result[0]
-            disp_frq.append(frq)
-            drawer(canvas, algo, note, frq, oct_selection, genre, i)
-
-        dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
-        if is_mp3:
-            os.remove(wav_path)
-    else: # we have a sample of the audio
-        for i, note in enumerate(bars):
-            drawer(canvas, algo, note, S[i], oct_selection, genre, i)
-
-    return True
-
-
+    if is_mp3:
+        os.remove(wav_path)
+    return True, bars, S, genre, have_sample, freq_scale, sr_selection, oct_selection
 
 
 def transcribeSpeech(path):
@@ -140,13 +108,13 @@ def transcribeSpeech(path):
     sound = AudioSegment.from_wav(path)
     # split audio sound where silence is 700 miliseconds or more and get chunks
     chunks = split_on_silence(sound,
-        # experiment with this value for your target audio file
-        min_silence_len = 500,
-        # adjust this per requirement
-        silence_thresh = sound.dBFS-14,
-        # keep the silence for 1 second, adjustable as well
-        keep_silence=500,
-    )
+                              # experiment with this value for your target audio file
+                              min_silence_len=500,
+                              # adjust this per requirement
+                              silence_thresh=sound.dBFS - 14,
+                              # keep the silence for 1 second, adjustable as well
+                              keep_silence=500,
+                              )
     folder_name = "audio-chunks"
     # create a directory to store the audio chunks
     if not os.path.isdir(folder_name):
