@@ -3,7 +3,7 @@ import os
 import shutil
 import os
 import sys
-from PyQt5.QtCore import Qt, QObject
+from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import urllib.request
@@ -11,6 +11,15 @@ from wsl import *
 from PIL.ImageQt import ImageQt
 from art_generator import qt_canvas, process_audio, dbm
 from images import *
+
+
+class ProcessAudio(QObject):
+    finished = pyqtSignal()
+    success = None
+
+    def run(self, text, canvas, file, sr, oct, freq):
+        self.success = process_audio.proc_audio(text, canvas, file, sr, oct, freq)
+        self.finished.emit()
 
 
 class Window(QWidget):
@@ -123,7 +132,7 @@ class Window(QWidget):
         self.frq_lbl = QLabel(self)
         self.frq_lbl.setText('Frequency:')
         self.frq_lbl.move(8, 255)
-        self.frq_lbl.resize(0,0)
+        self.frq_lbl.resize(0, 0)
         self.frq_lbl.setToolTip(frq_tt)
         self.frq_val = QLabel(self)
         self.frq_val.move(170, 257)
@@ -147,7 +156,7 @@ class Window(QWidget):
         self.sr_lbl.setText('Sample Rate:')
         self.sr_lbl.move(8, 280)
         self.sr_lbl.setToolTip(sr_tt)
-        self.sr_lbl.resize(0,0)
+        self.sr_lbl.resize(0, 0)
         self.sr_val = QLabel(self)
         self.sr_val.move(170, 282)
         self.sr_val.resize(0, 0)
@@ -163,7 +172,7 @@ class Window(QWidget):
         self.sr_sld.move(90, 281)
         self.sr_sld.resize(0, 0)
         self.sr_sld.valueChanged.connect(
-            lambda val: self.sr_val.setText(str(round(val/1000, 1)) + 'k'))
+            lambda val: self.sr_val.setText(str(round(val / 1000, 1)) + 'k'))
 
         # Octave Sliders
         octave_tt = 'Increases or decreases the octaves by the number selected'
@@ -171,10 +180,10 @@ class Window(QWidget):
         self.octave_lbl.setText('Octave:')
         self.octave_lbl.move(8, 305)
         self.octave_lbl.setToolTip(octave_tt)
-        self.octave_lbl.resize(0,0)
+        self.octave_lbl.resize(0, 0)
         self.octave_val = QLabel(self)
         self.octave_val.move(170, 307)
-        self.octave_val.resize(0,0)
+        self.octave_val.resize(0, 0)
         self.octave_val.setText('0')
         self.octave_val.setFont(QFont('', 8))
         self.octave_val.setToolTip(octave_tt)
@@ -183,7 +192,7 @@ class Window(QWidget):
         self.octave_sld.setFocusPolicy(Qt.NoFocus)
         self.octave_sld.setPageStep(1)
         self.octave_sld.move(90, 306)
-        self.octave_sld.resize(0,0)
+        self.octave_sld.resize(0, 0)
         self.octave_sld.setToolTip(octave_tt)
         self.octave_sld.valueChanged.connect(
             lambda val: self.octave_val.setText(str(val)))
@@ -212,7 +221,6 @@ class Window(QWidget):
         self.word_cloud_lbl = QLabel('', self)
         self.word_cloud_lbl.resize(410, 410)
         self.word_cloud_lbl.move(210, 230)
-
         # used when saving generated images
         self.enable_save = False
 
@@ -258,7 +266,7 @@ class Window(QWidget):
         self.spec_combo.resize(140, 20)
         specs_list = ['']
         specs_list += [
-            f'FRQ={s[0]}%, SR={round(int(s[1])/1000,1)}k' for s in specs]
+            f'FRQ={s[0]}%, SR={round(int(s[1]) / 1000, 1)}k' for s in specs]
         self.spec_combo.addItems(specs_list)
 
     def set_sample(self): 
@@ -285,23 +293,23 @@ class Window(QWidget):
 
     def clear_toggles(self):
         self.frq_val.resize(0,0) 
-        self.frq_sld.resize(0,0) 
-        self.frq_lbl.resize(0,0)
+        self.frq_sld.resize(0, 0)
+        self.frq_lbl.resize(0, 0)
         self.sr_val.resize(0,0) 
-        self.sr_sld.resize(0,0)
-        self.sr_lbl.resize(0,0)
+        self.sr_sld.resize(0, 0)
+        self.sr_lbl.resize(0, 0)
         self.octave_val.resize(0,0) 
-        self.octave_sld.resize(0,0)
-        self.octave_lbl.resize(0,0)
+        self.octave_sld.resize(0, 0)
+        self.octave_lbl.resize(0, 0)
 
     def on_algo_change(self):
         algo_desc = {
-            '': ['',''],
-            'Shape of You': ['Draw a collection of shapes based on notes and octaves','fso'],
-            'Line Rider': ['Draws a collection of lines based on notes and octaves','fso'],
-            'Curvy': ['Draws a collection of arcs based on notes and octaves','fso'],
-            'Speech': ['Draws a word map based on the most common words in the selected speech',''],
-            'Grid': ['Draws a collection of arcs based on notes and octaves','fs'],
+            '': ['', ''],
+            'Shape of You': ['Draw a collection of shapes based on notes and octaves', 'fso'],
+            'Line Rider': ['Draws a collection of lines based on notes and octaves', 'fso'],
+            'Curvy': ['Draws a collection of arcs based on notes and octaves', 'fso'],
+            'Speech': ['Draws a word map based on the most common words in the selected speech', ''],
+            'Grid': ['Draws a collection of arcs based on notes and octaves', 'fs'],
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()][0])
         self.algo_lbl.resize(150, 80)
@@ -309,7 +317,7 @@ class Window(QWidget):
         self.clear_toggles()
         toggles = algo_desc[self.algo_combo.currentText()][1]
         if self.spec_combo.currentText() != '':
-            toggles = toggles.replace('f','').replace('s','')
+            toggles = toggles.replace('f', '').replace('s', '')
 
         if 'f' in toggles:
             self.frq_lbl.adjustSize()
@@ -320,13 +328,12 @@ class Window(QWidget):
             self.sr_lbl.adjustSize()
             self.sr_val.resize(35, 10)
             self.sr_sld.resize(75, 15)
-            self.sr_val.setText(str(round(self.sr_sld.value()/1000, 1)) + 'k')
+            self.sr_val.setText(str(round(self.sr_sld.value() / 1000, 1)) + 'k')
         if 'o' in toggles:
             self.octave_lbl.adjustSize()
             self.octave_val.resize(35, 10)
-            self.octave_sld.resize(75, 15)        
+            self.octave_sld.resize(75, 15)
             self.octave_val.setText(str(self.octave_sld.value()))
-
 
     def process_file(self):
         self.word_cloud_lbl.setHidden(True)
@@ -338,7 +345,6 @@ class Window(QWidget):
             self.error_lbl.setText(
                 '<font color=red>Error: Choose Specifications</font>')
             return
-        success = False
         file = self.file_path.text() if self.sample_combo.currentText() == '' else self.sample_combo.currentText()
         if file[-4:].lower() in ('.mp3', '.wav') and os.path.exists(file):
             self.error_lbl.setText('')
@@ -348,20 +354,36 @@ class Window(QWidget):
             self.canvas.shapes = []
             self.canvas.repaint()
 
-            # p = multiprocessing.Process(target=shapes_algo.notes_to_canvas, args=(self.canvas,file),self.sr_sld.value(),self.octave_sld.value()))
-            # p.start()
             self.enable_save = False
-            success = process_audio.proc_audio(self.algo_combo.currentText(), self.canvas, file,
-                                               int(round(self.sr_sld.value()/1000, 1) * 1000), self.octave_sld.value(), self.frq_sld.value(), self.word_cloud_lbl)
-            self.proc_lbl.setText('')
-            file = self.sample_combo.currentText()
-            self.sample_combo.addItems(self.get_samples())
-            if file != '':
-                self.sample_combo.setCurrentText(file)
+            self.thread = QThread()
+            self.worker = ProcessAudio()
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(lambda: self.worker.run(self.algo_combo.currentText(), self.canvas, file, int(round(self.sr_sld.value() / 1000, 1) * 1000),self.octave_sld.value(), self.frq_sld.value()))
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+            self.proc_file.setEnabled(False)
+            self.thread.finished.connect(
+                lambda: self.proc_file.setEnabled(True)
+            )
+            self.thread.finished.connect(
+                lambda: self.proc_file.setEnabled(True)
+            )
+            self.thread.finished.connect(
+                lambda: self.after_process_cleanup(self.worker.success)
+            )
         else:
             self.error_lbl.setText(
                 '<font color=red>Error: Invalid Audio File</font>')
             return
+
+    def after_process_cleanup(self, success):
+        self.proc_lbl.setText('')
+        file = self.sample_combo.currentText()
+        self.sample_combo.addItems(self.get_samples())
+        if file != '':
+            self.sample_combo.setCurrentText(file)
         if not success:
             self.error_lbl.setText(
                 '<font color=red>Error Processing Audio File</font>')
@@ -383,6 +405,7 @@ class Window(QWidget):
             self.error_lbl.setText(
                 '<font color=red>Errror: Image Not Saved</font>')
 
+
 def main_func():
     set_display_to_host()
     # instantiate application and create a window
@@ -399,6 +422,7 @@ def pip_main_func():
     print("Welcome to Synesthesia (installed via Pip)")
     # os.chdir('synesthesia')
     main_func()
+
 
 if __name__ == '__main__':
     main_func()
