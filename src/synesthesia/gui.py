@@ -257,7 +257,7 @@ class Window(QWidget):
             f'FRQ={s[0]}%, SR={round(int(s[1])/1000,1)}k' for s in specs]
         self.spec_combo.addItems(specs_list)
 
-    def set_sample(self):
+    def set_sample(self): 
         self.on_algo_change()
         if self.sample_combo.currentText() == '' or self.spec_combo.currentText() == '':
             return
@@ -280,13 +280,13 @@ class Window(QWidget):
         self.spec_lbl.resize(0, 0)
 
     def clear_toggles(self):
-        self.frq_val.setText('')
+        self.frq_val.resize(0,0) 
         self.frq_sld.resize(0,0) 
         self.frq_lbl.resize(0,0)
-        self.sr_val.setText('')
+        self.sr_val.resize(0,0) 
         self.sr_sld.resize(0,0)
         self.sr_lbl.resize(0,0)
-        self.octave_val.setText('')
+        self.octave_val.resize(0,0) 
         self.octave_sld.resize(0,0)
         self.octave_lbl.resize(0,0)
 
@@ -328,6 +328,10 @@ class Window(QWidget):
         if self.algo_combo.currentText() == '':
             self.error_lbl.setText(
                 '<font color=red>Error: Choose an Algorithm</font>')
+            return
+        if self.sample_combo.currentText() != '' and self.spec_combo.currentText() == '':
+            self.error_lbl.setText(
+                '<font color=red>Error: Choose Specifications</font>')
             return
         success = False
         file = self.file_path.text() if self.sample_combo.currentText() == '' else self.sample_combo.currentText()
