@@ -207,7 +207,11 @@ class Window(QWidget):
         self.canvas = qt_canvas.QtCanvas(self)
         self.canvas.resize(410, 410)
         self.canvas.move(210, 230)
-
+        
+        # create the label for word cloud viewing
+        self.word_cloud_lbl = QLabel('', self)
+        self.word_cloud_lbl.resize(410, 410)
+        self.word_cloud_lbl.move(210, 230)
 
         # used when saving generated images
         self.enable_save = False
@@ -325,6 +329,7 @@ class Window(QWidget):
 
 
     def process_file(self):
+        self.word_cloud_lbl.setHidden(True)
         if self.algo_combo.currentText() == '':
             self.error_lbl.setText(
                 '<font color=red>Error: Choose an Algorithm</font>')
@@ -347,7 +352,7 @@ class Window(QWidget):
             # p.start()
             self.enable_save = False
             success = process_audio.proc_audio(self.algo_combo.currentText(), self.canvas, file,
-                                               int(round(self.sr_sld.value()/1000, 1) * 1000), self.octave_sld.value(), self.frq_sld.value())
+                                               int(round(self.sr_sld.value()/1000, 1) * 1000), self.octave_sld.value(), self.frq_sld.value(), self.word_cloud_lbl)
             self.proc_lbl.setText('')
             file = self.sample_combo.currentText()
             self.sample_combo.addItems(self.get_samples())
