@@ -6,14 +6,37 @@ import urllib.request
 from wsl import *
 from art_generator import qt_canvas, process_audio, dbm
 from collections import Counter
-
+from multiprocessing import Process
 
 class ProcessAudio(QObject):
     finished = pyqtSignal()
     success = None
+    stopped = False
 
-    def run(self, algo, file, sr, oct, freq):
-        self.success = process_audio.proc_audio(algo, file, sr, oct, freq)
+    def __init__(self, algo, file, sr, oct, freq):
+        super().__init__()
+        self.algo = algo
+        self.file = file
+        self.sr = sr
+        self.oct = oct
+        self.freq = freq
+
+    def run(self):
+        self.process = Process(target=self.process_aud)
+        self.process.start()
+        self.process.join()
+
+    def process_aud(self):
+        self.success = process_audio.proc_audio(self.algo, self.file, self.sr, self.oct, self.freq)
+        self.finished.emit()
+
+    def stop(self):
+        try:
+            self.process.terminate()
+            self.process.close()
+        except ValueError:
+            print('Processing Stopped')
+        self.stopped = True
         self.finished.emit()
 
 
@@ -342,40 +365,47 @@ class Window(QWidget):
             return
         file = self.file_path.text() if self.sample_combo.currentText() == '' else self.sample_combo.currentText()
         if file[-4:].lower() in ('.mp3', '.wav') and os.path.exists(file):
-            self.error_lbl.setText('')
-            self.proc_lbl.setText('Processing...')
-            self.proc_lbl.adjustSize()
             self.canvas.clear_args()
             self.canvas.shapes = []
             self.canvas.repaint()
 
             self.enable_save = False
             self.thread = QThread()
-            self.worker = ProcessAudio()
-            self.worker.moveToThread(self.thread)
-            self.thread.started.connect(lambda: self.worker.run(self.algo_combo.currentText(), file,
+            self.worker = ProcessAudio(self.algo_combo.currentText(), file,
                                                                 int(round(self.sr_sld.value() / 1000, 1) * 1000),
-                                                                self.octave_sld.value(), self.frq_sld.value()))
+                                                                self.octave_sld.value(), self.frq_sld.value())
+
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
             self.worker.finished.connect(self.thread.quit)
             self.worker.finished.connect(self.worker.deleteLater)
             self.thread.finished.connect(self.thread.deleteLater)
-            self.thread.start()
+            self.update_gui_pre_process()
             self.proc_file.setEnabled(False)
+            self.proc_file.clicked.disconnect()
+            self.proc_file.clicked.connect(self.stop_processing)
+            self.proc_file.setEnabled(True)
+            self.thread.start()
             self.thread.finished.connect(
-                lambda: self.proc_file.setEnabled(True)
-            )
-            self.thread.finished.connect(
-                lambda: self.proc_file.setEnabled(True)
-            )
-            self.thread.finished.connect(
-                lambda: self.after_process_cleanup(self.worker.success, file)
+                lambda: self.after_process_cleanup(self.worker.success, file, self.worker.stopped)
             )
         else:
             self.error_lbl.setText(
                 '<font color=red>Error: Invalid Audio File</font>')
             return
 
-    def after_process_cleanup(self, success, file):
+    def stop_processing(self):
+        self.worker.stop()
+        self.update_gui_stopped_process()
+        self.proc_file.setEnabled(False)
+        self.proc_file.clicked.disconnect()
+        self.proc_file.clicked.connect(self.process_file)
+        self.proc_file.setEnabled(True)
+
+
+    def after_process_cleanup(self, success, file, stopped):
+        if stopped:
+            return
         algo = self.algo_combo.currentText()
         succ = success[0]
         bars = success[1]
@@ -411,7 +441,6 @@ class Window(QWidget):
             for i, note in enumerate(bars):
                 process_audio.drawer(self.canvas, algo, note, S[i], oct_selection, genre, i)
 
-        self.proc_lbl.setText('')
         file = self.sample_combo.currentText()
         self.sample_combo.addItems(self.get_samples())
         if file != '':
@@ -421,6 +450,11 @@ class Window(QWidget):
                 '<font color=red>Error Processing Audio File</font>')
         else:
             self.enable_save = True
+        self.update_gui_post_process()
+        self.proc_file.setEnabled(False)
+        self.proc_file.clicked.disconnect()
+        self.proc_file.clicked.connect(self.process_file)
+        self.proc_file.setEnabled(True)
 
     # https://stackoverflow.com/questions/20930764/how-to-add-a-right-click-menu-to-each-cell-of-qtableview-in-pyqt
     def mousePressEvent(self, QMouseEvent):
@@ -437,6 +471,48 @@ class Window(QWidget):
             self.error_lbl.setText(
                 '<font color=red>Errror: Image Not Saved</font>')
 
+    def update_gui_pre_process(self):
+        self.error_lbl.setText('')
+        self.proc_lbl.setText('Processing...')
+        self.proc_lbl.adjustSize()
+        self.file_path.setEnabled(False)
+        self.get_file.setEnabled(False)
+        self.sample_combo.setEnabled(False)
+        self.spec_combo.setEnabled(False)
+        self.select_algo.setEnabled(False)
+        self.algo_combo.setEnabled(False)
+        self.frq_sld.setEnabled(False)
+        self.sr_sld.setEnabled(False)
+        self.octave_sld.setEnabled(False)
+        self.proc_file.setText('Stop')
+
+    def update_gui_stopped_process(self):
+        self.proc_file.setText('Process')
+        self.error_lbl.setText('')
+        self.proc_lbl.setText('')
+        self.file_path.setEnabled(True)
+        self.get_file.setEnabled(True)
+        self.sample_combo.setEnabled(True)
+        self.spec_combo.setEnabled(True)
+        self.select_algo.setEnabled(True)
+        self.algo_combo.setEnabled(True)
+        self.frq_sld.setEnabled(True)
+        self.sr_sld.setEnabled(True)
+        self.octave_sld.setEnabled(True)
+
+    def update_gui_post_process(self):
+        self.proc_lbl.setText('')
+        self.file_path.setEnabled(True)
+        self.get_file.setEnabled(True)
+        self.sample_combo.setEnabled(True)
+        self.spec_combo.setEnabled(True)
+        self.select_algo.setEnabled(True)
+        self.algo_combo.setEnabled(True)
+        self.frq_sld.setEnabled(True)
+        self.sr_sld.setEnabled(True)
+        self.octave_sld.setEnabled(True)
+
+
 
 def main_func():
     set_display_to_host()
@@ -446,7 +522,7 @@ def main_func():
     window = Window()
     app.setPalette(window.dark_mode())  # turn on dark mode
     window.show()
-    sys.exit(app.exec())
+    app.exec()
 
 
 def pip_main_func():
