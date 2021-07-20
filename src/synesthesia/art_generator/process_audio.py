@@ -30,7 +30,7 @@ def drawer(canvas, algo, note, frq, oct_selection, genre, bar_index):
                 '-'), oct_selection, genre_colors.getColors(genre), bar_index)
 
 
-def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
+def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale, word_cloud_display):
     is_mp3 = False
     have_sample = False
     if algo == 'Speech':

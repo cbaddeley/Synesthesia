@@ -13,13 +13,14 @@ class ProcessAudio(QObject):
     success = None
     stopped = False
 
-    def __init__(self, algo, file, sr, oct, freq):
+    def __init__(self, algo, file, sr, oct, freq, word_cloud_lbl):
         super().__init__()
         self.algo = algo
         self.file = file
         self.sr = sr
         self.oct = oct
         self.freq = freq
+        self.word_cloud_lbl = word_cloud_lbl
 
     def run(self):
         self.process = Process(target=self.process_aud)
@@ -27,7 +28,7 @@ class ProcessAudio(QObject):
         self.process.join()
 
     def process_aud(self):
-        self.success = process_audio.proc_audio(self.algo, self.file, self.sr, self.oct, self.freq)
+        self.success = process_audio.proc_audio(self.algo, self.file, self.sr, self.oct, self.freq, self.word_cloud_lbl)
         self.finished.emit()
 
     def stop(self):
@@ -373,7 +374,7 @@ class Window(QWidget):
             self.thread = QThread()
             self.worker = ProcessAudio(self.algo_combo.currentText(), file,
                                                                 int(round(self.sr_sld.value() / 1000, 1) * 1000),
-                                                                self.octave_sld.value(), self.frq_sld.value())
+                                                                self.octave_sld.value(), self.frq_sld.value(), self.word_cloud_lbl)
 
             self.worker.moveToThread(self.thread)
             self.thread.started.connect(self.worker.run)
