@@ -9,6 +9,7 @@ import librosa
 import numpy as np
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainterPath
+from PyQt5.QtGui import QPixmap
 from wsl import *
 import warnings
 from wordcloud import WordCloud, ImageColorGenerator
@@ -34,7 +35,7 @@ def drawer(canvas, algo, note, frq, oct_selection, genre, bar_index):
 
 
 
-def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale):
+def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale, word_cloud_display):
     is_mp3 = False
     have_sample = False
     if algo == 'Speech':
@@ -50,9 +51,14 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
             transcribedText = transcribeSpeech(song_path)
 
         print(transcribedText)
-        wordcloud = WordCloud(max_words=1000, margin=10, random_state=1).generate(transcribedText)
-        wordcloud.to_file(song_path[:-4] + '.png')
-        # TODO - make it print the image in the GUI
+        wordcloud = WordCloud(width=400, height=400, max_words=1000, margin=10, random_state=1, background_color=None, mode='RGBA').generate(transcribedText)
+        cloud_path = song_path[:-4] + '.png'
+        wordcloud.to_file(cloud_path)
+        # display the word cloud in the GUI
+        wc_pixmap = QPixmap(cloud_path)
+        word_cloud_display.setPixmap(wc_pixmap)
+        word_cloud_display.setHidden(False)
+        return True
     
     try:
         S, bars, genre = dbm.db_driver(
