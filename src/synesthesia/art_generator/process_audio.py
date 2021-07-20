@@ -11,12 +11,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainterPath
 from wsl import *
 import warnings
-from wordcloud import WordCloud, ImageColorGenerator
+# from wordcloud import WordCloud, ImageColorGenerator
 set_display_to_host()
 from . import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
+from ctypes import *
+from cffi import FFI
 
 
-def drawer(canvas, algo, note, frq, oct_selection, genre, bar_index):
+def drawer(canvas, algo, note, oct_selection, genre, bar_index):
     if '-' in note[0]:
         if algo == 'Shape of You':
             shapes_algo.draw_note(canvas, note[0].split(
@@ -55,7 +57,7 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
         # TODO - make it print the image in the GUI
     
     try:
-        S, bars, genre = dbm.db_driver(
+        bars, genre = dbm.db_driver(
             'r', song_path, freq_scale, sr_selection)[0]
         bars = pickle.loads(bars)
         have_sample = True
@@ -91,33 +93,35 @@ def proc_audio(algo, canvas, song_path, sr_selection, oct_selection, freq_scale)
         canvas.set_grid_dimensions(len(bars))
     
     if not have_sample:
-        disp_notes = []
-        disp_frq = []
         canvas.set_grid_dimensions(len(bars))
 
-        for i, bar in enumerate(bars):
-            c = Counter(bar)
-            result = c.most_common(1)
-            note = result[0]
-            disp_notes.append(note)
+        notes_buf = create_string_buffer(len(bars))
+        lib = load_lib()
+        lib.common(bars, notes_buf)
 
-            c = Counter(S[i])
-            result = c.most_common(1)
-            frq = result[0]
-            disp_frq.append(frq)
-            drawer(canvas, algo, note, frq, oct_selection, genre, i)
+        for i, note in enumerate(notes_buf):  
+            drawer(canvas, algo, note, oct_selection, genre, i)
 
-        dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
+        dbm.db_driver('i', song_path, freq_scale, sr_selection, notes_buf, genre)
         if is_mp3:
             os.remove(wav_path)
     else: # we have a sample of the audio
         for i, note in enumerate(bars):
-            drawer(canvas, algo, note, S[i], oct_selection, genre, i)
+            drawer(canvas, algo, note, oct_selection, genre, i)
 
     return True
 
-
-
+def load_lib():
+    ffi = FFI()
+    ffi.cdef(
+        """
+            
+        """
+    )
+    lib = ffi.dlopen(r'./art_generator/rusty.dll')
+    lib.common.restype = None
+    lib.common.argtypes = [c_wchar_p, c_wchar_p, c_int]
+    return lib
 
 def transcribeSpeech(path):
     import speech_recognition as sr

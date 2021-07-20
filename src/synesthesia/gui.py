@@ -240,6 +240,7 @@ class Window(QWidget):
             self.error_lbl.setText('')
             self.sample_combo.addItems(self.get_samples())
             self.clear_specs()
+            self.on_algo_change()
 
     def set_specs(self):
         path = self.sample_combo.currentText()
