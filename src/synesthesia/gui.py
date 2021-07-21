@@ -15,7 +15,7 @@ class ProcessAudio(QObject):
     success = None
     stopped = False
 
-    def __init__(self, algo, file, sr, oct, freq):
+    def __init__(self, algo, file, sr, oct, freq):  
         super().__init__()
         self.algo = algo
         self.file = file
@@ -23,14 +23,16 @@ class ProcessAudio(QObject):
         self.oct = oct
         self.freq = freq
 
-    def run(self):
+    def run(self, gui):
         # self.process = Process(target=self.process_aud)
         # self.process.start()
         # self.process.join()
         # self.thread = Thread(target=self.process_aud)
         # self.thread.start()
         # self.thread.join()
-        self.process_aud()
+        if gui.thread_tracker == 0:
+            self.process_aud()
+        gui.thread_tracker += 1
 
     def process_aud(self):
         self.success = process_audio.proc_audio(self.algo, self.file, self.sr, self.oct, self.freq)
@@ -248,6 +250,7 @@ class Window(QWidget):
         self.word_cloud_lbl = QLabel('', self)
         self.word_cloud_lbl.resize(410, 410)
         self.word_cloud_lbl.move(210, 230)
+
         # used when saving generated images
         self.enable_save = False
 
@@ -379,14 +382,14 @@ class Window(QWidget):
             self.canvas.repaint()
 
             self.enable_save = False
+            self.thread_tracker = 0
             self.worker = ProcessAudio(self.algo_combo.currentText(), file,
                                                                 int(round(self.sr_sld.value() / 1000, 1) * 1000),
                                                                 self.octave_sld.value(), self.frq_sld.value())
             self.worker.moveToThread(self.thread)
-            self.thread.started.connect(self.worker.run)
+            self.thread.started.connect(lambda: self.worker.run(self))
             self.worker.finished.connect(self.thread.quit)
             self.worker.finished.connect(self.worker.deleteLater)
-            # self.worker.finished.connect(self.thread.deleteLater)
             self.update_gui_pre_process()
             self.proc_file.setEnabled(False)
             self.proc_file.clicked.disconnect()
@@ -396,6 +399,7 @@ class Window(QWidget):
             self.thread.finished.connect(
                 lambda: self.after_process_cleanup(self.worker.success, file, self.worker.stopped)
             )
+            self.thread_tracker = 0
         else:
             self.error_lbl.setText(
                 '<font color=red>Error: Invalid Audio File</font>')
@@ -411,11 +415,12 @@ class Window(QWidget):
 
 
     def after_process_cleanup(self, success, file, stopped):
-        if stopped:
+        if stopped or self.thread_tracker != 1:
+            self.thread_tracker -= 1
             return
         algo = self.algo_combo.currentText()
         if algo == 'Speech':
-            cloud_path = success[0]
+            cloud_path = success
             # display the word cloud in the GUI
             wc_pixmap = QPixmap(cloud_path)
             self.word_cloud_lbl.setPixmap(wc_pixmap)
@@ -439,7 +444,6 @@ class Window(QWidget):
                 disp_notes = []
                 disp_frq = []
                 self.canvas.set_grid_dimensions(len(bars))
-
                 for i, bar in enumerate(bars):
                     c = Counter(bar)
                     result = c.most_common(1)

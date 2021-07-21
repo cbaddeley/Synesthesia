@@ -7,7 +7,7 @@ from PyQt5.QtGui import QPainterPath
 
 from wsl import *
 import warnings
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 
 set_display_to_host()
 from . import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
