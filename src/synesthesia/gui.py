@@ -7,36 +7,43 @@ from wsl import *
 from art_generator import qt_canvas, process_audio, dbm
 from collections import Counter
 from multiprocessing import Process
+from threading import Thread
+import ctypes
 
 class ProcessAudio(QObject):
     finished = pyqtSignal()
     success = None
     stopped = False
 
-    def __init__(self, algo, file, sr, oct, freq, word_cloud_lbl):
+    def __init__(self, algo, file, sr, oct, freq):
         super().__init__()
         self.algo = algo
         self.file = file
         self.sr = sr
         self.oct = oct
         self.freq = freq
-        self.word_cloud_lbl = word_cloud_lbl
 
     def run(self):
-        self.process = Process(target=self.process_aud)
-        self.process.start()
-        self.process.join()
+        # self.process = Process(target=self.process_aud)
+        # self.process.start()
+        # self.process.join()
+        # self.thread = Thread(target=self.process_aud)
+        # self.thread.start()
+        # self.thread.join()
+        self.process_aud()
 
     def process_aud(self):
-        self.success = process_audio.proc_audio(self.algo, self.file, self.sr, self.oct, self.freq, self.word_cloud_lbl)
+        self.success = process_audio.proc_audio(self.algo, self.file, self.sr, self.oct, self.freq)
         self.finished.emit()
 
     def stop(self):
-        try:
-            self.process.terminate()
-            self.process.close()
-        except ValueError:
-            print('Processing Stopped')
+        # try:
+        #     # self.process.terminate()
+        #     # self.process.close()
+        #     ctypes.pythonapi.PyThreadState_SetAsyncExc(self.thread.native_id,
+        #                                                      ctypes.py_object(SystemExit))
+        # except ValueError:
+        #     print('Processing Stopped')
         self.stopped = True
         self.finished.emit()
 
@@ -44,6 +51,7 @@ class ProcessAudio(QObject):
 class Window(QWidget):
     def __init__(self):
         super().__init__()
+        self.thread = QThread()
         # set widow titles
         self.setWindowTitle(' ')
         url_data_title_logosvg = urllib.request.urlopen(
@@ -371,16 +379,14 @@ class Window(QWidget):
             self.canvas.repaint()
 
             self.enable_save = False
-            self.thread = QThread()
             self.worker = ProcessAudio(self.algo_combo.currentText(), file,
                                                                 int(round(self.sr_sld.value() / 1000, 1) * 1000),
-                                                                self.octave_sld.value(), self.frq_sld.value(), self.word_cloud_lbl)
-
+                                                                self.octave_sld.value(), self.frq_sld.value())
             self.worker.moveToThread(self.thread)
             self.thread.started.connect(self.worker.run)
             self.worker.finished.connect(self.thread.quit)
             self.worker.finished.connect(self.worker.deleteLater)
-            self.thread.finished.connect(self.thread.deleteLater)
+            # self.worker.finished.connect(self.thread.deleteLater)
             self.update_gui_pre_process()
             self.proc_file.setEnabled(False)
             self.proc_file.clicked.disconnect()
@@ -408,49 +414,59 @@ class Window(QWidget):
         if stopped:
             return
         algo = self.algo_combo.currentText()
-        succ = success[0]
-        bars = success[1]
-        S = success[2]
-        genre = success[3]
-        have_sample = success[4]
-        freq_scale = success[5]
-        sr_selection = success[6]
-        oct_selection = success[7]
-        song_path = file
-        if algo == 'Grid':
-            self.canvas.set_grid_dimensions(len(bars))
-
-        if not have_sample:
-            disp_notes = []
-            disp_frq = []
-            self.canvas.set_grid_dimensions(len(bars))
-
-            for i, bar in enumerate(bars):
-                c = Counter(bar)
-                result = c.most_common(1)
-                note = result[0]
-                disp_notes.append(note)
-
-                c = Counter(S[i])
-                result = c.most_common(1)
-                frq = result[0]
-                disp_frq.append(frq)
-                process_audio.drawer(self.canvas, algo, note, frq, self.octave_sld.value(), genre, i)
-
-            dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
-        else:  # we have a sample of the audio
-            for i, note in enumerate(bars):
-                process_audio.drawer(self.canvas, algo, note, S[i], oct_selection, genre, i)
-
-        file = self.sample_combo.currentText()
-        self.sample_combo.addItems(self.get_samples())
-        if file != '':
-            self.sample_combo.setCurrentText(file)
-        if not succ:
-            self.error_lbl.setText(
-                '<font color=red>Error Processing Audio File</font>')
+        if algo == 'Speech':
+            cloud_path = success[0]
+            # display the word cloud in the GUI
+            wc_pixmap = QPixmap(cloud_path)
+            self.word_cloud_lbl.setPixmap(wc_pixmap)
+            self.word_cloud_lbl.setHidden(False)
         else:
-            self.enable_save = True
+            succ = success[0]
+            bars = success[1]
+            S = success[2]
+            genre = success[3]
+            have_sample = success[4]
+            freq_scale = success[5]
+            sr_selection = success[6]
+            oct_selection = success[7]
+            song_path = file
+            if algo == 'Grid':
+                self.canvas.set_grid_dimensions(len(bars))
+
+            self.proc_file.setHidden(True)
+            self.proc_file.setEnabled(False)
+            if not have_sample:
+                disp_notes = []
+                disp_frq = []
+                self.canvas.set_grid_dimensions(len(bars))
+
+                for i, bar in enumerate(bars):
+                    c = Counter(bar)
+                    result = c.most_common(1)
+                    note = result[0]
+                    disp_notes.append(note)
+
+                    c = Counter(S[i])
+                    result = c.most_common(1)
+                    frq = result[0]
+                    disp_frq.append(frq)
+                    process_audio.drawer(self.canvas, algo, note, frq, self.octave_sld.value(), genre, i)
+
+                dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
+            else:  # we have a sample of the audio
+                for i, note in enumerate(bars):
+                    process_audio.drawer(self.canvas, algo, note, S[i], oct_selection, genre, i)
+            self.proc_file.setHidden(False)
+            self.proc_file.setEnabled(True)
+            file = self.sample_combo.currentText()
+            self.sample_combo.addItems(self.get_samples())
+            if file != '':
+                self.sample_combo.setCurrentText(file)
+            if not succ:
+                self.error_lbl.setText(
+                    '<font color=red>Error Processing Audio File</font>')
+            else:
+                self.enable_save = True
         self.update_gui_post_process()
         self.proc_file.setEnabled(False)
         self.proc_file.clicked.disconnect()
@@ -502,6 +518,7 @@ class Window(QWidget):
         self.octave_sld.setEnabled(True)
 
     def update_gui_post_process(self):
+        self.proc_file.setText('Process')
         self.proc_lbl.setText('')
         self.file_path.setEnabled(True)
         self.get_file.setEnabled(True)
