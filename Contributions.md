@@ -45,3 +45,4 @@
 | Scott Engelhardt | 07/14/21     | Updated GUI to make it "discoverable" |
 | George Kolasa    | 07/16/21     | Essentia work on TF2 and Python3.8    |
 | Zach Simmons     | 07/20/21     | Finished up word cloud integration    |
+| Cory Baddeley    | 07/20/21     | Added threading support               |
