@@ -6,6 +6,8 @@ import urllib.request
 from wsl import *
 from art_generator import qt_canvas, process_audio, dbm
 from collections import Counter
+import time
+
 
 class ProcessAudio(QObject):
     finished = pyqtSignal()
@@ -343,7 +345,14 @@ class Window(QWidget):
             self.octave_sld.resize(75, 15)
             self.octave_val.setText(str(self.octave_sld.value()))
 
+
+
+
     def process_file(self):
+        print("Starting...")
+        global theStartTime
+        theStartTime = time.process_time()
+
         self.word_cloud_lbl.setHidden(True)
         if self.algo_combo.currentText() == '':
             self.error_lbl.setText(
@@ -383,6 +392,8 @@ class Window(QWidget):
             self.error_lbl.setText(
                 '<font color=red>Error: Invalid Audio File</font>')
             return
+
+
 
     def stop_processing(self):
         self.worker.stop()
@@ -449,6 +460,7 @@ class Window(QWidget):
         self.proc_file.clicked.disconnect()
         self.proc_file.clicked.connect(self.process_file)
         self.proc_file.setEnabled(True)
+        print("Ended. Overall, it took %f seconds" % (time.process_time() - theStartTime))
 
     # https://stackoverflow.com/questions/20930764/how-to-add-a-right-click-menu-to-each-cell-of-qtableview-in-pyqt
     def mousePressEvent(self, QMouseEvent):
