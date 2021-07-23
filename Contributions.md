@@ -45,10 +45,11 @@
 | Scott Engelhardt | 07/14/21     | Updated GUI to make it "discoverable" |
 | George Kolasa    | 07/16/21     | Essentia work on TF2 and Python3.8    |
 | Zach Simmons     | 07/20/21     | Finished up word cloud integration    |
-| George Kolasa    | 07/20/21     | Tried out lyrics voice recognition    |
+| George Kolasa    | 07/20/21     | Worked on lyrics voice recognition    |
 | Cory Baddeley    | 07/20/21     | Added threading support               |
 | Scott Engelhardt | 07/20/21     | Worked on Rust and met with TAs on it |
 | Scott Engelhardt | 07/21/21     | Worked on Rust and met with TAs on it |
 | Scott Engelhardt | 07/22/21     | Worked on Rust and met with TAs on it |
 | Cory Baddeley    | 07/23/21     | Finished threading                    |
 | Scott Engelhardt | 07/23/21     | Finished threading                    |
+| George Kolasa    | 07/23/21     | Timing how long it takes              |
