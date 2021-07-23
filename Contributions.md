@@ -49,3 +49,5 @@
 | Scott Engelhardt | 07/20/21     | Worked on Rust and met with TAs on it |
 | Scott Engelhardt | 07/21/21     | Worked on Rust and met with TAs on it |
 | Scott Engelhardt | 07/22/21     | Worked on Rust and met with TAs on it |
+| Cory Baddeley    | 07/23/21     | Finished threading                    |
+| Scott Engelhardt | 07/23/21     | Finished threading                    |

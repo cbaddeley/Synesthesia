@@ -394,7 +394,7 @@ class Window(QWidget):
 
 
     def after_process_cleanup(self, success, file, stopped):
-        if stopped:
+        if success is None or stopped:
             return
         algo = self.algo_combo.currentText()
         if algo == 'Speech':
