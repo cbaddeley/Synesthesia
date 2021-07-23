@@ -1,3 +1,4 @@
+from ctypes import c_float
 from . import dbm
 import subprocess
 import pickle
@@ -9,11 +10,13 @@ from wsl import *
 import warnings
 from wordcloud import WordCloud
 
+from ctypes import *
+
 set_display_to_host()
 from . import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
 
 
-def drawer(canvas, algo, note, frq, oct_selection, genre, bar_index):
+def drawer(canvas, algo, note, oct_selection, genre, bar_index):
     if '-' in note[0]:
         if algo == 'Shape of You':
             shapes_algo.draw_note(canvas, note[0].split(
@@ -52,7 +55,7 @@ def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
         return cloud_path
 
     try:
-        S, bars, genre = dbm.db_driver(
+        bars, genre = dbm.db_driver(
             'r', song_path, freq_scale, sr_selection)[0]
         bars = pickle.loads(bars)
         have_sample = True
@@ -70,7 +73,20 @@ def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
         if freq_scale != 0:
             S *= (1 + (freq_scale / 100))
         try:
-            bars = librosa.hz_to_note(S)
+            lib = cdll.LoadLibrary(r'./art_generator/rusty.so')
+            lib.note.restype = c_int
+            lib.note.argtypes = [c_double]
+            note_list = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+
+            bars = []
+            for freq_bars in S:
+                bar = []
+                for frq in freq_bars:
+                    notes_oct = abs(lib.note(frq))
+                    note = notes_oct // 1000
+                    oct = notes_oct - note * 1000
+                    bar.append(note_list[note] + '-' + str(oct))
+                bars.append(bar)
         except:
             return False
 
@@ -86,7 +102,7 @@ def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
 
     if is_mp3:
         os.remove(wav_path)
-    return True, bars, S, genre, have_sample, freq_scale, sr_selection, oct_selection
+    return True, bars, genre, have_sample, freq_scale, sr_selection, oct_selection
 
 
 def transcribeSpeech(path):

@@ -426,51 +426,47 @@ class Window(QWidget):
             self.word_cloud_lbl.setPixmap(wc_pixmap)
             self.word_cloud_lbl.setHidden(False)
         else:
-            succ = success[0]
-            bars = success[1]
-            S = success[2]
-            genre = success[3]
-            have_sample = success[4]
-            freq_scale = success[5]
-            sr_selection = success[6]
-            oct_selection = success[7]
-            song_path = file
-            if algo == 'Grid':
-                self.canvas.set_grid_dimensions(len(bars))
+            if success:
+                if not success[0]:
+                     self.error_lbl.setText('<font color=red>Error Processing Audio File</font>')
+                else:
+                    bars = success[1]
+                    genre = success[2]
+                    have_sample = success[3]
+                    freq_scale = success[4]
+                    sr_selection = success[5]
+                    oct_selection = success[6]
+                    song_path = file
+                    if algo == 'Grid':
+                        self.canvas.set_grid_dimensions(len(bars))
 
-            self.proc_file.setHidden(True)
-            self.proc_file.setEnabled(False)
-            if not have_sample:
-                disp_notes = []
-                disp_frq = []
-                self.canvas.set_grid_dimensions(len(bars))
-                for i, bar in enumerate(bars):
-                    c = Counter(bar)
-                    result = c.most_common(1)
-                    note = result[0]
-                    disp_notes.append(note)
+                    self.proc_file.setHidden(True)
+                    self.proc_file.setEnabled(False)
+                    if not have_sample:
+                        disp_notes = []
+                        self.canvas.set_grid_dimensions(len(bars))
+                        for i, bar in enumerate(bars):
+                            c = Counter(bar)
+                            result = c.most_common(1)
+                            note = result[0]
+                            disp_notes.append(note)
 
-                    c = Counter(S[i])
-                    result = c.most_common(1)
-                    frq = result[0]
-                    disp_frq.append(frq)
-                    process_audio.drawer(self.canvas, algo, note, frq, self.octave_sld.value(), genre, i)
+                            process_audio.drawer(self.canvas, algo, note, self.octave_sld.value(), genre, i)
 
-                dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_frq, disp_notes, genre)
-            else:  # we have a sample of the audio
-                for i, note in enumerate(bars):
-                    process_audio.drawer(self.canvas, algo, note, S[i], oct_selection, genre, i)
-            self.proc_file.setHidden(False)
-            self.proc_file.setEnabled(True)
-            file = self.sample_combo.currentText()
-            self.sample_combo.addItems(self.get_samples())
-            if file != '':
-                self.sample_combo.setCurrentText(file)
-            if not succ:
-                self.error_lbl.setText(
-                    '<font color=red>Error Processing Audio File</font>')
+                        dbm.db_driver('i', song_path, freq_scale, sr_selection, disp_notes, genre)
+                    else:  # we have a sample of the audio
+                        for i, note in enumerate(bars):
+                            process_audio.drawer(self.canvas, algo, note, oct_selection, genre, i)
+                    self.proc_file.setHidden(False)
+                    self.proc_file.setEnabled(True)
+                    file = self.sample_combo.currentText()
+                    self.sample_combo.addItems(self.get_samples())
+                    if file != '':
+                        self.sample_combo.setCurrentText(file)
+                    else:
+                        self.enable_save = True
             else:
-                self.enable_save = True
+                self.error_lbl.setText('<font color=red>Error Processing Audio File</font>')
         self.update_gui_post_process()
         self.proc_file.setEnabled(False)
         self.proc_file.clicked.disconnect()

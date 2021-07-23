@@ -8,7 +8,7 @@ import pickle
 def retrieve(c, path, date, frq_selection, sr_selection):
     try:
         c.execute("""
-            select frq, notes, genre
+            select notes, genre
             from samples 
             where path == ? and date == ? and frq_selection == ? and sr_selection == ?
             """, (path, date, frq_selection, sr_selection))
@@ -17,11 +17,11 @@ def retrieve(c, path, date, frq_selection, sr_selection):
         return []
 
 
-def insert(c, path, date, frq_selection, sr_selection, frq, notes, genre):
+def insert(c, path, date, frq_selection, sr_selection, notes, genre):
     files = retrieve(c, path, date, frq_selection, sr_selection)
     if files == []:
-        c.execute('insert into samples values(?,?,?,?,?,?,?)',
-                  (path, date, frq_selection, sr_selection, pickle.dumps(frq), pickle.dumps(notes), genre))
+        c.execute('insert into samples values(?,?,?,?,?,?)',
+                  (path, date, frq_selection, sr_selection,pickle.dumps(notes), genre))
 
 
 
@@ -49,7 +49,7 @@ def get_specs(c, path):
     c.execute('select frq_selection, sr_selection from samples where path = ?',(path,))
     return c.fetchall()
  
-def db_driver(action, path='', frq_selection=0, sr_selection=0, frq='', notes='', genre=''):
+def db_driver(action, path='', frq_selection=0, sr_selection=0, notes='', genre=''):
     db_path = __file__[:-6] + 'audio_samples.db'
     ret = ''
     if not os.path.exists(db_path):
@@ -61,7 +61,6 @@ def db_driver(action, path='', frq_selection=0, sr_selection=0, frq='', notes=''
                 date text,
                 frq_selection text,
                 sr_selection text,
-                frq blob, 
                 notes blob,
                 genre text
                 )
@@ -72,7 +71,7 @@ def db_driver(action, path='', frq_selection=0, sr_selection=0, frq='', notes=''
     c = conn.cursor()
     if action.lower() == 'i':  # insert
         insert(c, path, str(os.path.getmtime(path)), str(frq_selection),
-               str(sr_selection), frq, notes, genre)
+               str(sr_selection), notes, genre)
     elif action.lower() == 'r':  # retrieve all
         ret = retrieve(c, path, str(os.path.getmtime(path)),
                        str(frq_selection), str(sr_selection))
