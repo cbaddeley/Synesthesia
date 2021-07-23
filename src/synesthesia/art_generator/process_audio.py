@@ -33,7 +33,7 @@ def drawer(canvas, algo, note, oct_selection, genre, bar_index):
                 '-'), oct_selection, genre_colors.getColors(genre), bar_index)
 
 
-def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
+def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
     is_mp3 = False
     have_sample = False
     if algo == 'Speech':
@@ -65,11 +65,17 @@ def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
             is_mp3 = True
             if not os.path.exists(wav_path):
                 subprocess.call(['ffmpeg', '-i', song_path, wav_path])
+        if gui.stopped:
+            return 'stopped'
         if is_mp3:
-            y, sr = librosa.load(wav_path, sr=sr_selection)
+            y, _ = librosa.load(wav_path, sr=sr_selection)
         else:
-            y, sr = librosa.load(song_path, sr=sr_selection)
+            y, _ = librosa.load(song_path, sr=sr_selection)
+        if gui.stopped:
+            return 'stopped'
         S = np.abs(librosa.stft(y))
+        if gui.stopped:
+            return 'stopped'
         if freq_scale != 0:
             S *= (1 + (freq_scale / 100))
         try:
@@ -82,6 +88,8 @@ def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
             for freq_bars in S:
                 bar = []
                 for frq in freq_bars:
+                    if gui.stopped:
+                        return 'stopped'
                     notes_oct = abs(lib.note(frq))
                     note = notes_oct // 1000
                     oct = notes_oct - note * 1000
@@ -101,7 +109,10 @@ def proc_audio(algo, song_path, sr_selection, oct_selection, freq_scale):
             genre = ''
 
     if is_mp3:
-        os.remove(wav_path)
+        try:
+            os.remove(wav_path)
+        except:
+            pass
     return True, bars, genre, have_sample, freq_scale, sr_selection, oct_selection
 
 
