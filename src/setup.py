@@ -21,7 +21,7 @@ setup(
     url="https://github.com/cbaddeley/Synesthesia",
     license="GPL 3",
     install_requires=['PyQt5', 'librosa', 'SpeechRecognition', 'pydub',
-                      'pillow', 'musicnn', 'matplotlib'],
+                      'pillow', 'musicnn', 'matplotlib', 'wordcloud'],
     keywords=['audio', 'visualizer', "image"],
 
     entry_points =
