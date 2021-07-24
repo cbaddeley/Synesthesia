@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread
+from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread, QPoint
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import urllib.request
@@ -233,6 +233,11 @@ class Window(QWidget):
 
         # used when saving generated images
         self.enable_save = False
+
+        self.help_button = QPushButton('?',self)
+        self.help_button.setGeometry(580, 5, 35, 20)
+        self.help_button.clicked.connect(self.show_help)
+        
 
     def dark_mode(self):
         # https://gist.github.com/mstuttgart/37c0e6d8f67a0611674e08294f3daef7
@@ -519,17 +524,55 @@ class Window(QWidget):
         self.sr_sld.setEnabled(True)
         self.octave_sld.setEnabled(True)
 
+    def show_help(self):
+        help = QMessageBox()
+        help.setWindowTitle('Synesthesia Help & Info')
+        help.setStandardButtons(QMessageBox.Ok)
+        help.setText('Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file, modify any parameters, and Synesthesia will create an image based on the mood, rhythm, and melody of your audio file.')
+        details = """
+Functionality:
+    1. Audio File: Enter in the file path of any MP3 or WAV file or use the Choose... button to open the built in file picker.
+    2. Sample: Once an audio file file has been processed, the file's data will be stored in out database for faster processing in the future. 
+        a. Select the song from the sample list to show the artistic rendering of the file.
+        b. Chooes the specifications of for the stored sample song.
+            i. If you wish to try a different sample rate and frequency combo, you will need to reprocess the song.
+    3. Algorithm: Synesthesia currently supports 5 algorthms. Choose from the list for a variety of outputs.
+        a. Shape of You: Draw a collection of shapes based on notes and octaves.
+        b. Line Rider: Draws a collection of lines based on notes and octaves.
+        c. Curvy: Draws a collection of arcs based on notes and octaves.
+        d. Speech: Draws a word map based on the most common words in the selected speech.
+        e. Grid: Draws a collection of arcs based on notes and octaves.
+    4. Specifications: Toggle the artistic rendering by altering the slider values shown. If a slider value is not shown, it is not applicable for the algorithm.
+        a. Frequency: Increases or decreases the frequencies by the percent selected.
+        b. Sample Rate: Determines the number of samples taken per second of audio.
+        c. Octave: Increases or decreases the octaves by the number selected.
+    5. Processing: Select the process button to analyze the audio file and draw the artistic rending.
+        a. This can be stopped at any time by pressing the Cancel button.
+        b. If the audio file presented is corrupt, you will see an error on the audio processing.
+
+Contributors:
+    Cory Baddeley: cbaddeley@ufl.edu
+    Andrew Garmon: andrewgarmon@ufl.edu
+    Scott Engelhardt: scott.engelhardt@ufl.edu
+    George Kolasa: georgekolasa@ufl.edu
+    Zach Simmons: zsimmons@ufl.edu
+
+        """
+        help.setInformativeText(details)
+        help.move(self.mapToGlobal(self.rect().topRight() + QPoint(10,2)))
+        help.exec_()
+        
 
 
 def main_func():
     set_display_to_host()
     # instantiate application and create a window
-    app = QApplication([])
+    app = QApplication(sys.argv)
     app.setStyle('Fusion')
     window = Window()
     app.setPalette(window.dark_mode())  # turn on dark mode
     window.show()
-    app.exec()
+    sys.exit(app.exec_())
 
 
 def pip_main_func():
