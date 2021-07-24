@@ -53,3 +53,4 @@
 | Cory Baddeley    | 07/23/21     | Finished threading                    |
 | Scott Engelhardt | 07/23/21     | Finished threading                    |
 | Scott Engelhardt | 07/23/21     | Added Help Window                     |
+| Scott Engelhardt | 07/23/21     | Tested timing between Rust & non-Rust |
