@@ -528,7 +528,12 @@ class Window(QWidget):
         help = QMessageBox()
         help.setWindowTitle('Synesthesia Help & Info')
         help.setStandardButtons(QMessageBox.Ok)
-        help.setText('Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file, modify any parameters, and Synesthesia will create an image based on the mood, rhythm, and melody of your audio file.')
+        url_data_title_logosvg = urllib.request.urlopen(
+            "https://raw.githubusercontent.com/cbaddeley/Synesthesia/main/src/synesthesia/images/title_logo.svg").read()
+        title_logosvg = QPixmap()
+        title_logosvg.loadFromData(url_data_title_logosvg)
+        help.setWindowIcon(QIcon(title_logosvg))
+        help.setText('Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file, modify any parameters, and Synesthesia will create an image based on the mood, rhythm, and melody of your audio file. Synesthesia will also analyze spoken audio to create a word cloud of common words within the recording.')
         details = """
 Functionality:
     1. Audio File: Enter in the file path of any MP3 or WAV file or use the Choose... button to open the built in file picker.
@@ -551,11 +556,11 @@ Functionality:
         b. If the audio file presented is corrupt, you will see an error on the audio processing.
 
 Contributors:
-    Cory Baddeley: cbaddeley@ufl.edu
-    Andrew Garmon: andrewgarmon@ufl.edu
-    Scott Engelhardt: scott.engelhardt@ufl.edu
-    George Kolasa: georgekolasa@ufl.edu
-    Zach Simmons: zsimmons@ufl.edu
+    Cory Baddeley:      cbaddeley@ufl.edu
+    Andrew Garmon:      andrewgarmon@ufl.edu
+    Scott Engelhardt:   scott.engelhardt@ufl.edu
+    George Kolasa:      georgekolasa@ufl.edu
+    Zach Simmons:       zsimmons@ufl.edu
 
         """
         help.setInformativeText(details)
