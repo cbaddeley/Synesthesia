@@ -54,3 +54,10 @@
 | Scott Engelhardt | 07/23/21     | Finished threading                    |
 | Scott Engelhardt | 07/23/21     | Added Help Window                     |
 | George Kolasa    | 07/23/21     | Tested timing between Rust & non-Rust |
+| Scott Engelhardt | 07/26/21     | Updated Help Window                   |
+| Scott Engelhardt | 07/26/21     | Team Meeting                          |
+| George Kolasa    | 07/26/21     | Team Meeting                          |
+| Zach Simmons     | 07/26/21     | Team Meeting                          |
+| Cory Baddeley    | 07/26/21     | Team Meeting                          |
+| Scott Engelhardt | 07/27/21     | Started Power Point                   |
+

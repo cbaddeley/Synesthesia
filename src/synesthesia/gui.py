@@ -6,8 +6,7 @@ import urllib.request
 from wsl import *
 from art_generator import qt_canvas, process_audio, dbm
 from collections import Counter
-import time
-
+from threading import Thread
 
 class ProcessAudio(QObject):
     finished = pyqtSignal()
@@ -31,8 +30,7 @@ class ProcessAudio(QObject):
 
     def stop(self):
         self.stopped = True
-
-
+        
 
 class Window(QWidget):
     def __init__(self):
@@ -323,8 +321,8 @@ class Window(QWidget):
             'Shape of You': ['Draw a collection of shapes based on notes and octaves', 'fso'],
             'Line Rider': ['Draws a collection of lines based on notes and octaves', 'fso'],
             'Curvy': ['Draws a collection of arcs based on notes and octaves', 'fso'],
-            'Speech': ['Draws a word map based on the most common words in the selected speech', ''],
             'Grid': ['Draws a collection of arcs based on notes and octaves', 'fs'],
+            'Speech': ['Draws a word map based on the most common words in the selected speech', ''],
         }
         self.algo_lbl.setText(algo_desc[self.algo_combo.currentText()][0])
         self.algo_lbl.resize(150, 80)
@@ -354,10 +352,6 @@ class Window(QWidget):
 
 
     def process_file(self):
-        print("Starting...")
-        global theStartTime
-        theStartTime = time.process_time()
-
         self.word_cloud_lbl.setHidden(True)
         if self.algo_combo.currentText() == '':
             self.error_lbl.setText(
@@ -399,7 +393,6 @@ class Window(QWidget):
             return
 
 
-
     def stop_processing(self):
         self.worker.stop()
         self.update_gui_stopped_process()
@@ -414,11 +407,14 @@ class Window(QWidget):
             return
         algo = self.algo_combo.currentText()
         if algo == 'Speech':
-            cloud_path = success
-            # display the word cloud in the GUI
-            wc_pixmap = QPixmap(cloud_path)
-            self.word_cloud_lbl.setPixmap(wc_pixmap)
-            self.word_cloud_lbl.setHidden(False)
+            if success == False:
+                self.error_lbl.setText('<font color=red>Error Processing Audio File</font>')
+            else:
+                cloud_path = success
+                # display the word cloud in the GUI
+                wc_pixmap = QPixmap(cloud_path)
+                self.word_cloud_lbl.setPixmap(wc_pixmap)
+                self.word_cloud_lbl.setHidden(False)
         else:
             if success not in (False, 'stopped'):
                 bars = success[1]
@@ -456,8 +452,6 @@ class Window(QWidget):
                     self.sample_combo.setCurrentText(file)
                 else:
                     self.enable_save = True
-            elif success == 'stopped':
-                self.error_lbl.setText('<font color=red>Stopped Processing Audio File</font>')
             else:
                 self.error_lbl.setText('<font color=red>Error Processing Audio File</font>')
         self.update_gui_post_process()
@@ -465,7 +459,6 @@ class Window(QWidget):
         self.proc_file.clicked.disconnect()
         self.proc_file.clicked.connect(self.process_file)
         self.proc_file.setEnabled(True)
-        print("Ended. Overall, it took %f seconds" % (time.process_time() - theStartTime))
 
     # https://stackoverflow.com/questions/20930764/how-to-add-a-right-click-menu-to-each-cell-of-qtableview-in-pyqt
     def mousePressEvent(self, QMouseEvent):
@@ -537,15 +530,16 @@ class Window(QWidget):
 Functionality:
     1. Audio File: Enter in the file path of any MP3 or WAV file or use the Choose... button to open the built-in file picker.
     2. Sample: Once an audio file has been processed, the file's data will be stored in our database for faster processing in the future. 
-        a. Select the song from the sample list to show the artistic rendering of the file.
-        b. Choose the specifications of for the stored sample song.
-            i. If you wish to try a different sample rate and frequency combo, you will need to reprocess the song.
+        a. Select the file from the sample list to show the artistic rendering of the file.
+            i. Speech recognition will not be stored in the database and will need to be reprocessed each time.
+        b. Choose the specifications of for the stored sample.
+            i. If you wish to try a different sample rate and frequency combo, you will need to reprocess the audio.
     3. Algorithm: Synesthesia currently supports 5 algorithms. Choose from the list for a variety of outputs.
         a. Shape of You: Draw a collection of shapes based on notes and octaves.
         b. Line Rider: Draws a collection of lines based on notes and octaves.
         c. Curvy: Draws a collection of arcs based on notes and octaves.
-        d. Speech: Draws a word map based on the most common words in the selected speech.
-        e. Grid: Draws a collection of arcs based on notes and octaves.
+        d. Grid: Draws a collection of arcs based on notes and octaves.
+        e. Speech: Draws a word map based on the most common words in the selected speech.
     4. Specifications: Toggle the artistic rendering by altering the slider values shown. If a slider value is not shown, it is not applicable for the algorithm.
         a. Frequency: Increases or decreases the frequencies by the percent selected.
         b. Sample Rate: Determines the number of samples taken per second of audio.
@@ -568,7 +562,7 @@ Contributors:
         if self.pos().x() + 625 >= avail_space.width() - 625:
             help.setGeometry(self.x() - 600, self.y() + 2, 0, 0)
         help.exec_()
-        
+
 
 
 def main_func():

@@ -12,6 +12,8 @@ from wordcloud import WordCloud
 
 from ctypes import *
 
+from timeit import default_timer as timer
+
 set_display_to_host()
 from . import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
 
@@ -36,6 +38,7 @@ def drawer(canvas, algo, note, oct_selection, genre, bar_index):
 def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
     is_mp3 = False
     have_sample = False
+    wav_path = ''
     if algo == 'Speech':
         if song_path[-4:] == '.mp3':
             wav_path = song_path[:-4] + '.wav'
@@ -48,8 +51,10 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
         else:
             transcribedText = transcribeSpeech(song_path)
 
-        print(transcribedText)
-        wordcloud = WordCloud(width=400, height=400, max_words=1000, margin=10, random_state=1, background_color=None, mode='RGBA').generate(transcribedText)
+        try:
+            wordcloud = WordCloud(width=400, height=400, max_words=1000, margin=10, random_state=1, background_color=None, mode='RGBA').generate(transcribedText)
+        except:
+            return False
         cloud_path = song_path[:-4] + '.png'
         wordcloud.to_file(cloud_path)
         return cloud_path
@@ -81,12 +86,12 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
             return 'stopped'
         if freq_scale != 0:
             S *= (1 + (freq_scale / 100))
-        try:
+  
+        try: 
             lib = cdll.LoadLibrary(r'./art_generator/rusty.so')
             lib.note.restype = c_int
             lib.note.argtypes = [c_double]
             note_list = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-
             bars = []
             for freq_bars in S:
                 bar = []
@@ -99,7 +104,7 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
                     oct = notes_oct - note * 1000
                     bar.append(note_list[note] + '-' + str(oct))
                 bars.append(bar)
-        except:
+        except:    
             return False
 
         # Musicnn gives a bunch of useless console warnings that we don't need to see and should just try to block out AMAP
@@ -111,7 +116,7 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
             warnings.filterwarnings("default")
         except:
             genre = ''
-    del_file(is_mp3, wav_path)
+        del_file(is_mp3, wav_path)
     return True, bars, genre, have_sample, freq_scale, sr_selection, oct_selection
 
 
@@ -162,11 +167,9 @@ def transcribeSpeech(path):
             try:
                 text = r.recognize_google(audio_listened)
             except sr.UnknownValueError as e:
-                # print("Error:", str(e))
-                1 + 1
+                pass
             else:
                 text = f"{text.capitalize()}. "
-                # print(chunk_filename, ":", text)
                 whole_text += text
     # return the text for all chunks detected
     return whole_text
