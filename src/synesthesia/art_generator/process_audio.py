@@ -66,15 +66,18 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
             if not os.path.exists(wav_path):
                 subprocess.call(['ffmpeg', '-i', song_path, wav_path])
         if gui.stopped:
+            del_file(is_mp3, wav_path)
             return 'stopped'
         if is_mp3:
             y, _ = librosa.load(wav_path, sr=sr_selection)
         else:
             y, _ = librosa.load(song_path, sr=sr_selection)
         if gui.stopped:
+            del_file(is_mp3, wav_path)
             return 'stopped'
         S = np.abs(librosa.stft(y))
         if gui.stopped:
+            del_file(is_mp3, wav_path)
             return 'stopped'
         if freq_scale != 0:
             S *= (1 + (freq_scale / 100))
@@ -89,6 +92,7 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
                 bar = []
                 for frq in freq_bars:
                     if gui.stopped:
+                        del_file(is_mp3, wav_path)
                         return 'stopped'
                     notes_oct = abs(lib.note(frq))
                     note = notes_oct // 1000
@@ -107,14 +111,16 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
             warnings.filterwarnings("default")
         except:
             genre = ''
+    del_file(is_mp3, wav_path)
+    return True, bars, genre, have_sample, freq_scale, sr_selection, oct_selection
 
+
+def del_file(is_mp3, wav_path):
     if is_mp3:
         try:
             os.remove(wav_path)
         except:
             pass
-    return True, bars, genre, have_sample, freq_scale, sr_selection, oct_selection
-
 
 def transcribeSpeech(path):
     import speech_recognition as sr

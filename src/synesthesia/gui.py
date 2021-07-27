@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread, QPoint
+from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread, QPoint, QRect
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import urllib.request
@@ -527,7 +527,6 @@ class Window(QWidget):
     def show_help(self):
         help = QMessageBox()
         help.setWindowTitle('Synesthesia Help & Info')
-        help.setStandardButtons(QMessageBox.Ok)
         url_data_title_logosvg = urllib.request.urlopen(
             "https://raw.githubusercontent.com/cbaddeley/Synesthesia/main/src/synesthesia/images/title_logo.svg").read()
         title_logosvg = QPixmap()
@@ -536,12 +535,12 @@ class Window(QWidget):
         help.setText('Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file, modify any parameters, and Synesthesia will create an image based on the mood, rhythm, and melody of your audio file. Synesthesia will also analyze spoken audio to create a word cloud of common words within the recording.')
         details = """
 Functionality:
-    1. Audio File: Enter in the file path of any MP3 or WAV file or use the Choose... button to open the built in file picker.
-    2. Sample: Once an audio file file has been processed, the file's data will be stored in out database for faster processing in the future. 
+    1. Audio File: Enter in the file path of any MP3 or WAV file or use the Choose... button to open the built-in file picker.
+    2. Sample: Once an audio file has been processed, the file's data will be stored in our database for faster processing in the future. 
         a. Select the song from the sample list to show the artistic rendering of the file.
-        b. Chooes the specifications of for the stored sample song.
+        b. Choose the specifications of for the stored sample song.
             i. If you wish to try a different sample rate and frequency combo, you will need to reprocess the song.
-    3. Algorithm: Synesthesia currently supports 5 algorthms. Choose from the list for a variety of outputs.
+    3. Algorithm: Synesthesia currently supports 5 algorithms. Choose from the list for a variety of outputs.
         a. Shape of You: Draw a collection of shapes based on notes and octaves.
         b. Line Rider: Draws a collection of lines based on notes and octaves.
         c. Curvy: Draws a collection of arcs based on notes and octaves.
@@ -561,10 +560,13 @@ Contributors:
     Scott Engelhardt:   scott.engelhardt@ufl.edu
     George Kolasa:      georgekolasa@ufl.edu
     Zach Simmons:       zsimmons@ufl.edu
-
         """
         help.setInformativeText(details)
-        help.move(self.mapToGlobal(self.rect().topRight() + QPoint(10,2)))
+        # https://stackoverflow.com/questions/58721258/how-to-determine-if-a-pyqt5-dialog-will-display-off-screen
+        help.setGeometry(self.x() + 625, self.y() + 2, 0, 0)
+        avail_space = QDesktopWidget().availableGeometry()
+        if self.pos().x() + 625 >= avail_space.width() - 625:
+            help.setGeometry(self.x() - 600, self.y() + 2, 0, 0)
         help.exec_()
         
 
