@@ -12,7 +12,6 @@ from wordcloud import WordCloud
 
 from ctypes import *
 
-from timeit import default_timer as timer
 import traceback
 
 set_display_to_host()
@@ -93,10 +92,8 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
             import pkgutil
             import synesthesia.images as syne_pkg
             syne_path = syne_pkg.__file__
-            # print(syne_path)
             syne_path = syne_path[:-18]
             syne_path = syne_path + "art_generator/rusty.so"
-            # print(syne_path)
 
             lib = cdll.LoadLibrary(syne_path)
 

@@ -122,8 +122,8 @@ class Window(QWidget):
             'Shape of You',
             'Line Rider',
             'Curvy',
-            'Speech',
             'Grid',
+            'Speech',
         ]
         self.algo_combo.addItems(algos)
         self.algo_combo.activated[str].connect(self.on_algo_change)
@@ -347,9 +347,6 @@ class Window(QWidget):
             self.octave_val.resize(35, 10)
             self.octave_sld.resize(75, 15)
             self.octave_val.setText(str(self.octave_sld.value()))
-
-
-
 
     def process_file(self):
         self.word_cloud_lbl.setHidden(True)
