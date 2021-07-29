@@ -535,16 +535,16 @@ Functionality:
         a. Shape of You: Draw a collection of shapes based on notes and octaves.
         b. Line Rider: Draws a collection of lines based on notes and octaves.
         c. Curvy: Draws a collection of arcs based on notes and octaves.
-        d. Grid: Draws a collection of arcs based on notes and octaves.
+        d. Grid: Draws a grid based on notes.
         e. Speech: Draws a word map based on the most common words in the selected speech.
     4. Specifications: Toggle the artistic rendering by altering the slider values shown. If a slider value is not shown, it is not applicable for the algorithm.
-        a. Frequency: Increases or decreases the frequencies by the percent selected.
-        b. Sample Rate: Determines the number of samples taken per second of audio.
-        c. Octave: Increases or decreases the octaves by the number selected.
+        a. Frequency: Increases or decreases the frequencies of the provided audio file by the percent selected.
+        b. Sample Rate: Determines the number of samples taken per second of audio. The larger the sample rate the increased processing time.
+        c. Octave: Increases or decreases the octaves by the number selected which changes the octaves by the selected amount which impact the size of the shapes, lines, etc. in the resulting image.
     5. Processing: Select the process button to analyze the audio file and draw the artistic rending.
         a. This can be stopped at any time by pressing the Cancel button.
         b. If the audio file presented is corrupt, you will see an error on the audio processing.
-
+        c. Right click the image to perform a save as of the generated image. This is not an option for the Speech algorithm, since the image is stored as a png file where the audio file was selected from.
 Contributors:
     Cory Baddeley:      cbaddeley@ufl.edu
     Andrew Garmon:      andrewgarmon@ufl.edu
