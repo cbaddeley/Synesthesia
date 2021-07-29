@@ -528,7 +528,7 @@ class Window(QWidget):
         help.setText('Synesthesia is a lightweight audio visualization tool. Simply select an MP3 or WAV file, modify any parameters, and Synesthesia will create an image based on the mood, rhythm, and melody of your audio file. Synesthesia will also analyze spoken audio to create a word cloud of common words within the recording.')
         details = """
 Functionality:
-    1. Audio File: Enter in the file path of any MP3 or WAV file or use the Choose... button to open the built-in file picker.
+    1. Audio File: Enter in the file path of any MP3 or WAV file or use the "Choose..." button to open the built-in file picker.
     2. Sample: Once an audio file has been processed, the file's data will be stored in our database for faster processing in the future. 
         a. Select the file from the sample list to show the artistic rendering of the file.
             i. Speech recognition will not be stored in the database and will need to be reprocessed each time.
