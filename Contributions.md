@@ -60,4 +60,5 @@
 | Zach Simmons     | 07/26/21     | Team Meeting                          |
 | Cory Baddeley    | 07/26/21     | Team Meeting                          |
 | Scott Engelhardt | 07/27/21     | Started Power Point                   |
+| George Kolasa    | 07/29/21     | Pip fixing for final presentation     |
 
