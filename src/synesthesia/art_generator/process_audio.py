@@ -96,13 +96,14 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
             for freq_bars in S:
                 bar = []
                 for frq in freq_bars:
-                    if gui.stopped:
-                        del_file(is_mp3, wav_path)
-                        return 'stopped'
-                    notes_oct = abs(lib.note(frq))
-                    note = notes_oct // 1000
-                    oct = notes_oct - note * 1000
-                    bar.append(note_list[note] + '-' + str(oct))
+                    if frq != 0.0:
+                        if gui.stopped:
+                            del_file(is_mp3, wav_path)
+                            return 'stopped'
+                        notes_oct = abs(lib.note(frq))
+                        note = notes_oct // 1000
+                        oct = notes_oct - note * 1000
+                        bar.append(note_list[note] + '-' + str(oct))
                 bars.append(bar)
         except:    
             return False
