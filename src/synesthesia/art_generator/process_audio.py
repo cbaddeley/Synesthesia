@@ -1,21 +1,22 @@
 from ctypes import c_float
-from . import dbm
+from synesthesia.art_generator import dbm
 import subprocess
 import pickle
 import librosa
 import numpy as np
 from PyQt5.QtGui import QPainterPath
 
-from wsl import *
+from synesthesia.art_generator.wsl import *
 import warnings
 from wordcloud import WordCloud
 
 from ctypes import *
 
 from timeit import default_timer as timer
+import traceback
 
 set_display_to_host()
-from . import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
+from synesthesia.art_generator import genre_colors, shapes_algo, curvy_algo, lines_algo, grid_algo
 
 
 def drawer(canvas, algo, note, oct_selection, genre, bar_index):
@@ -86,9 +87,19 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
             return 'stopped'
         if freq_scale != 0:
             S *= (1 + (freq_scale / 100))
-  
-        try: 
-            lib = cdll.LoadLibrary(r'./art_generator/rusty.so')
+
+
+        try:
+            import pkgutil
+            import synesthesia.images as syne_pkg
+            syne_path = syne_pkg.__file__
+            print(syne_path)
+            syne_path = syne_path[:-18]
+            syne_path = syne_path + "art_generator/rusty.so"
+            print(syne_path)
+
+            lib = cdll.LoadLibrary(syne_path)
+
             lib.note.restype = c_int
             lib.note.argtypes = [c_double]
             note_list = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
@@ -104,8 +115,10 @@ def proc_audio(gui, algo, song_path, sr_selection, oct_selection, freq_scale):
                     oct = notes_oct - note * 1000
                     bar.append(note_list[note] + '-' + str(oct))
                 bars.append(bar)
-        except:    
+        except Exception as error:
+            traceback.print_exc()
             return False
+
 
         # Musicnn gives a bunch of useless console warnings that we don't need to see and should just try to block out AMAP
         try:

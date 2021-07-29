@@ -3,8 +3,8 @@ from PyQt5.QtCore import Qt, QObject, pyqtSignal, QThread, QPoint, QRect
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import urllib.request
-from wsl import *
-from art_generator import qt_canvas, process_audio, dbm
+from synesthesia.wsl import *
+from synesthesia.art_generator import qt_canvas, process_audio, dbm
 from collections import Counter
 from threading import Thread
 
