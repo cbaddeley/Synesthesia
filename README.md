@@ -49,8 +49,8 @@ To run Synesthesia after installing (via pip or local), enter an Ubuntu based te
 
 ## Sample Install ## 
 It is assumed that a Windows Shell is opened.
-`wsl`
-`mkdir synesthesia && cd synesthesia && python3 -m venv ./ && source ./bin/activate && pip3 install synesthesia-uf && syne`
+- `wsl`
+- `mkdir synesthesia && cd synesthesia && python3 -m venv ./ && source ./bin/activate && pip3 install synesthesia-uf && syne`
 
 ## Github Repository ##
 https://github.com/cbaddeley/Synesthesia
