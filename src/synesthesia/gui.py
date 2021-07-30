@@ -447,8 +447,7 @@ class Window(QWidget):
                 self.sample_combo.addItems(self.get_samples())
                 if file != '':
                     self.sample_combo.setCurrentText(file)
-                else:
-                    self.enable_save = True
+                self.enable_save = True
             else:
                 self.error_lbl.setText('<font color=red>Error Processing Audio File</font>')
         self.update_gui_post_process()
