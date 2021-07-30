@@ -41,16 +41,9 @@ If you want to build it locally, simply extract the tar and enter the "src" fold
 ## Dependencies ## 
 _Note: All dependencies are included in the "install_requires" part of the setup.py file and should be installed when you run the application._
 
-Dependencies include: PyQt5, librosa, essentia, and musicnn.
-
 ## Program Execution ##
-To run Synesthesia, after installing (via pip or local) on an Ubuntu based terminal, please restart your terminal. Then run the command `syne`. After installing any dependencies, the application will be launched.
+To run Synesthesia, after installing (via pip or local) on an Ubuntu based terminal, please restart your terminal. Then run the command `sudo syne`. After installing any dependencies, the application will be launched.
 
-
-## Sample Install ## 
-It is assumed that a Windows Shell is opened.
-- `wsl`
-- `mkdir synesthesia && cd synesthesia && python3 -m venv ./ && source ./bin/activate && pip3 install synesthesia-uf && syne`
 
 ## Github Repository ##
 https://github.com/cbaddeley/Synesthesia
