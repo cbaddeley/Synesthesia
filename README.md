@@ -42,7 +42,7 @@ If you want to build it locally, simply extract the tar and enter the "src" fold
 _Note: All dependencies are included in the "install_requires" part of the setup.py file and should be installed when you run the application._
 
 ## Program Execution ##
-To run Synesthesia, after installing (via pip or local) on an Ubuntu based terminal, please restart your terminal. Then run the command `sudo syne`. After installing any dependencies, the application will be launched.
+To run Synesthesia, after installing (via pip or local) on an Ubuntu based terminal, please restart your terminal. Then run the command `syne` (or if that's causing issues, `sudo syne`). After installing any dependencies, the application will be launched.
 
 
 ## Github Repository ##
