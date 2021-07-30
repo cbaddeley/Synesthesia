@@ -470,6 +470,8 @@ class Window(QWidget):
         if not self.enable_save or not self.canvas.save(QFileDialog.getSaveFileName(self, 'Save Image')[0]):
             self.error_lbl.setText(
                 '<font color=red>Errror: Image Not Saved</font>')
+        else:
+            self.error_lbl.setText('')
 
     def update_gui_pre_process(self):
         self.error_lbl.setText('')
@@ -544,6 +546,7 @@ Functionality:
         a. This can be stopped at any time by pressing the Cancel button.
         b. If the audio file presented is corrupt, you will see an error on the audio processing.
         c. Right click the image to perform a save as of the generated image. This is not an option for the Speech algorithm, since the image is stored as a png file where the audio file was selected from.
+
 Contributors:
     Cory Baddeley:      cbaddeley@ufl.edu
     Andrew Garmon:      andrewgarmon@ufl.edu
